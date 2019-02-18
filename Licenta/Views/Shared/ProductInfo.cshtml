@@ -1,0 +1,18 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">@Model.Title</div>
+    <div class="panel-body">
+        <img src="@Url.Action("MainProductPhoto", "Product", new { prodId = Model.ProductId})" height="42" width="42" />
+        Pret: <strong>@Model.Price</strong>
+        <br />
+        <span class="label label-success">@Model.Date</span>
+        <br />
+        <i class="glyphicon glyphicon-globe"></i> @Model.SubCategory.SubCategoryName
+    </div>
+    <div class="panel-footer">
+        <a class="btn btn-sm btn-success" href="/Product/Show/@Model.ProductId">Afisare articol</a>
+    </div>
+</div>
+<br />
+
+
+

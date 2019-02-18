@@ -1,0 +1,147 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">@Model.Title</div>
+    <div class="panel-body">
+
+        <h3> Galerie Foto </h3>
+        
+        <div id="ProductPhotosGallery" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                @{
+                    var first = true;
+                }
+                @*@foreach (var item in ViewBag.ProductImages)
+                    {
+                        <div class="carousel-item @(first?Html.Raw("active"):Html.Raw(""))">
+                        <img class="d-block w-100" src="@item.ImageData" alt="@item.Id">
+                    </div>
+                    first = false;
+                    }*@
+                @foreach (var item in ViewBag.ProductImages)
+                {
+                    <div class="item @(first?Html.Raw("active"):Html.Raw(""))">
+                        <img class="d-block w-100" src="@item" alt="Imagine produs">
+                    </div>
+                    first = false;
+                }
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+               data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button"
+               data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <div class="container">
+            <strong>@Model.City.CityName</strong>
+            <i class="glyphicon glyphicon-info-sign">Adaugat La @Model.Date</i>
+        </div>
+        <hr />
+
+        <h3>Informatii Produs</h3>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">Stare</div>
+                <div class="col-sm">@Model.ProductState.ProductStateName</div>
+            </div>
+            <div class="row">
+                <div class="col-sm">Pret</div>
+                <div class="col-sm">@Model.Price</div>
+            </div>
+        </div>
+
+        <div class="container">
+            <p>@Model.Description</p>
+            @*Categorie: <i class="glyphicon glyphicon-globe"></i> @Model.Category.CategoryName / @Model.SubCategory.SubCategoryName*@
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">@Model.Category.CategoryName</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.SubCategory.SubCategoryName</li>
+                </ol>
+            </nav>
+        </div>
+
+        <hr />
+
+        @if (Model.Site != null || Model.Warranty != null || Model.ReturnPolicy != null)
+        {
+            <h3>Informatii suplimentare</h3>
+            <div class="container">
+                @if (Model.Site != null)
+                {
+                    <div class="row">
+                        <div class="col">Site</div>
+                        <div class="col"><a href="@Model.Site">Mergi spre site</a></div>
+                    </div>
+                }
+                @if (Model.Warranty != null)
+                {
+                    <div class="row">
+                        <div class="col">Garantie</div>
+                        <div class="col">@Model.Warranty</div>
+                    </div>
+                }
+                @if (Model.ReturnPolicy != null)
+                {
+                    <div class="row">
+                        <div class="col">Politica de retur</div>
+                        <div class="col">@Model.ReturnPolicy</div>
+                    </div>
+                }
+            </div>
+        }
+
+        <hr />
+
+        <h3>Informatii livrare</h3>
+        <div class="container">
+            <div class="row">
+                <div class="col">Livrare personala:</div>
+                @if (Model.PersonalDelivery == true)
+                {
+                    <div class="col">Da</div>
+                }
+                else
+                {
+                    <div class="col">Nu</div>
+                }
+            </div>
+
+            <div class="row">
+                <div class="col">Livrare prin curier:</div>
+                @if (Model.DeliveryCompanyId != null)
+                {
+                    <div class="col">@Model.DeliveryCompany.DeliveryCompanyName</div>
+                    if (Model.DeliveryPrice != null)
+                    {
+                        <div class="row">
+                            <div class="col">Cost livrare estimativ</div>
+                            <div class="col">@Model.DeliveryPrice</div>
+                        </div>
+                    }
+
+                }
+                else
+                {
+                    <div class="col">Nu</div>
+                }
+            </div>
+
+            @if (Model.DeliveryDetails != null)
+            {
+                <div class="row">
+                    <div class="col">Detalii livrare</div>
+                    <div class="col">@Model.DeliveryDetails</div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</div>
+
+

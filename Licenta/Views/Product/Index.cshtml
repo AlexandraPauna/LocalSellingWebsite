@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "Anunturile Mele";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (TempData.ContainsKey("message"))
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+}
+
+@foreach (Licenta.Models.Product product in ViewBag.Products)
+{
+    @Html.Partial("ProductInfo", product);
+}
+
+<a class="btn btn-sm btn-success" href="/Product/New">Adauga un anunt</a>
+<br />
+

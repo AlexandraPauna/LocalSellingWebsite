@@ -1,0 +1,27 @@
+﻿
+
+@{
+    ViewBag.Title = "Afisare Anunt";
+}
+
+<h2>@ViewBag.Titlu</h2>
+
+<br />
+
+@Html.Partial("ProductShowPartial")
+
+<a class="btn btn-sm btn-info" href="/Product/Edit/@Model.ProductId">
+    Modifica anunt
+</a>
+<br />
+<form method="post" action="/Product/Delete/@Model.ProductId">
+    @Html.HttpMethodOverride(HttpVerbs.Delete)
+    <button class="btn btn-sm btn-danger" type="submit">Sterge anunt</button>
+</form>
+
+<hr />
+<a class="btn btn-sm btn-success" href="/Product/Index">Inapoi la anunturile mele</a>
+<a class="btn btn-sm btn-success" href="/Product/New">Adauga anunt</a>
+
+<br />
+
