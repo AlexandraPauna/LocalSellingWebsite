@@ -96,11 +96,11 @@
             <br />
             @if (Model.PersonalDelivery == true)
             {
-                @Html.CheckBox("allowsPersonalDelivery", true, new { @class = "checkbox" })
+                @Html.CheckBox("PersonalDelivery", true, new { @class = "checkbox" })
             }
             else
             {
-                @Html.CheckBox("allowsPersonalDelivery", false, new { @class = "checkbox" })
+                @Html.CheckBox("PersonalDelivery", false, new { @class = "checkbox" })
             }
             <br /> <br />
 

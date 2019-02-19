@@ -1,0 +1,17 @@
+﻿@model Licenta.Models.Categories.Category
+
+@{
+    ViewBag.Title = "Editare categorie";
+}
+
+<h2>@ViewBag.Title</h2>
+<form method="post" action="/Categories/Edit/@Model.CategoryId">
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+    <br />
+    @Html.Label("CategoryName", "Denumire categorie")
+    <br />
+    @Html.EditorFor(m => m.CategoryName)
+    @Html.ValidationMessageFor(model => model.CategoryName, null, new { @class = "text-danger " })
+    <br />
+    <button class="btn btn-sm btn-success" type="submit">Modifica aceasta categorie</button>
+</form>
