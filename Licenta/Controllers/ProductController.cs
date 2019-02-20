@@ -351,24 +351,24 @@ namespace Licenta.Controllers
         {
             try
             {
-                
-                    Product product = db.Products.Find(id);
-                    
-                        product.Title = requestProduct.Title;
-                        product.Price = requestProduct.Price;
-                        product.Description = requestProduct.Description;
-                        product.CityId = requestProduct.CityId;
-                        product.CategoryId = requestProduct.CategoryId;
-                        product.SubCategoryId = requestProduct.SubCategoryId;
-                        product.ProductStateId = requestProduct.ProductStateId;
-                        product.Site = requestProduct.Site;
-                        product.PersonalDelivery = requestProduct.PersonalDelivery;
-                        product.DeliveryCompanyId = requestProduct.DeliveryCompanyId;
-                        product.ReturnPolicy = requestProduct.ReturnPolicy;
-                        product.Warranty = requestProduct.Warranty;
-                        db.SaveChanges();
-                        TempData["message"] = "Anuntul a fost modificat cu succes!";
-                   
+
+                Product product = db.Products.Find(id);
+
+                product.Title = requestProduct.Title;
+                product.Price = requestProduct.Price;
+                product.Description = requestProduct.Description;
+                product.CityId = requestProduct.CityId;
+                product.CategoryId = requestProduct.CategoryId;
+                product.SubCategoryId = requestProduct.SubCategoryId;
+                product.ProductStateId = requestProduct.ProductStateId;
+                product.Site = requestProduct.Site;
+                product.PersonalDelivery = requestProduct.PersonalDelivery;
+                product.DeliveryCompanyId = requestProduct.DeliveryCompanyId;
+                product.ReturnPolicy = requestProduct.ReturnPolicy;
+                product.Warranty = requestProduct.Warranty;
+                db.SaveChanges();
+                TempData["message"] = "Anuntul a fost modificat cu succes!";
+
                 return RedirectToAction("Index");
             }
             catch (Exception e)
@@ -376,6 +376,19 @@ namespace Licenta.Controllers
                 return View();
             }
         }
+
+        public struct Data
+        {
+            public Data(int id, string source)
+            {
+                IntegerData = id;
+                StringData = source;
+            }
+
+            public int IntegerData { get; private set; }
+            public string StringData { get; private set; }
+        }
+
 
         public ActionResult ManageGallery(int id)
         {
@@ -386,32 +399,76 @@ namespace Licenta.Controllers
                                 where prodImages.ProductId.Equals(product.ProductId)
                                 select prodImages.Id;
 
-            /*if (productImages == null)
-            {
-                string fileName = HttpContext.Server.MapPath(@"~/Images/noImg.png");
+        var imgList = new List<Data>();
 
-                byte[] imageData = null;
-                FileInfo fileInfo = new FileInfo(fileName);
-                long imageFileLength = fileInfo.Length;
-                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                BinaryReader br = new BinaryReader(fs);
-                imageData = br.ReadBytes((int)imageFileLength);
+        foreach (var img in productImages)
+                {
+                    imgList.Add(new Data(img, "/Product/ProductPhoto/?photoId=" + img));
+                }
+                ViewBag.ProductImages = imgList;
 
-                return File(imageData, "image/png");
-            }
+                //var imgList = new List<String>();
+                //foreach (var img in productImages)
+                //{
+                //    imgList.Add("/Product/ProductPhoto/?photoId=" + img);
+                //}
+                //ViewBag.ProductImages = imgList;
 
-            ViewBag.ProductImages = productImages;*/
-            //ViewBag.ProductImages = new FileContentResult(productImages, "image/jpeg");
-            var imgList = new List<String>();
-            foreach (var img in productImages)
-            {
-                //var imgData = new FileContentResult(img.ImageData, "image/jpeg");
-                imgList.Add("/Product/ProductPhoto/?photoId=" + img);
-            }
-            ViewBag.ProductImages = imgList;
+                //ViewBag.ProductImagesId = productImages.ToList();
 
-            return View(product);
+
+                return View(product);
         }
 
+        [HttpPost]
+        public ActionResult AddPhotos([Bind(Exclude = "ProductPhotos")]int id)
+        {
+
+            Product product = db.Products.Find(id);
+            if (Request.Files.Count > 0)
+            {
+
+                List<HttpPostedFileBase> images = new List<HttpPostedFileBase>();
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    var file = Request.Files[i];
+                    // this file's Type is HttpPostedFileBase which is in memory
+                    images.Add(file);
+                }
+
+                var prdImageList = new List<ProductImage>();
+                foreach (var image in images)
+                {
+                    using (var br = new BinaryReader(image.InputStream))
+                    {
+                        var data = br.ReadBytes(image.ContentLength);
+                        var img = new ProductImage { ProductId = product.ProductId };
+                        img.ImageData = data;
+                        prdImageList.Add(img);
+                    }
+                }
+                product.ProductImages = prdImageList;
+
+            }
+            
+            db.SaveChanges();
+            TempData["message"] = "Adaugare efectuata!";
+
+            return RedirectToAction("ManageGallery", "Product" , new { id = id });
+
+        }
+
+        [HttpDelete]
+        public ActionResult DeletePhoto(int id)
+        {
+            ProductImage prdPhoto = db.ProductImages.Find(id);
+
+            db.ProductImages.Remove(prdPhoto);
+            db.SaveChanges();
+
+            TempData["message"] = "Poza a fost stearsa!";
+            return RedirectToAction("ManageGallery", "Product", new { id = prdPhoto.ProductId });
+
+        }
     }
 }

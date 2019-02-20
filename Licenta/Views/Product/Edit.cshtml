@@ -13,6 +13,8 @@
     @Html.HiddenFor(m => m.UserId)
     <br />
 
+    <button class="jumbotron" onclick="location.href='@Url.Action("ManageGallery", "Product", new { id = Model.ProductId})';return false;">Modifica Galeria Foto</button>
+   
     <div class="panel panel-default">
         <div class="panel-heading">Editeaza titlu si categoria</div>
         <div class="panel-body">
@@ -34,17 +36,17 @@
     </div>
     <br /><br />
 
-    <div class="panel panel-default">
-        <div class="panel-heading">Modifica Galeria Foto</div>
-        <div class="panel-body">
-            @Html.Label("ProductPhotos", "Poze Anunt")
-            <br />
-            <div class="col-md-10">
-                <input type="file" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+    @*<div class="panel panel-default">
+            <div class="panel-heading">Modifica Galeria Foto</div>
+            <div class="panel-body">
+                @Html.Label("ProductPhotos", "Poze Anunt")
+                <br />
+                <div class="col-md-10">
+                    <input type="file" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+                </div>
+                <br /><br />
             </div>
-            <br /><br />
-        </div>
-    </div>
+        </div>*@
 
     <div class="panel panel-default">
         <div class="panel-heading">Modifica Detaliile Produsului</div>

@@ -3,10 +3,70 @@
 }
 
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
+    <h1>TransH</h1>
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    }
+
+
+
+
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
+
+<ul class="nav flex-column">
+    @foreach (var category in ViewBag.Categories)
+    {
+
+        <li class="nav-item">
+            <a class="navbar-link" href="/Categories/Show/@category.CategoryId">@category.CategoryName</a>
+        </li>
+
+    }
+</ul>
+
+@foreach (Licenta.Models.Product products in ViewBag.LatestProducts)
+{
+    <div class="card" style="width: 18rem;">
+        <img src="@Url.Action("MainProductPhoto", "Home", new { prodId = products.ProductId})" class="card-img-top" alt="Imagine indisponibila">
+        <div class="card-body">
+            <h5 class="card-title">@products.Title</h5>
+            @*<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>*@
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">@products.Price</li>
+            <li class="list-group-item">@products.City.CityName</li>
+            <li class="list-group-item">@products.Date</li>
+        </ul>
+        <div class="card-body">
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+        </div>
+    </div>
+}
+
+@*@foreach (Licenta.Models.Product products in ViewBag.LatestProducts)
+    {
+        <p>Produs</p> <br/>
+    }*@
+
+@*@foreach (Licenta.Models.Product products in ViewBag.LatestProducts)
+    {
+        <div class="col-sm-5 col-md-3">
+
+            <div class="thumbnail">
+                <img src=""
+            </div>
+        </div>
+    }*@
+
+@*@foreach (Licenta.Models.Product products in ViewBag.LatestProducts)
+    {
+        @Html.Partial("ProductThumbnail", products);
+
+    }*@
 
 <div class="row">
     <div class="col-md-4">

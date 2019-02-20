@@ -1,17 +1,57 @@
-﻿
+﻿@model Licenta.Models.Product
+
 @{
     ViewBag.Title = "ManageGallery";
 }
 
 <h2>ManageGallery</h2>
 
-<div id="ProductPhotosGallery">
-    @foreach (var item in ViewBag.ProductImages)
-    {
-        <div>
-            <img class="d-block w-100" src="@item" alt="Imagine produs">
-        </div>
+@if (TempData.ContainsKey("message"))
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+}
 
-    }
-</div>
+@if (ViewBag.ProductImages != null)
+{
+    <div id="ProductPhotosGallery">
+        @foreach (var item in ViewBag.ProductImages)
+        {
+            <div>
+                <img class="img-thumbnail " src="@item.StringData" alt="Imagine produs">
+            </div>
+            <form method="post" action="/Product/DeletePhoto/@item.IntegerData">
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button class="btn btn-sm btn-danger" type="submit">Sterge</button>
+            </form>
+
+        }
+    </div>
+}
+else
+{
+    <h2>Momentan nu exista fotografii pentru anunt!</h2>
+}
+
+<form method="post" action="/Product/AddPhotos/@Model.ProductId" enctype="multipart/form-data">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Adauga Fotografii Noi</div>
+        <div class="panel-body">
+            @Html.Label("ProductPhotos", "Poze Anunt")
+            <br />
+            <div class="col-md-10">
+                <input type="file" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+            </div>
+            <br /><br />
+        </div>
+        <button class="btn btn-sm btn-success" type="submit">Adauga</button>
+
+    </div>
+
+</form>
+
+<br /><br />
+
+<a class="btn btn-sm btn-success" href="/Product/Edit/@Model.ProductId">Inapoi</a> 
+
 
