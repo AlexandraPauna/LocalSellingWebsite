@@ -22,6 +22,8 @@ namespace Licenta
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             // Se adauga rolurile aplicatiei
+
+
             if (!roleManager.RoleExists("Administrator"))
             {
                 // Se adauga rolul de administrator
