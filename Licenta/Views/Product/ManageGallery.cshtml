@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "ManageGallery";
+}
+
+<h2>ManageGallery</h2>
+
+<div id="ProductPhotosGallery">
+    @foreach (var item in ViewBag.ProductImages)
+    {
+        <div>
+            <img class="d-block w-100" src="@item" alt="Imagine produs">
+        </div>
+        
+    }
+</div>
+

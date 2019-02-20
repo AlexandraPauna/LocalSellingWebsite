@@ -349,13 +349,11 @@ namespace Licenta.Controllers
         [HttpPut]
         public ActionResult Edit([Bind(Exclude = "ProductPhotos")]int id, Product requestProduct)
         {
+            Product product = db.Products.Find(id);
+
             try
             {
-                if (ModelState.IsValid)
-                {
-                    Product product = db.Products.Find(id);
-                    if (TryUpdateModel(product))
-                    {
+                
                         product.Title = requestProduct.Title;
                         product.Price = requestProduct.Price;
                         product.Description = requestProduct.Description;
@@ -370,14 +368,49 @@ namespace Licenta.Controllers
                         product.Warranty = requestProduct.Warranty;
                         db.SaveChanges();
                         TempData["message"] = "Anuntul a fost modificat cu succes!";
-                    }
-                }
+                    
                 return RedirectToAction("Index");
             }
             catch (Exception e)
             {
                 return View();
             }
+        }
+
+        public ActionResult ManageGallery(int id)
+        {
+            Product product = db.Products.Find(id);
+            ViewBag.Product = product;
+
+            var productImages = from prodImages in db.ProductImages
+                                where prodImages.ProductId.Equals(product.ProductId)
+                                select prodImages.Id;
+
+            /*if (productImages == null)
+            {
+                string fileName = HttpContext.Server.MapPath(@"~/Images/noImg.png");
+
+                byte[] imageData = null;
+                FileInfo fileInfo = new FileInfo(fileName);
+                long imageFileLength = fileInfo.Length;
+                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                BinaryReader br = new BinaryReader(fs);
+                imageData = br.ReadBytes((int)imageFileLength);
+
+                return File(imageData, "image/png");
+            }
+
+            ViewBag.ProductImages = productImages;*/
+            //ViewBag.ProductImages = new FileContentResult(productImages, "image/jpeg");
+            var imgList = new List<String>();
+            foreach (var img in productImages)
+            {
+                //var imgData = new FileContentResult(img.ImageData, "image/jpeg");
+                imgList.Add("/Product/ProductPhoto/?photoId=" + img);
+            }
+            ViewBag.ProductImages = imgList;
+
+            return View(product);
         }
 
     }
