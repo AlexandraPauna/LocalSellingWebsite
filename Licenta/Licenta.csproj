@@ -283,6 +283,7 @@
     <Content Include="Views\Shared\ProductShowPartial.cshtml" />
     <Content Include="Views\Categories\NewCatg.cshtml" />
     <Content Include="Views\Categories\Edit.cshtml" />
+    <Content Include="Views\Product\ManageGallery.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

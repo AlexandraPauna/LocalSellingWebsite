@@ -351,11 +351,9 @@ namespace Licenta.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
+                
                     Product product = db.Products.Find(id);
-                    if (TryUpdateModel(product))
-                    {
+                    
                         product.Title = requestProduct.Title;
                         product.Price = requestProduct.Price;
                         product.Description = requestProduct.Description;
@@ -370,8 +368,7 @@ namespace Licenta.Controllers
                         product.Warranty = requestProduct.Warranty;
                         db.SaveChanges();
                         TempData["message"] = "Anuntul a fost modificat cu succes!";
-                    }
-                }
+                   
                 return RedirectToAction("Index");
             }
             catch (Exception e)
