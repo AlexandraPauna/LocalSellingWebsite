@@ -16,7 +16,7 @@
 <br />
 <form method="post" action="/Product/Delete/@Model.ProductId">
     @Html.HttpMethodOverride(HttpVerbs.Delete)
-    <button class="btn btn-sm btn-danger" type="submit">Sterge anunt</button>
+    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Esti sigur?');">Sterge anunt</button>
 </form>
 
 <hr />

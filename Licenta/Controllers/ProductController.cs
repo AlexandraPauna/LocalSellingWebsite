@@ -120,7 +120,7 @@ namespace Licenta.Controllers
 
             //convert the user uploaded Photo as Byte Array before save to DB
             //byte[] imageData = null;
-            if (Request.Files.Count > 0)
+            if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
             {
                 List<HttpPostedFileBase> images = new List<HttpPostedFileBase>();
                 for (int i = 0; i < Request.Files.Count; i++)
@@ -150,18 +150,18 @@ namespace Licenta.Controllers
             //product.SubCategories = GetAllSubCategories();
             try
             {
-                if (ModelState.IsValid)
-                {
+                //if (ModelState.IsValid)
+               // {
                     db.Products.Add(product);
                     db.SaveChanges();
                     TempData["message"] = "Anuntul a fost adaugat cu succes!";
 
                     return RedirectToAction("Index");
-                }
-                else
-                {
-                    return View(product);
-                }
+               // }
+               // else
+               // {
+               //     return View(product);
+               // }
             }
             catch (Exception e)
             {
@@ -425,7 +425,7 @@ namespace Licenta.Controllers
         {
 
             Product product = db.Products.Find(id);
-            if (Request.Files.Count > 0)
+            if (Request.Files.Count > 0 &&  Request.Files[0].ContentLength > 0)
             {
 
                 List<HttpPostedFileBase> images = new List<HttpPostedFileBase>();
@@ -469,6 +469,19 @@ namespace Licenta.Controllers
             TempData["message"] = "Poza a fost stearsa!";
             return RedirectToAction("ManageGallery", "Product", new { id = prdPhoto.ProductId });
 
+        }
+
+        [HttpDelete]
+        public ActionResult Delete(int id)
+        {
+            Product product = db.Products.Find(id);
+            if (product.UserId == User.Identity.GetUserId() || User.IsInRole("Administrator") || User.IsInRole("Editor"))
+            {
+                db.Products.Remove(product);
+                db.SaveChanges();
+                TempData["message"] = "Anuntul a fost sters!";
+            }
+            return RedirectToAction("Index");
         }
     }
 }
