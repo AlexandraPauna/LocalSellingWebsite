@@ -13,8 +13,24 @@ namespace Licenta.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        /*public ActionResult Index()
+        {
+            return View();
+        }*/
         public ActionResult Index()
         {
+            var categories = from category in db.Categories
+                             orderby category.CategoryName
+                             select category;
+            ViewBag.Categories = categories;
+
+            var userId = User.Identity.GetUserId();
+            ViewBag.Allow = db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
             return View();
         }
 
@@ -33,7 +49,7 @@ namespace Licenta.Controllers
                 db.Categories.Add(category);
                 db.SaveChanges();
                 TempData["message"] = "Categoria a fost adaugata!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
             catch (Exception e)
             {
@@ -57,9 +73,8 @@ namespace Licenta.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            ViewBag.SubCategories = 
-            ViewBag.Articles = subCatgs;
-
+            ViewBag.SubCategories = subCatgs;
+           
             return View();
         }
 
@@ -101,14 +116,14 @@ namespace Licenta.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "Editor,Administrator")]
+        //[Authorize(Roles = "Editor,Administrator")]
         public ActionResult Delete(int id)
         {
             Category category = db.Categories.Find(id);
             db.Categories.Remove(category);
             db.SaveChanges();
             TempData["message"] = "Categoria a fost stearsa!";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
     }

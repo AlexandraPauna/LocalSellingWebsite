@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Licenta.Models.Categories;
 using Licenta.Models.Data;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace Licenta.Models
 {
@@ -27,6 +28,9 @@ namespace Licenta.Models
         public virtual City City { get; set; }
         public IEnumerable<SelectListItem> Cities { get; set; }
         public byte[] UserPhoto { get; set; }
+
+        public IEnumerable<SelectListItem> AllRoles { get; internal set; }
+
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

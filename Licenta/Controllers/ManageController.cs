@@ -280,6 +280,7 @@ namespace Licenta.Controllers
                 model.LastName = user.LastName;
                 model.UserName = user.UserName;
                 model.CityId = user.CityId;
+                
                 model.PhoneNumber = user.PhoneNumber;
                 //model.UserPhoto = user.UserPhoto;
                 model.Cities = GetAllCities();

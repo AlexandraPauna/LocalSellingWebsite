@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Titlu = "Afisare categorii";
+}
+
+<h2>@ViewBag.Titlu</h2>
+<hr />
+<br />
+
+@if (TempData.ContainsKey("message"))
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+}
+
+@foreach (var category in ViewBag.Categories)
+{
+    <p>@category.CategoryName</p>
+    <a class="btn btn-sm btn-success" href="/Categories/Show/@category.CategoryId">Afisare categorie</a>
+    <br />
+    <hr />
+    <br />
+}
+
+@if (ViewBag.Allow == true)
+{
+    <a class="btn btn-sm btn-success" href="/Categories/New">Adauga categorie</a>
+    <br />
+}
+

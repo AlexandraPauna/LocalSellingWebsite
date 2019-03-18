@@ -11,21 +11,19 @@
     }
 
 
-
-
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
-<ul class="nav flex-column">
-    @foreach (var category in ViewBag.Categories)
-    {
+    <ul class="nav flex-column">
+        @foreach (var category in ViewBag.Categories)
+        {
 
-        <li class="nav-item">
-            <a class="navbar-link" href="/Categories/Show/@category.CategoryId">@category.CategoryName</a>
-        </li>
+            <li class="nav-item">
+                <a class="navbar-link" href="/Categories/Show/@category.CategoryId">@category.CategoryName</a>
+            </li>
 
-    }
-</ul>
+        }
+    </ul>
 
 @foreach (Licenta.Models.Product products in ViewBag.LatestProducts)
 {
@@ -33,8 +31,7 @@
         <img src="@Url.Action("MainProductPhoto", "Home", new { prodId = products.ProductId})" class="card-img-top" alt="Imagine indisponibila">
         <div class="card-body">
             <h5 class="card-title">@products.Title</h5>
-            @*<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>*@
-        </div>
+            </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">@products.Price</li>
             <li class="list-group-item">@products.City.CityName</li>

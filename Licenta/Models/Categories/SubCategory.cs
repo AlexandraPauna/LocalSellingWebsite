@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Licenta.Models.Categories
 {
@@ -20,5 +21,7 @@ namespace Licenta.Models.Categories
 
         public virtual ICollection<Product> Product { get; set; }
 
+        public virtual Category Category { get; set; }
+        public IEnumerable<SelectListItem> Categories { get; set; }
     }
 }

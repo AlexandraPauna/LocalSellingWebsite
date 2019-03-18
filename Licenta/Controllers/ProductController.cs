@@ -28,7 +28,7 @@ namespace Licenta.Controllers
             else
             {
                 //products of current logged in user
-                var products = from prod in db.Products.Include("City").Include("Category").Include("Subcategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
+                var products = from prod in db.Products.Include("City").Include("Subcategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
                                where prod.UserId.Equals(userId.ToString())
                                select prod;
 
@@ -48,7 +48,19 @@ namespace Licenta.Controllers
             Product product = db.Products.Find(id);
             ViewBag.Product = product;
             ViewBag.City = product.City;
-            ViewBag.Category = product.Category;
+            //ViewBag.Category = from categs in db.SubCategories
+            //                   where categs.SubCategoryId.Equals(product.SubCategoryId)
+            //                   select categs.CategoryId;
+            var catId = from categs in db.SubCategories
+                        where categs.SubCategoryId.Equals(product.SubCategoryId)
+                        select categs.CategoryId;
+            ViewBag.Category = catId;
+           
+            ViewBag.CategoryName = from categs in db.Categories
+                                   where categs.CategoryId.Equals(catId)
+                                   select categs.CategoryName;
+
+            //ViewBag.Category = product.Category;
             ViewBag.SubCategory = product.SubCategory;
             ViewBag.DeliveryCompany = product.DeliveryCompany;
 
@@ -97,10 +109,10 @@ namespace Licenta.Controllers
 
                 Product product = new Product();
                 product.Cities = GetAllCities();
-                product.Categories = GetAllCategories();
+                //product.Categories = GetAllCategories();
+                ViewBag.Categories = GetAllCategories();
                 product.ProductStateTypes = GetAllProductStateTypes();
                 product.DeliveryCompanies = GetAllDeliveryCompanies();
-                //product.SubCategories = GetAllSubCategories(product.CategoryId);
                 product.UserId = User.Identity.GetUserId();
                 //product.Date = DateTime.Now;
 
@@ -113,7 +125,8 @@ namespace Licenta.Controllers
         public ActionResult New([Bind(Exclude = "ProductPhotos")]Product product)
         {
             product.Cities = GetAllCities();
-            product.Categories = GetAllCategories();
+            //product.Categories = GetAllCategories();
+            ViewBag.Categories = GetAllCategories();
             product.ProductStateTypes = GetAllProductStateTypes();
             product.DeliveryCompanies = GetAllDeliveryCompanies();
             product.UserId = User.Identity.GetUserId();
@@ -334,12 +347,48 @@ namespace Licenta.Controllers
 
         }
 
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllCategoriesForEdit(int id)
+        {
+            //generate empty list
+            var selectList = new List<SelectListItem>();
+
+            var prod = db.Products.Find(id);
+            var defaultCatId = from categs in db.SubCategories
+                        where categs.SubCategoryId.Equals(prod.SubCategoryId)
+                        select categs.CategoryId;
+
+            //get all categories from Data Base
+            var categories = from cat in db.Categories select cat;
+            foreach (var category in categories)
+            {
+                //add elements in dropdown
+                selectList.Add(new SelectListItem
+                {
+                    Value = category.CategoryId.ToString(),
+                    Text = category.CategoryName.ToString(),
+                    Selected = (category.CategoryId.ToString() == defaultCatId.ToString() ? true : false)
+                });
+            }
+
+            
+            
+
+            return selectList;
+        }
+
         public ActionResult Edit(int id)
         {
             Product product = db.Products.Find(id);
             ViewBag.Product = product;
             product.Cities = GetAllCities();
-            product.Categories = GetAllCategories();
+            ViewBag.Categories = GetAllCategories();
+            //ViewBag.Categories = GetAllCategoriesForEdit(id);
+            var catId = (from categs in db.SubCategories
+                              where categs.SubCategoryId.Equals(product.SubCategoryId)
+                              select categs.CategoryId).Single();
+            ViewBag.CategoryId = Convert.ToInt32(catId);
+            //product.Categories = GetAllCategories();
             product.ProductStateTypes = GetAllProductStateTypes();
             product.DeliveryCompanies = GetAllDeliveryCompanies();
 
@@ -358,7 +407,7 @@ namespace Licenta.Controllers
                 product.Price = requestProduct.Price;
                 product.Description = requestProduct.Description;
                 product.CityId = requestProduct.CityId;
-                product.CategoryId = requestProduct.CategoryId;
+                //product.CategoryId = requestProduct.CategoryId;
                 product.SubCategoryId = requestProduct.SubCategoryId;
                 product.ProductStateId = requestProduct.ProductStateId;
                 product.Site = requestProduct.Site;

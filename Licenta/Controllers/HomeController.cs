@@ -20,7 +20,7 @@ namespace Licenta.Controllers
 
             ViewBag.Categories = categories;
 
-            var products = db.Products.Include("Category").Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Include("User").OrderByDescending(a => a.Date).Take(2);
+            var products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Include("User").OrderByDescending(a => a.Date).Take(2);
             ViewBag.LatestProducts = products;
 
             if (TempData.ContainsKey("message"))

@@ -199,6 +199,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\SubCategoriesController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -281,9 +283,16 @@
     <Content Include="Views\Product\Show.cshtml" />
     <Content Include="Views\Shared\ProductInfo.cshtml" />
     <Content Include="Views\Shared\ProductShowPartial.cshtml" />
-    <Content Include="Views\Categories\NewCatg.cshtml" />
     <Content Include="Views\Categories\Edit.cshtml" />
     <Content Include="Views\Product\ManageGallery.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Categories\Show.cshtml" />
+    <Content Include="Views\SubCategories\New.cshtml" />
+    <Content Include="Views\SubCategories\Edit.cshtml" />
+    <Content Include="Views\Categories\New.cshtml" />
+    <Content Include="Views\SubCategories\Show.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

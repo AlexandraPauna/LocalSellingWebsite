@@ -44,12 +44,12 @@ namespace Licenta.Models
         public virtual City City { get; set; }
         public IEnumerable<SelectListItem> Cities { get; set; }
 
-        [Required(ErrorMessage = "Va rugam selectati categoria!")]
+        /*[Required(ErrorMessage = "Va rugam selectati categoria!")]
         [Display(Name = "Categorie")]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public virtual Category Category { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }
-
+        */
         [Required(ErrorMessage = "Va rugam selectati subcategoria!")]
         [Display(Name = "Subcategorie")]
         public int SubCategoryId { get; set; }

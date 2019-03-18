@@ -14,7 +14,7 @@
     <br />
 
     <button class="jumbotron" onclick="location.href='@Url.Action("ManageGallery", "Product", new { id = Model.ProductId})';return false;">Modifica Galeria Foto</button>
-   
+
     <div class="panel panel-default">
         <div class="panel-heading">Editeaza titlu si categoria</div>
         <div class="panel-body">
@@ -24,8 +24,12 @@
             <br /><br />
 
             <label>Selectati Categoria</label>
-            @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Value", "Text"), "Selectati categoria", new { id = "catList", @class = "form-control" })
-            <br /><br />
+            @Html.DropDownList("catList", new SelectList(ViewBag.Categories, "Value", "Text"), "Selectati categoria", new { id = "catList", @class = "form-control" })
+
+
+            @*<label>Selectati Categoria</label>
+                @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Value", "Text"), "Selectati categoria", new { id = "catList", @class = "form-control" })
+                <br /><br />*@
 
             <label>Selectati Subcategoria</label>
             @Html.DropDownListFor(m => m.SubCategoryId, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Selectati subcategoria", new { id = "subcatList", @class = "form-control" })
@@ -35,18 +39,6 @@
         </div>
     </div>
     <br /><br />
-
-    @*<div class="panel panel-default">
-            <div class="panel-heading">Modifica Galeria Foto</div>
-            <div class="panel-body">
-                @Html.Label("ProductPhotos", "Poze Anunt")
-                <br />
-                <div class="col-md-10">
-                    <input type="file" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
-                </div>
-                <br /><br />
-            </div>
-        </div>*@
 
     <div class="panel panel-default">
         <div class="panel-heading">Modifica Detaliile Produsului</div>
@@ -137,10 +129,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script type="text/javascript">
-
+    //incarcarea initiala a celor 2 dropdown-uri
     $(document).ready(function () {
         $(document).ready(function () {
-            var cID = $("#catList").val();
+            //var cID = $("#catList").val();
+            var cID = @ViewBag.CategoryId;
             $.getJSON("/Product/New/LoadSubCategories/" + cID, {},
                 function (data) {
                     var select = $("#subcatList");
@@ -155,10 +148,14 @@
                             text: itemData.Text
                         }));
                     });
+                    $("#catList").val(@ViewBag.CategoryId);
                     $("#subcatList").val(@Model.SubCategoryId);
                 });
         });
+    });
 
+    //evenimentul change
+    $(document).ready(function () {
         $(document).on("change", "#catList", function () {
             var cID = $(this).val();
             $.getJSON("/Product/New/LoadSubCategories/" + cID, {},
@@ -175,22 +172,44 @@
                             text: itemData.Text
                         }));
                     });
-                });
+                  });
         });
     });
+
+
 </script>
 
-@*<script type="text/javascript">
-    $(document).ready(function () {
-        $("#catList").change(function () {
-            var cID = $(this).val();
-            $.getJSON("../Home/LoadPhysiansByDepartment", { catId: cID },
+@*  $(document).ready(function () {
+        $(document).ready(function () {
+            var cID = $("#catList").val();
+            $.getJSON("/Product/New/LoadSubCategories/" + cID, {},
                 function (data) {
                     var select = $("#subcatList");
                     select.empty();
                     select.append($('<option/>', {
                         value: 0,
-                        text: "Select a Physian"
+                        text: "Selecteaza o subcategorie"
+                    }));
+                    $.each(data, function (index, itemData) {
+                        select.append($('<option/>', {
+                            value: itemData.Value,
+                            text: itemData.Text
+                        }));
+                    });
+                    $("#catList").val(@ViewBag.CategoryId);
+                    $("#subcatList").val(@Model.SubCategoryId);
+                });
+        }); });
+
+          $(document).on("change", "#catList", function () {
+            var cID = $(this).val();
+            $.getJSON("/Product/New/LoadSubCategories/" + cID, {},
+                function (data) {
+                    var select = $("#subcatList");
+                    select.empty();
+                    select.append($('<option/>', {
+                        value: 0,
+                        text: "Selecteaza o subcategorie"
                     }));
                     $.each(data, function (index, itemData) {
                         select.append($('<option/>', {

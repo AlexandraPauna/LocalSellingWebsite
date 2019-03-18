@@ -16,6 +16,8 @@ namespace Licenta.Models.Categories
         [Display(Name = "Nume Categorie")]
         public string CategoryName { get; set; }
 
-        public virtual ICollection<Product> Product { get; set; }
+        //public virtual ICollection<Product> Product { get; set; }
+
+        public virtual ICollection<SubCategory> SubCategory { get; set; }
     }
 }
