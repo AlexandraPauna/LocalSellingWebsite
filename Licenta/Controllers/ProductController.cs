@@ -48,17 +48,20 @@ namespace Licenta.Controllers
             Product product = db.Products.Find(id);
             ViewBag.Product = product;
             ViewBag.City = product.City;
-            //ViewBag.Category = from categs in db.SubCategories
-            //                   where categs.SubCategoryId.Equals(product.SubCategoryId)
-            //                   select categs.CategoryId;
-            var catId = from categs in db.SubCategories
+
+            var catId = (from categs in db.SubCategories
+                         where categs.SubCategoryId.Equals(product.SubCategoryId)
+                         select categs.CategoryId).Single();
+            ViewBag.Category = Convert.ToInt32(catId);
+            /*var catId = from categs in db.SubCategories
                         where categs.SubCategoryId.Equals(product.SubCategoryId)
                         select categs.CategoryId;
-            ViewBag.Category = catId;
+            ViewBag.Category = catId.First();*/
            
-            ViewBag.CategoryName = from categs in db.Categories
-                                   where categs.CategoryId.Equals(catId)
-                                   select categs.CategoryName;
+            var catName = (from categs in db.Categories
+                           where categs.CategoryId.Equals(catId)
+                           select categs.CategoryName).Single();
+            ViewBag.CategoryName = Convert.ToString(catName);
 
             //ViewBag.Category = product.Category;
             ViewBag.SubCategory = product.SubCategory;
