@@ -20,6 +20,18 @@
 <br />
 <br />
 
+@using (Html.BeginForm("Show", "SubCategory", new { id = ViewBag.SubCategoryId } ,FormMethod.Get))
+{
+    <b>Adauga filtre:</b>
+    @Html.TextBox("PriceMin", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" }));
+    @Html.TextBox("PriceMax", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" }));
+
+    <input class="btn btn-primary" type="submit" value="Aplica" />
+    <br />
+    <br />
+}
+<br />
+
 <form method="POST">
     Sorteaza dupa:
     <select id="sortType" name="sortType">
@@ -29,7 +41,7 @@
         <option value="PriceAsc">Pret crescator</option>
         <option value="PriceDesc">Pret descrescator</option>
     </select>
-    <input class="btn btn-default" type="submit" value="Aplica" />
+    <input class="btn btn-default" type="submit" value="Sorteaza" />
 </form>
 <br />
 

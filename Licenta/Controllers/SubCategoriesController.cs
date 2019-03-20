@@ -76,7 +76,7 @@ namespace Licenta.Controllers
         }
 
         //vizibil pt toata lumea
-        public ActionResult Show(int id)
+        public ActionResult Show(int id/*, float? priceMin, float? priceMax*/)
         {
             SubCategory subCategory = db.SubCategories.Find(id);
             ViewBag.SubCategoryId = subCategory.SubCategoryId;
@@ -91,6 +91,12 @@ namespace Licenta.Controllers
                 ViewBag.message = TempData["message"].ToString();
             }
             ViewBag.Products = products;
+
+            //Filtrarea
+            /*if (priceMin != null)
+            {
+                ViewBag.Products = products.Where(s => s.Price >= priceMin);
+            }*/
 
             return View();
         }
