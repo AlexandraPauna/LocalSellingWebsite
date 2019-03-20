@@ -7,29 +7,72 @@
 <h3>"@ViewBag.Search"</h3>
 <br />
 
-<form method="POST" action="/Search/Index?search=@ViewBag.Search">
-    Sorteaza dupa:
-    <select id="sortType" name="sortType">
-        <option value="Select">--Selecteaza--</option>
-        <option value="Title">Titlu</option>
-        <option value="Date">Data postarii</option>
-        <option value="PriceAsc">Pret crescator</option>
-        <option value="PriceDesc">Pret descrescator</option>
-    </select>
-    <input class="btn btn-default" type="submit" value="Aplica" />
-</form>
-<br />
+@using (Html.BeginForm("Index", "Search", new { search = ViewBag.Search }, FormMethod.Post))
+{
+    <b> Adauga filtre:</b>
+    <br />
+    @Html.Label("Locatie:");
+    @Html.DropDownList("FromCity", new SelectList(ViewBag.Cities, "Value", "Text"), "Selectati locatia", new { id = "FromCity", @class = "form-control" });
+    <br />
 
-@if (ViewBag.NoResult == false)
-{
-    foreach (Licenta.Models.Product product in ViewBag.Products)
+    @Html.Label("Postate dupa data de:");
+    @* @Html.TextBox("DateMin", null, "{0:dd/MM/yyyy}", new { @class = "datefield", @placeholder = "mm/dd/yyyy" });
+        <br /><br />*@
+    @Html.TextBox("DateMin", null, new { @class = "date-picker" });
+    <br />
+
+    @Html.Label("Pret minim:");
+    @Html.TextBox("priceMin", null, new { id="priceMin", type = "number", min = "0", step = "0.01", @class = "form-control" });
+    <br />
+    @Html.Label("Pret maxim:");
+    @Html.TextBox("PriceMax", null, new { id = "priceMax", type = "number", min = "0", step = "0.01", @class = "form-control" });
+    <br />
+
+    @Html.Label("Starea:");
+    @Html.DropDownList("State", new SelectList(ViewBag.ProductStates, "Value", "Text"), "Selectati starea produsului", new { id = "state", @class = "form-control" });
+    <br />
+
+    <br />
+    <input class="btn btn-primary" type="submit" value="Aplica" />
+    <br />
+    <br />
+}
+    <br />
+
+    <form method="POST" action="/Search/Index?search=@ViewBag.Search">
+        Sorteaza dupa:
+        <select id="sortType" name="sortType">
+            <option value="Select">--Selecteaza--</option>
+            <option value="Title">Titlu</option>
+            <option value="Date">Cele mai recente</option>
+            <option value="PriceAsc">Pret crescator</option>
+            <option value="PriceDesc">Pret descrescator</option>
+        </select>
+        <input class="btn btn-default" type="submit" value="Aplica" />
+    </form>
+    <br />
+
+    @if (ViewBag.NoResult == false)
     {
-        @Html.Partial("ProductInfo", product);
+        foreach (Licenta.Models.Product product in ViewBag.Products)
+        {
+            @Html.Partial("ProductInfo", product);
+        }
     }
-}
-else
-{
-    <p>Nu am gasit anunturi care sa se potriveasca acestei cautari!</p>
-    <p>Asigura-te ca ai scris corect (se poate intampla oricui) sau incearca o cautare mai generala.</p>
-}
+    else
+    {
+        <p>Nu am gasit anunturi care sa se potriveasca acestei cautari!</p>
+        <p>Asigura-te ca ai scris corect (se poate intampla oricui) sau incearca o cautare mai generala.</p>
+    }
+
+<script type="text/javascript">
+    $.noConflict();
+    jQuery(document).ready(function ($) {
+        $(function () {
+            // This will make every element with the class "date-picker" into a DatePicker element
+            $('.date-picker').datepicker();
+        })
+    });
+
+</script>
 

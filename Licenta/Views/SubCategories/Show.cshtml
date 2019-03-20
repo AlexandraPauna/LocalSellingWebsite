@@ -20,12 +20,32 @@
 <br />
 <br />
 
-@using (Html.BeginForm("Show", "SubCategory", new { id = ViewBag.SubCategoryId } ,FormMethod.Get))
+@using (Html.BeginForm("Show", "SubCategories", new { id = ViewBag.SubCategoryId }, FormMethod.Get))
 {
-    <b>Adauga filtre:</b>
-    @Html.TextBox("PriceMin", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" }));
-    @Html.TextBox("PriceMax", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" }));
+    <b> Adauga filtre:</b>
+    <br />
+    @Html.Label("Locatie:");
+    @Html.DropDownList("FromCity", new SelectList(ViewBag.Cities, "Value", "Text"), "Selectati locatia", new { id = "FromCity", @class = "form-control" });
+    <br />
 
+    @Html.Label("Postate dupa data de:");
+    @* @Html.TextBox("DateMin", null, "{0:dd/MM/yyyy}", new { @class = "datefield", @placeholder = "mm/dd/yyyy" });
+        <br /><br />*@
+    @Html.TextBox("DateMin", null, new{ @class = "date-picker"});
+    <br />
+
+    @Html.Label("Pret minim:");
+    @Html.TextBox("PriceMin", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" });
+    <br />
+    @Html.Label("Pret maxim:");
+    @Html.TextBox("PriceMax", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" });
+     <br />
+
+    @Html.Label("Starea:");
+    @Html.DropDownList("State", new SelectList(ViewBag.ProductStates, "Value", "Text"), "Selectati starea produsului", new { id = "State", @class = "form-control" });
+    <br />
+
+    <br />
     <input class="btn btn-primary" type="submit" value="Aplica" />
     <br />
     <br />
@@ -37,7 +57,7 @@
     <select id="sortType" name="sortType">
         <option value="Select">--Selecteaza--</option>
         <option value="Title">Titlu</option>
-        <option value="Date">Data postarii</option>
+        <option value="Date">Cele mai recente</option>
         <option value="PriceAsc">Pret crescator</option>
         <option value="PriceDesc">Pret descrescator</option>
     </select>
@@ -57,3 +77,15 @@
 
 <a class="btn btn-sm btn-success" href="/Product/New">Adauga un anunt</a>
 <br />
+
+<script type="text/javascript">
+    $.noConflict();
+    jQuery(document).ready(function ($) {
+        $(function () {
+            // This will make every element with the class "date-picker" into a DatePicker element
+            $('.date-picker').datepicker();
+        })
+    });
+
+
+</script>

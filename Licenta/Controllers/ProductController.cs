@@ -395,7 +395,15 @@ namespace Licenta.Controllers
             product.ProductStateTypes = GetAllProductStateTypes();
             product.DeliveryCompanies = GetAllDeliveryCompanies();
 
-            return View(product);
+            if (product.UserId == User.Identity.GetUserId() || User.IsInRole("Administrator") || User.IsInRole("Editor"))
+            {
+                return View(product);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui anunt care nu va apartine!";
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPut]
@@ -451,25 +459,33 @@ namespace Licenta.Controllers
                                 where prodImages.ProductId.Equals(product.ProductId)
                                 select prodImages.Id;
 
-        var imgList = new List<Data>();
+            var imgList = new List<Data>();
 
-        foreach (var img in productImages)
-                {
-                    imgList.Add(new Data(img, "/Product/ProductPhoto/?photoId=" + img));
-                }
-                ViewBag.ProductImages = imgList;
+            foreach (var img in productImages)
+            {
+                imgList.Add(new Data(img, "/Product/ProductPhoto/?photoId=" + img));
+            }
+            ViewBag.ProductImages = imgList;
 
-                //var imgList = new List<String>();
-                //foreach (var img in productImages)
-                //{
-                //    imgList.Add("/Product/ProductPhoto/?photoId=" + img);
-                //}
-                //ViewBag.ProductImages = imgList;
+            //var imgList = new List<String>();
+            //foreach (var img in productImages)
+            //{
+            //    imgList.Add("/Product/ProductPhoto/?photoId=" + img);
+            //}
+            //ViewBag.ProductImages = imgList;
 
-                //ViewBag.ProductImagesId = productImages.ToList();
+            //ViewBag.ProductImagesId = productImages.ToList();
 
-
+            if (product.UserId == User.Identity.GetUserId() || User.IsInRole("Administrator")|| User.IsInRole("Editor"))
+            {
                 return View(product);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui anunt care nu va apartine!";
+                return RedirectToAction("Index");
+            }
+
         }
 
         [HttpPost]

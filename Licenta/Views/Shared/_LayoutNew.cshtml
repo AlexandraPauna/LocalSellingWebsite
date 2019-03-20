@@ -61,12 +61,8 @@
 
             <div class="col-md-6 col-sm-8 col-xs-11 navbar-left">
                 <div class="navbar-form " role="search">
-                    @using (Html.BeginForm("Index", "Search", FormMethod.Get,
-                                            //new { search = FormMethod.Get }, 
-                                          FormMethod.Post,
-                                          new { @class = "form-group", @style = "max-width: 100%; width: 100%;" }))
+                    @using (Html.BeginForm("Index", "Search", FormMethod.Get@*,FormMethod.Post, new { @class = "form-group", @style = "max-width: 100%; width: 100%;" }*@))
                     {
-
                         @Html.TextBox("Search");
                         <input class="btn btn-primary" style="background: rgb(72, 166, 72);" type="submit" value="Cauta" />
 
@@ -90,7 +86,7 @@
                     </li>
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Utilizatori", "Index", "Users")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

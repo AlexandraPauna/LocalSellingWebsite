@@ -19,27 +19,6 @@ namespace Licenta.Controllers
             return View();
         }
 
-        [NonAction]
-        public IEnumerable<SelectListItem> GetAllCategories()
-        {
-            // generam o lista goala
-            var selectList = new List<SelectListItem>();
-            // Extragem toate categoriile din baza de date
-            var categories = from cat in db.Categories select cat;
-            // iteram prin categorii
-            foreach (var category in categories)
-            {
-                // Adaugam in lista elementele necesare pentru dropdown
-                selectList.Add(new SelectListItem
-                {
-                    Value = category.CategoryId.ToString(),
-                    Text = category.CategoryName.ToString()
-                });
-            }
-            // returnam lista de categorii
-            return selectList;
-        }
-
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult New()
         {
@@ -76,8 +55,11 @@ namespace Licenta.Controllers
         }
 
         //vizibil pt toata lumea
-        public ActionResult Show(int id/*, float? priceMin, float? priceMax*/)
+        public ActionResult Show(int id, int? fromCity, float? priceMin, float? priceMax, int? state)
         {
+            ViewBag.Cities = GetAllCities();
+            ViewBag.ProductStates = GetAllProductStates();
+
             SubCategory subCategory = db.SubCategories.Find(id);
             ViewBag.SubCategoryId = subCategory.SubCategoryId;
             ViewBag.SubCategoryName = subCategory.SubCategoryName;
@@ -90,20 +72,28 @@ namespace Licenta.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            ViewBag.Products = products;
-
+            
             //Filtrarea
-            /*if (priceMin != null)
-            {
-                ViewBag.Products = products.Where(s => s.Price >= priceMin);
-            }*/
+            if (priceMin != null)
+                products = products.Where(s => s.Price >= priceMin);
+            if (priceMax != null)
+                products = products.Where(s => s.Price <= priceMax);
+            if (fromCity != null)
+                products = products.Where(s => s.CityId == fromCity);
+            if(state != null)
+                products = products.Where(s => s.ProductStateId == state);
+
+            ViewBag.Products = products;
 
             return View();
         }
         
         [HttpPost]
-        public ActionResult Show(int id, string sortType)
+        public ActionResult Show(int id, int? fromCity, float? priceMin, float? priceMax, string sortType)
         {
+            ViewBag.Cities = GetAllCities();
+            ViewBag.ProductStates = GetAllProductStates();
+
             SubCategory subCategory = db.SubCategories.Find(id);
             ViewBag.SubCategoryId = subCategory.SubCategoryId;
             ViewBag.SubCategoryName = subCategory.SubCategoryName;
@@ -113,18 +103,26 @@ namespace Licenta.Controllers
 
             var products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id);
 
+            //Filtrarea
+            if (priceMin != null)
+                products = products.Where(s => s.Price >= priceMin);
+            if (priceMax != null)
+                products = products.Where(s => s.Price <= priceMax);
+            if (fromCity != null)
+                products = products.Where(s => s.CityId == fromCity);
+
+            //Sortarea
             if (sortType == "Title")
-                products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderBy(x => x.Title);
+                products = products.OrderBy(x => x.Title);
             else
             if (sortType == "Date")
-                products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderByDescending(x => x.Date);
+                products = products.OrderByDescending(x => x.Date);
             else
             if (sortType == "PriceAsc")
-                products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderBy(x => x.Price);
+               products = products.OrderBy(x => x.Price);
             else
             if (sortType == "PriceDesc")
-                products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderByDescending(x => x.Price);
-
+                products = products.OrderByDescending(x => x.Price);
 
             if (TempData.ContainsKey("message"))
             {
@@ -184,5 +182,67 @@ namespace Licenta.Controllers
             TempData["message"] = "SubCategoria a fost stearsa!";
             return RedirectToAction("Show", "Categories", new { id = subCategory.CategoryId });
         }
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllCategories()
+        {
+            // generam o lista goala
+            var selectList = new List<SelectListItem>();
+            // Extragem toate categoriile din baza de date
+            var categories = from cat in db.Categories select cat;
+            // iteram prin categorii
+            foreach (var category in categories)
+            {
+                // Adaugam in lista elementele necesare pentru dropdown
+                selectList.Add(new SelectListItem
+                {
+                    Value = category.CategoryId.ToString(),
+                    Text = category.CategoryName.ToString()
+                });
+            }
+            // returnam lista de categorii
+            return selectList;
+        }
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllCities()
+        {
+
+            //generate empty list
+            var selectList = new List<SelectListItem>();
+
+            var cities = from cit in db.Cities select cit;
+            foreach (var city in cities)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = city.CityId.ToString(),
+                    Text = city.CityName.ToString()
+                });
+            }
+
+            return selectList;
+        }
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllProductStates()
+        {
+
+            //generate empty list
+            var selectList = new List<SelectListItem>();
+
+            var states = from st in db.ProductState select st;
+            foreach (var state in states)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = state.ProductStateId.ToString(),
+                    Text = state.ProductStateName.ToString()
+                });
+            }
+
+            return selectList;
+        }
+
     }
 }
