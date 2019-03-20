@@ -3,6 +3,7 @@ using Licenta.Models.Categories;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -42,14 +43,27 @@ namespace Licenta.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Editor,Administrator")]
-        public ActionResult New(Category category)
+        public ActionResult New([Bind(Exclude = "CategoryPhoto")]Category category)
         {
             try
             {
+                byte[] imageData = null;
+                if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
+                {
+                    HttpPostedFileBase poImgFile = Request.Files["CategoryPhoto"];
+
+                    using (var binary = new BinaryReader(poImgFile.InputStream))
+                    {
+                        imageData = binary.ReadBytes(poImgFile.ContentLength);
+                    }
+                }
+                category.CategoryPhoto = imageData;
+
                 db.Categories.Add(category);
                 db.SaveChanges();
                 TempData["message"] = "Categoria a fost adaugata!";
                 return RedirectToAction("Index","Home");
+
             }
             catch (Exception e)
             {
@@ -124,6 +138,32 @@ namespace Licenta.Controllers
             db.SaveChanges();
             TempData["message"] = "Categoria a fost stearsa!";
             return RedirectToAction("Index", "Home");
+        }
+
+        public FileContentResult DisplayCategoryPhoto(int categoryId)
+        {
+
+            var category = from cat in db.Categories
+                          where cat.CategoryId.Equals(categoryId)
+                          select cat;
+            var catImage = category.FirstOrDefault().CategoryPhoto;
+
+            if (catImage == null || catImage.Length <= 0)
+            {
+                string fileName = HttpContext.Server.MapPath(@"~/Images/noImg.png");
+
+                byte[] imageData = null;
+                FileInfo fileInfo = new FileInfo(fileName);
+                long imageFileLength = fileInfo.Length;
+                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                BinaryReader br = new BinaryReader(fs);
+                imageData = br.ReadBytes((int)imageFileLength);
+
+                return File(imageData, "image/png");
+            }
+
+            return new FileContentResult(catImage, "image/jpeg");
+
         }
 
     }

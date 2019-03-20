@@ -53,12 +53,21 @@ namespace Licenta.Controllers
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult New(SubCategory subCategory)
         {
+            subCategory.Categories = GetAllCategories();
             try
             {
-                db.SubCategories.Add(subCategory);
-                db.SaveChanges();
-                TempData["message"] = "Subcategoria a fost adaugata!";
-                return RedirectToAction("Show", "Categories", new { id = subCategory.CategoryId});
+                if (ModelState.IsValid)
+                {
+                    db.SubCategories.Add(subCategory);
+                    db.SaveChanges();
+                    TempData["message"] = "Subcategoria a fost adaugata!";
+                    return RedirectToAction("Show", "Categories", new { id = subCategory.CategoryId });
+
+                }
+                else
+                {
+                    return View(subCategory);
+                }
             }
             catch (Exception e)
             {
@@ -85,6 +94,37 @@ namespace Licenta.Controllers
 
             return View();
         }
+        /*
+        [HttpPost]
+        public ActionResult Show(int id, string sortType)
+        {
+            SubCategory subCategory = db.SubCategories.Find(id);
+            ViewBag.SubCategoryId = subCategory.SubCategoryId;
+            ViewBag.SubCategoryName = subCategory.SubCategoryName;
+            var userId = User.Identity.GetUserId();
+
+            ViewBag.Allow = db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
+
+            var products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id);
+
+            if (sortType == "Title")
+                products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderBy(x => x.Title);
+            else
+            if (sortType == "Date")
+                products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderByDescending(x => x.Date);
+            else
+            if (sortType == "Date")
+                products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderByDescending(x => x.Date);
+
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+            ViewBag.Products = products;
+           
+            return View();
+        }*/
 
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult Edit(int id)

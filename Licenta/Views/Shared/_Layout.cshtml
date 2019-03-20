@@ -11,15 +11,12 @@
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script>
-                $('.carousel').carousel();
+        $('.carousel').carousel();
     </script>
 
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-
-
-
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -39,6 +36,34 @@
             </div>
         </div>
     </div>
+
+    @*<div class="navbar navbar-inverse">
+            <div class="container">
+                @using (Html.BeginForm("Index", "Home", FormMethod.Get))
+                {
+                    <b>Cauta stire:</b>
+                    @Html.TextBox("SearchTitle");<input class="btn btn-primary" class="form-control input-sm pull-right" type="submit" value="Aplica" />
+                    <br />
+                    <br />
+                }
+
+            </div>
+
+        </div>*@
+    <nav class="navbar-form navbar-left" role="search">
+        @using (Html.BeginForm("Index", "Home", //FormMethod.Get,
+                                new { ReturnUrl = ViewBag.ReturnUrl },
+                                FormMethod.Post, new { @class = "form-group" }))
+        {
+            <span class="glyphicon glyphicon-search"></span>
+            @Html.TextBox("Search");
+            <input class="btn btn-primary" class="form-control input-sm pull-right" type="submit" value="Cauta" />
+
+            <br />
+            <br />
+        }
+    </nav>
+
     <div class="container body-content">
         @RenderBody()
         <hr />

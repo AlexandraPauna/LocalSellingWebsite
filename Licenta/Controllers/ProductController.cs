@@ -28,7 +28,7 @@ namespace Licenta.Controllers
             else
             {
                 //products of current logged in user
-                var products = from prod in db.Products.Include("City").Include("Subcategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
+                var products = from prod in db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
                                where prod.UserId.Equals(userId.ToString())
                                select prod;
 

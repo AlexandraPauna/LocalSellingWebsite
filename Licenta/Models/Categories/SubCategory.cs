@@ -17,10 +17,11 @@ namespace Licenta.Models.Categories
         [Display(Name = "Nume Subcategorie")]
         public string SubCategoryName { get; set; }
 
-        public int CategoryId { get; set; }
-
         public virtual ICollection<Product> Product { get; set; }
 
+        [Required(ErrorMessage = "Selectati categoria!")]
+        [Display(Name = "Categorie")]
+        public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }
     }

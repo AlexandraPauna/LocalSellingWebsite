@@ -7,6 +7,8 @@
 <h2>@ViewBag.Title</h2>
 
 <form method="post" action="/SubCategories/New">
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
     <label>Selectati Categoria</label>
     @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Value", "Text"), "Selectati categoria", new { id = "catList", @class = "form-control" })
     <br /><br />

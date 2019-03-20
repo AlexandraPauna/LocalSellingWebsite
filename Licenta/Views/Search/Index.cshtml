@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Rezultatele Cautarii";
+}
+
+<h2>@ViewBag.Title</h2>
+<h3>"@ViewBag.Search"</h3>
+<br />
+
+@if (ViewBag.NoResult == false)
+{
+    foreach (Licenta.Models.Product product in ViewBag.Products)
+    {
+        @Html.Partial("ProductInfo", product);
+    }
+}
+else
+{
+    <p>Nu am gasit anunturi care sa se potriveasca acestei cautari!</p>
+    <p>Asigura-te ca ai scris corect (se poate intampla oricui) sau incearca o cautare mai generala.</p>
+}
+

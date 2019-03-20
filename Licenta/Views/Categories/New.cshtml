@@ -6,11 +6,23 @@
 
 <h2>@ViewBag.Title</h2>
 
-<form method="post" action="/Categories/New">
+<form method="post" action="/Categories/New" enctype="multipart/form-data">
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
     @Html.Label("CategoryName", "Denumire categorie")
     <br />
     @Html.TextBox("CategoryName", null, new { @class = "form-control" })
     @Html.ValidationMessageFor(model => model.CategoryName, null, new { @class = "text-danger " })
+    <br />
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.CategoryPhoto, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            <input type="file" name="CategoryPhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+        </div>
+    </div>
+    </br>
+
     <br /><br />
     <button class="btn btn-sm btn-success" type="submit">Adauga categorie</button>
 </form>

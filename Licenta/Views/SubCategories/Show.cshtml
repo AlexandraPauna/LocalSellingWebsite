@@ -4,7 +4,7 @@
 }
 
 <h2>@ViewBag.Title</h2>
-<h1>ViewBag.SubCategoryName</h1>
+<h1>@ViewBag.SubCategoryName</h1>
 
 <br />
 
@@ -18,6 +18,18 @@
     </form>
 }
 <br />
+<br />
+
+@*<form method="POST">
+    Sorteaza dupa:
+    <select id="sortType" name="sortType">
+        <option value="Title">Titlu</option>
+        <option value="Date">Data postarii</option>
+        <option value="PriceAsc">Pret crescator</option>
+        <option value="Price Desc">Pret descrescator</option>
+    </select>
+    <input class="btn btn-default" type="submit" value="Aplica" />
+</form>*@
 <br />
 
 @if (TempData.ContainsKey("message"))
