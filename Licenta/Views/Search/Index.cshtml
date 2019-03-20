@@ -7,6 +7,19 @@
 <h3>"@ViewBag.Search"</h3>
 <br />
 
+<form method="POST" action="/Search/Index?search=@ViewBag.Search">
+    Sorteaza dupa:
+    <select id="sortType" name="sortType">
+        <option value="Select">--Selecteaza--</option>
+        <option value="Title">Titlu</option>
+        <option value="Date">Data postarii</option>
+        <option value="PriceAsc">Pret crescator</option>
+        <option value="PriceDesc">Pret descrescator</option>
+    </select>
+    <input class="btn btn-default" type="submit" value="Aplica" />
+</form>
+<br />
+
 @if (ViewBag.NoResult == false)
 {
     foreach (Licenta.Models.Product product in ViewBag.Products)

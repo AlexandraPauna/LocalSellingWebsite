@@ -94,7 +94,7 @@ namespace Licenta.Controllers
 
             return View();
         }
-        /*
+        
         [HttpPost]
         public ActionResult Show(int id, string sortType)
         {
@@ -113,8 +113,11 @@ namespace Licenta.Controllers
             if (sortType == "Date")
                 products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderByDescending(x => x.Date);
             else
-            if (sortType == "Date")
-                products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderByDescending(x => x.Date);
+            if (sortType == "PriceAsc")
+                products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderBy(x => x.Price);
+            else
+            if (sortType == "PriceDesc")
+                products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id).OrderByDescending(x => x.Price);
 
 
             if (TempData.ContainsKey("message"))
@@ -124,7 +127,7 @@ namespace Licenta.Controllers
             ViewBag.Products = products;
            
             return View();
-        }*/
+        }
 
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult Edit(int id)
