@@ -11,7 +11,7 @@ namespace Licenta.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Search
-        public ActionResult Index(string search,int? fromCity, float? priceMin, float? priceMax, int? state)
+        public ActionResult Index(string search, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state)
         {
             ViewBag.Cities = GetAllCities(); //used to load cities in dropdown
             ViewBag.ProductStates = GetAllProductStates(); 
@@ -68,7 +68,9 @@ namespace Licenta.Controllers
                     products = products.Where(s => s.CityId == fromCity);
                 if (state != null)
                     products = products.Where(s => s.ProductStateId == state);
-                   
+                if (dateMin != null)
+                    products = products.Where(s => s.Date >= dateMin);
+
                 ViewBag.Products = products.OrderByDescending(a => a.Date);
                 if (ViewBag.Products != null)
                 {
@@ -82,11 +84,11 @@ namespace Licenta.Controllers
        
 
         [HttpPost]
-        public ActionResult Index(string search, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType)
+        public ActionResult Index(string search, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType)
         {
             ViewBag.Cities = GetAllCities(); //used to load cities in dropdown
             ViewBag.ProductStates = GetAllProductStates();
-
+            
             ViewBag.NoResult = true;
             ViewBag.Products = null;
             ViewBag.Search = search;
@@ -140,6 +142,8 @@ namespace Licenta.Controllers
                     products = products.Where(s => s.CityId == fromCity);
                 if (state != null)
                     products = products.Where(s => s.ProductStateId == state);
+                if (dateMin != null)
+                    products = products.Where(s => s.Date >= dateMin);
 
                 //Sortarea
                 if (sortType == "Title")

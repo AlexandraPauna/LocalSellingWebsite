@@ -16,13 +16,13 @@
     <br />
 
     @Html.Label("Postate dupa data de:");
-    @* @Html.TextBox("DateMin", null, "{0:dd/MM/yyyy}", new { @class = "datefield", @placeholder = "mm/dd/yyyy" });
+    @*@Html.TextBox("DateMin", null, "{0:dd/MM/yyyy}", new { @class = "datefield", @placeholder = "mm/dd/yyyy" });
         <br /><br />*@
-    @Html.TextBox("DateMin", null, new { @class = "date-picker" });
+    @Html.TextBox("DateMin", null, new { @id = "dateMin", @type = "datetime", @class = "date-picker" });
     <br />
 
     @Html.Label("Pret minim:");
-    @Html.TextBox("priceMin", null, new { id="priceMin", type = "number", min = "0", step = "0.01", @class = "form-control" });
+    @Html.TextBox("PriceMin", null, new { id = "priceMin", type = "number", min = "0", step = "0.01", @class = "form-control" });
     <br />
     @Html.Label("Pret maxim:");
     @Html.TextBox("PriceMax", null, new { id = "priceMax", type = "number", min = "0", step = "0.01", @class = "form-control" });
@@ -37,42 +37,54 @@
     <br />
     <br />
 }
-    <br />
+<br />
 
-    <form method="POST" action="/Search/Index?search=@ViewBag.Search">
-        Sorteaza dupa:
-        <select id="sortType" name="sortType">
-            <option value="Select">--Selecteaza--</option>
-            <option value="Title">Titlu</option>
-            <option value="Date">Cele mai recente</option>
-            <option value="PriceAsc">Pret crescator</option>
-            <option value="PriceDesc">Pret descrescator</option>
-        </select>
-        <input class="btn btn-default" type="submit" value="Aplica" />
-    </form>
-    <br />
+<form method="POST" action="/Search/Index?search=@ViewBag.Search">
+    Sorteaza dupa:
+    <select id="sortType" name="sortType">
+        <option value="Select">--Selecteaza--</option>
+        <option value="Title">Titlu</option>
+        <option value="Date">Cele mai recente</option>
+        <option value="PriceAsc">Pret crescator</option>
+        <option value="PriceDesc">Pret descrescator</option>
+    </select>
+    <input class="btn btn-default" type="submit" value="Aplica" />
+</form>
+<br />
 
-    @if (ViewBag.NoResult == false)
+@if (ViewBag.NoResult == false)
+{
+    foreach (Licenta.Models.Product product in ViewBag.Products)
     {
-        foreach (Licenta.Models.Product product in ViewBag.Products)
-        {
-            @Html.Partial("ProductInfo", product);
-        }
+        @Html.Partial("ProductInfo", product);
     }
-    else
-    {
-        <p>Nu am gasit anunturi care sa se potriveasca acestei cautari!</p>
-        <p>Asigura-te ca ai scris corect (se poate intampla oricui) sau incearca o cautare mai generala.</p>
-    }
+}
+else
+{
+    <p>Nu am gasit anunturi care sa se potriveasca acestei cautari!</p>
+    <p>Asigura-te ca ai scris corect (se poate intampla oricui) sau incearca o cautare mai generala.</p>
+}
 
+<!-- Bootstrap -->
+<!-- Bootstrap DatePicker -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js" type="text/javascript"></script>
 <script type="text/javascript">
     $.noConflict();
     jQuery(document).ready(function ($) {
         $(function () {
             // This will make every element with the class "date-picker" into a DatePicker element
-            $('.date-picker').datepicker();
-        })
+            $('.date-picker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd/mm/yyyy',
+                //dateFormat: "dd-mm-yy",
+                yearRange: "-60:+0",
+                showOn: "button"
+
+            });
+        });
     });
 
-</script>
 
+</script>

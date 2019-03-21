@@ -55,7 +55,7 @@ namespace Licenta.Controllers
         }
 
         //vizibil pt toata lumea
-        public ActionResult Show(int id, int? fromCity, float? priceMin, float? priceMax, int? state)
+        public ActionResult Show(int id, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state)
         {
             ViewBag.Cities = GetAllCities();
             ViewBag.ProductStates = GetAllProductStates();
@@ -82,6 +82,8 @@ namespace Licenta.Controllers
                 products = products.Where(s => s.CityId == fromCity);
             if(state != null)
                 products = products.Where(s => s.ProductStateId == state);
+            if (dateMin != null)
+                products = products.Where(s => s.Date >= dateMin);
 
             ViewBag.Products = products;
 
@@ -89,7 +91,7 @@ namespace Licenta.Controllers
         }
         
         [HttpPost]
-        public ActionResult Show(int id, int? fromCity, float? priceMin, float? priceMax, string sortType)
+        public ActionResult Show(int id, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, string sortType)
         {
             ViewBag.Cities = GetAllCities();
             ViewBag.ProductStates = GetAllProductStates();
@@ -110,6 +112,8 @@ namespace Licenta.Controllers
                 products = products.Where(s => s.Price <= priceMax);
             if (fromCity != null)
                 products = products.Where(s => s.CityId == fromCity);
+            if (dateMin != null)
+                products = products.Where(s => s.Date >= dateMin);
 
             //Sortarea
             if (sortType == "Title")
