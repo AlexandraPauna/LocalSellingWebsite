@@ -55,7 +55,7 @@ namespace Licenta.Controllers
         }
 
         //vizibil pt toata lumea
-        public ActionResult Show(int id, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state)
+        public ActionResult Show(int id, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType)
         {
             ViewBag.Cities = GetAllCities();
             ViewBag.ProductStates = GetAllProductStates();
@@ -85,36 +85,6 @@ namespace Licenta.Controllers
             if (dateMin != null)
                 products = products.Where(s => s.Date >= dateMin);
 
-            ViewBag.Products = products;
-
-            return View();
-        }
-        
-        [HttpPost]
-        public ActionResult Show(int id, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, string sortType)
-        {
-            ViewBag.Cities = GetAllCities();
-            ViewBag.ProductStates = GetAllProductStates();
-
-            SubCategory subCategory = db.SubCategories.Find(id);
-            ViewBag.SubCategoryId = subCategory.SubCategoryId;
-            ViewBag.SubCategoryName = subCategory.SubCategoryName;
-            var userId = User.Identity.GetUserId();
-
-            ViewBag.Allow = db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
-
-            var products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id);
-
-            //Filtrarea
-            if (priceMin != null)
-                products = products.Where(s => s.Price >= priceMin);
-            if (priceMax != null)
-                products = products.Where(s => s.Price <= priceMax);
-            if (fromCity != null)
-                products = products.Where(s => s.CityId == fromCity);
-            if (dateMin != null)
-                products = products.Where(s => s.Date >= dateMin);
-
             //Sortarea
             if (sortType == "Title")
                 products = products.OrderBy(x => x.Title);
@@ -123,19 +93,16 @@ namespace Licenta.Controllers
                 products = products.OrderByDescending(x => x.Date);
             else
             if (sortType == "PriceAsc")
-               products = products.OrderBy(x => x.Price);
+                products = products.OrderBy(x => x.Price);
             else
             if (sortType == "PriceDesc")
                 products = products.OrderByDescending(x => x.Price);
 
-            if (TempData.ContainsKey("message"))
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
             ViewBag.Products = products;
-           
+
             return View();
         }
+        
 
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult Edit(int id)

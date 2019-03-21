@@ -29,8 +29,6 @@
     <br />
 
     @Html.Label("Postate dupa data de:");
-    @* @Html.TextBox("DateMin", null, "{0:dd/MM/yyyy}", new { @class = "datefield", @placeholder = "mm/dd/yyyy" });
-        <br /><br />*@
     @Html.TextBox("DateMin", null, "{0:dd/mm/yyyy}", new { id = "dateMin", @class = "date-picker" });
     <br />
 
@@ -43,26 +41,23 @@
 
     @Html.Label("Starea:");
     @Html.DropDownList("State", new SelectList(ViewBag.ProductStates, "Value", "Text"), "Selectati starea produsului", new { id = "State", @class = "form-control" });
-    <br />
+    <br /><br />
+
+    @Html.Label("Sorteaza dupa:");
+    @Html.DropDownList("sortType", new SelectList(
+                                    new List<Object>{
+                                        new { value = "Select" , text = "Selecteaza"  },
+                                        new { value = "Title" , text = "Titlu" },
+                                        new { value = "Date" , text = "Cele mai recente"},
+                                        new { value = "PriceAsc" , text = "Pret crescator"},
+                                        new { value = "PriceDesc" , text = "Pret descrescator"}
+                                   }, "value","text",2), new { id = "sortType", @class = "form-control" });
 
     <br />
     <input class="btn btn-primary" type="submit" value="Aplica" />
     <br />
     <br />
 }
-<br />
-
-<form method="POST">
-    Sorteaza dupa:
-    <select id="sortType" name="sortType">
-        <option value="Select">--Selecteaza--</option>
-        <option value="Title">Titlu</option>
-        <option value="Date">Cele mai recente</option>
-        <option value="PriceAsc">Pret crescator</option>
-        <option value="PriceDesc">Pret descrescator</option>
-    </select>
-    <input class="btn btn-default" type="submit" value="Sorteaza" />
-</form>
 <br />
 
 @if (TempData.ContainsKey("message"))
