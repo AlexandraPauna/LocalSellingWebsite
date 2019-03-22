@@ -22,6 +22,7 @@ namespace Licenta.Controllers
             ViewBag.UsersList = users;
             return View();
         }
+
         [Authorize(Roles = "Administrator")]
         public ActionResult Edit(string id)
         {
@@ -32,22 +33,6 @@ namespace Licenta.Controllers
             ViewBag.NotVisible = db.Roles.Any(x => x.Users.Any(y => y.UserId == id) && x.Name == "Administrator");
 
             return View(user);
-        }
-
-        [NonAction]
-        public IEnumerable<SelectListItem> GetAllRoles()
-        {
-            var selectList = new List<SelectListItem>();
-            var roles = from role in db.Roles select role;
-            foreach (var role in roles)
-            {
-                selectList.Add(new SelectListItem
-                {
-                    Value = role.Id.ToString(),
-                    Text = role.Name.ToString()
-                });
-            }
-            return selectList;
         }
 
         [HttpPut]
@@ -100,6 +85,22 @@ namespace Licenta.Controllers
             TempData["message"] = "Userul a fost sters!";
 
             return RedirectToAction("Index");
+        }
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllRoles()
+        {
+            var selectList = new List<SelectListItem>();
+            var roles = from role in db.Roles select role;
+            foreach (var role in roles)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = role.Id.ToString(),
+                    Text = role.Name.ToString()
+                });
+            }
+            return selectList;
         }
 
     }

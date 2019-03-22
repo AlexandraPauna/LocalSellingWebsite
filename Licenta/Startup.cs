@@ -1,8 +1,10 @@
 ﻿using Licenta.Models;
+using Licenta.Models.Data;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Owin;
+using System.Linq;
 
 [assembly: OwinStartupAttribute(typeof(Licenta.Startup))]
 namespace Licenta
@@ -32,7 +34,10 @@ namespace Licenta
                 var user = new ApplicationUser();
                 user.UserName = "admin@admin.com";
                 user.Email = "admin@admin.com";
-                user.CityId = 1;
+                if (!context.Cities.Any())
+                {
+                    context.Cities.Add(new City { CityId = 1, CityName = "Bucuresti" });
+                }
                 var adminCreated = UserManager.Create(user, "Administrator1!");
                 if (adminCreated.Succeeded)
                 {
