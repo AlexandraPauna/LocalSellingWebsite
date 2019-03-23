@@ -35,14 +35,14 @@ namespace Licenta.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Editor,Administrator")]
+        [Authorize(Roles = "Editor, Administrator")]
         public ActionResult New()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Editor,Administrator")]
+        [Authorize(Roles = "Editor, Administrator")]
         public ActionResult New([Bind(Exclude = "CategoryPhoto")]Category category)
         {
             try
@@ -50,7 +50,7 @@ namespace Licenta.Controllers
                 byte[] imageData = null;
                 if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
                 {
-                    HttpPostedFileBase poImgFile = Request.Files["CategoryPhoto"];
+                    var poImgFile = Request.Files["CategoryPhoto"];
 
                     using (var binary = new BinaryReader(poImgFile.InputStream))
                     {
@@ -62,10 +62,10 @@ namespace Licenta.Controllers
                 db.Categories.Add(category);
                 db.SaveChanges();
                 TempData["message"] = "Categoria a fost adaugata!";
-                return RedirectToAction("Index","Home");
 
+                return RedirectToAction("Index");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return View();
             }
@@ -101,7 +101,7 @@ namespace Licenta.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "Editor,Administrator")]
+        [Authorize(Roles = "Editor, Administrator")]
         public ActionResult Edit(int id, Category requestCategory)
         {
             try
@@ -117,10 +117,8 @@ namespace Licenta.Controllers
                     }
                     return RedirectToAction("Index");
                 }
-                else
-                {
-                    return View(requestCategory);
-                }
+
+                return View(requestCategory);
 
             }
             catch (Exception e)
@@ -142,7 +140,6 @@ namespace Licenta.Controllers
 
         public FileContentResult DisplayCategoryPhoto(int categoryId)
         {
-
             var category = from cat in db.Categories
                           where cat.CategoryId.Equals(categoryId)
                           select cat;
@@ -163,7 +160,6 @@ namespace Licenta.Controllers
             }
 
             return new FileContentResult(catImage, "image/jpeg");
-
         }
 
     }

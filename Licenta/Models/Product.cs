@@ -33,7 +33,7 @@ namespace Licenta.Models
 
         public DateTime Date { get; set; }
 
-        [Required(ErrorMessage = "Adaugati descrierea produdului!")]
+        [Required(ErrorMessage = "Adaugati descrierea produsului!")]
         [MinLength(30, ErrorMessage = "Descrierea este prea scurta! Va rugam adaugati detalii!")]
         [Display(Name = "Descriere")]
         public string Description { get; set; }
