@@ -20,26 +20,26 @@ namespace Licenta.Controllers
         public ActionResult Index()
         {
             _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
             var userId = User.Identity.GetUserId();
             if (userId == null)
             {
                 return RedirectToAction("Login", "Account");
             }
-            else
+
+            //products of current logged in user
+            var products = from prod in db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
+                where prod.UserId.Equals(userId)
+                select prod;
+
+            var model = new ProductViewModel { Products = products.ToList() };
+
+            if (TempData.ContainsKey("message"))
             {
-                //products of current logged in user
-                var products = from prod in db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
-                               where prod.UserId.Equals(userId.ToString())
-                               select prod;
-
-                if (TempData.ContainsKey("message"))
-                {
-                    ViewBag.message = TempData["message"].ToString();
-                }
-                ViewBag.Products = products;
-
-                return View();
+                ViewBag.message = TempData["message"].ToString();
             }
+
+            return View(model);
         }
 
 

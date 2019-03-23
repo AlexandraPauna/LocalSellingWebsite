@@ -36,7 +36,7 @@ namespace Licenta
                 // Se adauga rolul de administrator
                 var role = new IdentityRole { Name = "Administrator" };
                 roleManager.Create(role);
-                
+
                 // se adauga utilizatorul administrator
                 var user = new ApplicationUser
                 {
