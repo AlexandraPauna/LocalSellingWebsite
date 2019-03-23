@@ -1,4 +1,4 @@
-﻿
+﻿@model Licenta.Models.ProductViewModel
 @{
     ViewBag.Title = "Anunturile Mele";
 }
@@ -10,7 +10,7 @@
     <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
 }
 
-@foreach (Licenta.Models.Product product in ViewBag.Products)
+@foreach (Licenta.Models.Product product in Model.Products)
 {
     @Html.Partial("ProductInfo", product);
 }

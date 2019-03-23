@@ -1,4 +1,5 @@
-﻿using Licenta.Models;
+﻿using System.Data.Entity;
+using Licenta.Models;
 using Licenta.Models.Data;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -15,45 +16,51 @@ namespace Licenta
         {
             ConfigureAuth(app);
             // Se apeleaza o metoda in care se adauga contul de administrator si rolurile aplicatiei
-            createAdminUserAndApplicationRoles();
+            CreateAdminUserAndApplicationRoles();
         }
 
-        private void createAdminUserAndApplicationRoles()
+        private void CreateAdminUserAndApplicationRoles()
         {
-            ApplicationDbContext context = new ApplicationDbContext();
+            var context = new ApplicationDbContext();
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+            if (!context.Cities.Any())
+            {
+                context.Cities.Add(new City { CityId = 1, CityName = "Bucuresti" });
+            }
+
             // Se adauga rolurile aplicatiei
             if (!roleManager.RoleExists("Administrator"))
             {
                 // Se adauga rolul de administrator
-                var role = new IdentityRole();
-                role.Name = "Administrator";
+                var role = new IdentityRole { Name = "Administrator" };
                 roleManager.Create(role);
+                
                 // se adauga utilizatorul administrator
-                var user = new ApplicationUser();
-                user.UserName = "admin@admin.com";
-                user.Email = "admin@admin.com";
-                if (!context.Cities.Any())
+                var user = new ApplicationUser
                 {
-                    context.Cities.Add(new City { CityId = 1, CityName = "Bucuresti" });
-                }
-                var adminCreated = UserManager.Create(user, "Administrator1!");
+                    UserName = "admin@admin.com",
+                    Email = "admin@admin.com",
+                    City = context.Cities.ToArray().First()
+                };
+
+                var adminCreated = userManager.Create(user, "Administrator1!");
                 if (adminCreated.Succeeded)
                 {
-                    UserManager.AddToRole(user.Id, "Administrator");
+                    userManager.AddToRole(user.Id, "Administrator");
                 }
             }
+
             if (!roleManager.RoleExists("Editor"))
             {
-                var role = new IdentityRole();
-                role.Name = "Editor";
+                var role = new IdentityRole { Name = "Editor" };
                 roleManager.Create(role);
             }
+
             if (!roleManager.RoleExists("User"))
             {
-                var role = new IdentityRole();
-                role.Name = "User";
+                var role = new IdentityRole { Name = "User" };
                 roleManager.Create(role);
             }
         }
