@@ -69,7 +69,7 @@ namespace Licenta.Controllers
 
         //
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        /*public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
@@ -90,6 +90,23 @@ namespace Licenta.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);
+        }*/
+
+        public ActionResult Index()
+        {
+            _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var userId = User.Identity.GetUserId();
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "AccountControler");
+            }
+            else
+            {
+                ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
+                user.Cities = GetAllCities();
+
+                return View(user);
+            }
         }
 
         //
@@ -330,7 +347,8 @@ namespace Licenta.Controllers
             //sign in user automatically after change of UserName
             await SignInManager.SignInAsync(user, true, true);
 
-            return RedirectToAction("Profile", "Account");
+            // return RedirectToAction("Profile", "Account");
+            return RedirectToAction("Index", "Manage");
         }
 
         [NonAction]

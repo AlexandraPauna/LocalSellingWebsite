@@ -98,6 +98,12 @@ namespace Licenta.Controllers
             return View(product);
         }
 
+        /*public ActionResult UserProile()
+        {
+
+            return View();
+        }*/
+
         // GET: /Product/New
         public ActionResult New()
         {
