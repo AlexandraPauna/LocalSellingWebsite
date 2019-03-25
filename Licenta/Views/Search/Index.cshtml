@@ -1,4 +1,5 @@
-﻿
+﻿@using Licenta.Common.Entities
+
 @{
     ViewBag.Title = "Rezultatele Cautarii";
 }
@@ -53,7 +54,7 @@
 
 @if (ViewBag.NoResult == false)
 {
-    foreach (Licenta.Models.Product product in ViewBag.Products)
+    foreach (Product product in ViewBag.Products)
     {
         @Html.Partial("ProductInfo", product);
     }

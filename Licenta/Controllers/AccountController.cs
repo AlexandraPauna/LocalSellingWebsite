@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Licenta;
+using Licenta.Common.Entities;
+using Licenta.Common.Models;
+using Licenta.DataAccess;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Licenta.Models;
 
 namespace Licenta.Controllers
 {
@@ -21,7 +20,7 @@ namespace Licenta.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -158,7 +157,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var cities = from cit in db.Cities select cit;
+            var cities = from cit in _db.Cities select cit;
             foreach (var city in cities)
             {
                 selectList.Add(new SelectListItem

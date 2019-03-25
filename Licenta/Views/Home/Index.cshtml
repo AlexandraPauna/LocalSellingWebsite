@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Licenta.Common.Entities
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -25,7 +26,7 @@
         }
     </ul>
 
-@foreach (Licenta.Models.Product products in ViewBag.LatestProducts)
+@foreach (Product products in ViewBag.LatestProducts)
 {
     <div class="card" style="width: 18rem;">
         <img src="@Url.Action("MainProductPhoto", "Home", new { prodId = products.ProductId})" class="card-img-top" alt="Imagine indisponibila">

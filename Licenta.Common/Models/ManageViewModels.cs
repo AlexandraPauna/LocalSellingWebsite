@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
-using Licenta.Models.Data;
+using Licenta.Common.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace Licenta.Models
+namespace Licenta.Common.Models
 {
     public class IndexViewModel
     {

@@ -1,4 +1,5 @@
-﻿
+﻿@using Licenta.Common.Entities
+
 @{
     ViewBag.Title = "Afisare Subcategorie";
 }
@@ -65,7 +66,7 @@
     <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
 }
 
-@foreach (Licenta.Models.Product product in ViewBag.Products)
+@foreach (Product product in ViewBag.Products)
 {
     @Html.Partial("ProductInfo", product);
 }

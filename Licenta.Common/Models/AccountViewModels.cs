@@ -1,10 +1,10 @@
-﻿using Licenta.Models.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
+using Licenta.Common.Entities;
 
-namespace Licenta.Models
+namespace Licenta.Common.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
@@ -21,7 +21,7 @@ namespace Licenta.Models
     public class SendCodeViewModel
     {
         public string SelectedProvider { get; set; }
-        public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+        public ICollection<SelectListItem> Providers { get; set; }
         public string ReturnUrl { get; set; }
         public bool RememberMe { get; set; }
     }

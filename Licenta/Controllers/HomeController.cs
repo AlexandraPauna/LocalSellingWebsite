@@ -1,26 +1,23 @@
-﻿using Licenta.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using Licenta.DataAccess;
 
 namespace Licenta.Controllers
 {
     public class HomeController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         public ActionResult Index()
         {
-            var categories = from category in db.Categories
+            var categories = from category in _db.Categories
                              orderby category.CategoryName
                              select category;
 
             ViewBag.Categories = categories;
 
-            var products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Include("User").OrderByDescending(a => a.Date).Take(2);
+            var products = _db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Include("User").OrderByDescending(a => a.Date).Take(2);
             ViewBag.LatestProducts = products;
 
             if (TempData.ContainsKey("message"))
@@ -32,7 +29,7 @@ namespace Licenta.Controllers
 
         public FileContentResult MainProductPhoto(int prodId)
         {
-            var productsImages = from prodImages in db.ProductImages
+            var productsImages = from prodImages in _db.ProductImages
                                  where prodImages.ProductId.Equals(prodId)
                                  select prodImages;
             var prodImage = productsImages.FirstOrDefault();

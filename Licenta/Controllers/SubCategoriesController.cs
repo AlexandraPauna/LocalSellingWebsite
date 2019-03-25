@@ -1,17 +1,16 @@
-﻿using Licenta.Models;
-using Licenta.Models.Categories;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using Licenta.Common.Entities;
+using Licenta.DataAccess;
 
 namespace Licenta.Controllers
 {
     public class SubCategoriesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         // GET: SubCategories
         public ActionResult Index()
@@ -37,8 +36,8 @@ namespace Licenta.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    db.SubCategories.Add(subCategory);
-                    db.SaveChanges();
+                    _db.SubCategories.Add(subCategory);
+                    _db.SaveChanges();
                     TempData["message"] = "Subcategoria a fost adaugata!";
                     return RedirectToAction("Show", "Categories", new { id = subCategory.CategoryId });
 
@@ -60,14 +59,14 @@ namespace Licenta.Controllers
             ViewBag.Cities = GetAllCities();
             ViewBag.ProductStates = GetAllProductStates();
 
-            SubCategory subCategory = db.SubCategories.Find(id);
+            SubCategory subCategory = _db.SubCategories.Find(id);
             ViewBag.SubCategoryId = subCategory.SubCategoryId;
             ViewBag.SubCategoryName = subCategory.SubCategoryName;
             var userId = User.Identity.GetUserId();
 
-            ViewBag.Allow = db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
+            ViewBag.Allow = _db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
 
-            var products = db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id);
+            var products = _db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id);
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
@@ -107,7 +106,7 @@ namespace Licenta.Controllers
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult Edit(int id)
         {
-            SubCategory subCategory = db.SubCategories.Find(id);
+            SubCategory subCategory = _db.SubCategories.Find(id);
             ViewBag.SubCategory = subCategory;
             subCategory.Categories = GetAllCategories();
             
@@ -122,11 +121,11 @@ namespace Licenta.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    SubCategory subCategory = db.SubCategories.Find(id);
+                    SubCategory subCategory = _db.SubCategories.Find(id);
                     if (TryUpdateModel(subCategory))
                     {
                         subCategory.SubCategoryName = requestSubCategory.SubCategoryName;
-                        db.SaveChanges();
+                        _db.SaveChanges();
                         TempData["message"] = "Subcategoria a fost modificata!";
                     }
                     return RedirectToAction("Index");
@@ -147,9 +146,9 @@ namespace Licenta.Controllers
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult Delete(int id)
         {
-            SubCategory subCategory = db.SubCategories.Find(id);
-            db.SubCategories.Remove(subCategory);
-            db.SaveChanges();
+            SubCategory subCategory = _db.SubCategories.Find(id);
+            _db.SubCategories.Remove(subCategory);
+            _db.SaveChanges();
             TempData["message"] = "SubCategoria a fost stearsa!";
             return RedirectToAction("Show", "Categories", new { id = subCategory.CategoryId });
         }
@@ -160,7 +159,7 @@ namespace Licenta.Controllers
             // generam o lista goala
             var selectList = new List<SelectListItem>();
             // Extragem toate categoriile din baza de date
-            var categories = from cat in db.Categories select cat;
+            var categories = from cat in _db.Categories select cat;
             // iteram prin categorii
             foreach (var category in categories)
             {
@@ -182,7 +181,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var cities = from cit in db.Cities select cit;
+            var cities = from cit in _db.Cities select cit;
             foreach (var city in cities)
             {
                 selectList.Add(new SelectListItem
@@ -202,7 +201,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var states = from st in db.ProductState select st;
+            var states = from st in _db.ProductState select st;
             foreach (var state in states)
             {
                 selectList.Add(new SelectListItem

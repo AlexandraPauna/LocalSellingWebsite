@@ -1,18 +1,16 @@
-﻿using Licenta.Models;
-using Licenta.Models.Categories;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using Licenta.Common.Entities;
+using Licenta.DataAccess;
 
 namespace Licenta.Controllers
 {
     public class CategoriesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         /*public ActionResult Index()
         {
@@ -20,13 +18,13 @@ namespace Licenta.Controllers
         }*/
         public ActionResult Index()
         {
-            var categories = from category in db.Categories
+            var categories = from category in _db.Categories
                              orderby category.CategoryName
                              select category;
             ViewBag.Categories = categories;
 
             var userId = User.Identity.GetUserId();
-            ViewBag.Allow = db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
+            ViewBag.Allow = _db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
 
             if (TempData.ContainsKey("message"))
             {
@@ -59,8 +57,8 @@ namespace Licenta.Controllers
                 }
                 category.CategoryPhoto = imageData;
 
-                db.Categories.Add(category);
-                db.SaveChanges();
+                _db.Categories.Add(category);
+                _db.SaveChanges();
                 TempData["message"] = "Categoria a fost adaugata!";
 
                 return RedirectToAction("Index");
@@ -74,14 +72,14 @@ namespace Licenta.Controllers
         //vizibil pt toata lumea
         public ActionResult Show(int id)
         {
-            Category category = db.Categories.Find(id);
+            Category category = _db.Categories.Find(id);
             ViewBag.CategoryId = category.CategoryId;
             ViewBag.CategoryName = category.CategoryName;
             var userId = User.Identity.GetUserId();
 
-            ViewBag.Allow = db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
+            ViewBag.Allow = _db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
 
-            var subCatgs = db.SubCategories.Where(a => a.CategoryId == id);
+            var subCatgs = _db.SubCategories.Where(a => a.CategoryId == id);
 
             if (TempData.ContainsKey("message"))
             {
@@ -95,7 +93,7 @@ namespace Licenta.Controllers
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult Edit(int id)
         {
-            Category category = db.Categories.Find(id);
+            Category category = _db.Categories.Find(id);
             ViewBag.Category = category;
             return View(category);
         }
@@ -108,11 +106,11 @@ namespace Licenta.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Category category = db.Categories.Find(id);
+                    Category category = _db.Categories.Find(id);
                     if (TryUpdateModel(category))
                     {
                         category.CategoryName = requestCategory.CategoryName;
-                        db.SaveChanges();
+                        _db.SaveChanges();
                         TempData["message"] = "Categoria a fost modificata!";
                     }
                     return RedirectToAction("Index");
@@ -131,16 +129,16 @@ namespace Licenta.Controllers
         //[Authorize(Roles = "Editor,Administrator")]
         public ActionResult Delete(int id)
         {
-            Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
-            db.SaveChanges();
+            Category category = _db.Categories.Find(id);
+            _db.Categories.Remove(category);
+            _db.SaveChanges();
             TempData["message"] = "Categoria a fost stearsa!";
             return RedirectToAction("Index", "Home");
         }
 
         public FileContentResult DisplayCategoryPhoto(int categoryId)
         {
-            var category = from cat in db.Categories
+            var category = from cat in _db.Categories
                           where cat.CategoryId.Equals(categoryId)
                           select cat;
             var catImage = category.FirstOrDefault().CategoryPhoto;

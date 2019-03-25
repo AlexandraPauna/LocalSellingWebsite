@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Licenta.Common.Entities;
 
-namespace Licenta.Models
+namespace Licenta.Common.Models
 {
     public class ProductViewModel
     {
