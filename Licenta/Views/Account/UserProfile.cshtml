@@ -7,7 +7,7 @@
 <h2>@ViewBag.Title</h2>
 
 <div>
-    <img src="@Url.Action("UserPhotos", "Account" )" style="width:160px;height:160px; background: #FFFFFF;
+    <img src="@Url.Action("UserPhotos", "Account", new { id = Model.Id } )" style="width:160px;height:160px; background: #FFFFFF;
     margin: auto;
     -moz-border-radius: 60px;
     border-radius: 100px;
