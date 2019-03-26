@@ -208,6 +208,8 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Categories\Category.cs" />
     <Compile Include="Models\Categories\SubCategory.cs" />
+    <Compile Include="Models\Communication\Conversation.cs" />
+    <Compile Include="Models\Communication\Message.cs" />
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\DeliveryCompany.cs" />
     <Compile Include="Models\Data\ProductState.cs" />
