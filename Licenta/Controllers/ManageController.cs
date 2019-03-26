@@ -105,6 +105,11 @@ namespace Licenta.Controllers
                 ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
                 user.Cities = GetAllCities();
 
+                var recentProducts = from prod in db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
+                                     where prod.UserId.Equals(userId)
+                                     select prod;
+                ViewBag.RecentProducts = recentProducts.Take(3);
+
                 return View(user);
             }
         }

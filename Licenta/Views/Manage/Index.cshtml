@@ -104,7 +104,21 @@
     <hr />
     <div>@Html.ActionLink("Editeaza Informatii Profil", "ChangeProfile", "Manage")</div>
     <div>@Html.ActionLink("Schimba Parola", "ChangePassword", "Manage")</div>
+    <hr />
+    <br /><br />
 
+    <h4>Anunturile utilizatorului</h4>
+    <hr />
+    <br />
+
+    <div>@Html.ActionLink("Vezi toate anunturile utilizatorului", "Index", "Product", new { id = Model.Id }, null)</div>
+    <br />
+    @foreach (Licenta.Models.Product product in ViewBag.recentProducts)
+    {
+        @Html.Partial("ProductInfo", product);
+    }
+    <hr />
+    <br /><br />
 
 
 </div>
