@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Licenta.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Licenta.Controllers
 {
@@ -22,6 +23,7 @@ namespace Licenta.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private ApplicationDbContext db = new ApplicationDbContext();
+        //private ApplicationDbContext db = ApplicationDbContext.Create();
 
         public AccountController()
         {
@@ -570,7 +572,7 @@ namespace Licenta.Controllers
             return city;
         }
 
-        public ActionResult Profile()
+        /*public ActionResult Profile(string userId)
         {
             _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var userId = User.Identity.GetUserId();
@@ -585,6 +587,22 @@ namespace Licenta.Controllers
 
                 return View(user);
             }
+        }*/
+
+        public ActionResult UserProfile(string id)
+        {
+            //ApplicationUser user = db.Users.Find(userId);
+
+            //ApplicationUser user = new ApplicationUser();
+            //user = db.Users.Find(userId);
+            ApplicationUser user = db.Users.Find(id);
+
+            var recentProducts = from prod in db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
+                                 where prod.UserId.Equals(id)
+                                 select prod;
+            ViewBag.RecentProducts = recentProducts.Take(3);
+
+            return View(user);
         }
 
         public FileContentResult UserPhotos()
