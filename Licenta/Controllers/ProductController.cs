@@ -17,7 +17,7 @@ namespace Licenta.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: /Product/Index
-        public ActionResult Index()
+        /*public ActionResult Index()
         {
             _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
@@ -31,6 +31,21 @@ namespace Licenta.Controllers
             var products = from prod in db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
                 where prod.UserId.Equals(userId)
                 select prod;
+
+            var model = new ProductViewModel { Products = products.ToList() };
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
+            return View(model);
+        }*/
+        public ActionResult Index(string id)
+        {
+            var products = from prod in db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
+                           where prod.UserId.Equals(id)
+                           select prod;
 
             var model = new ProductViewModel { Products = products.ToList() };
 
