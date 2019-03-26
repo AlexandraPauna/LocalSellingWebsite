@@ -3,19 +3,19 @@
     <div class="panel-body">
 
         <h3> Galerie Foto </h3>
-        
+
         <div id="ProductPhotosGallery" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 @{
                     var first = true;
                 }
                 @*@foreach (var item in ViewBag.ProductImages)
-                    {
-                        <div class="carousel-item @(first?Html.Raw("active"):Html.Raw(""))">
-                        <img class="d-block w-100" src="@item.ImageData" alt="@item.Id">
-                    </div>
-                    first = false;
-                    }*@
+                {
+                    <div class="carousel-item @(first?Html.Raw("active"):Html.Raw(""))">
+                    <img class="d-block w-100" src="@item.ImageData" alt="@item.Id">
+                </div>
+                first = false;
+                }*@
                 @foreach (var item in ViewBag.ProductImages)
                 {
                     <div class="item @(first?Html.Raw("active"):Html.Raw(""))">
@@ -39,6 +39,9 @@
         <div class="container">
             <strong>@Model.City.CityName</strong>
             <i class="glyphicon glyphicon-info-sign">Adaugat La @Model.Date</i>
+            <i class="glyphicon glyphicon-user"></i> <i>Adaugat de</i>
+            <strong>@Html.ActionLink((String)Model.User.UserName, "UserProfile", "Account", new { id = Model.User.Id }, null)</strong>
+           
         </div>
         <hr />
 
