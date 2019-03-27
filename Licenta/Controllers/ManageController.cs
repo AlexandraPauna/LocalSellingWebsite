@@ -106,6 +106,7 @@ namespace Licenta.Controllers
 
                 var recentProducts = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
                                      where prod.UserId.Equals(userId)
+                                     orderby prod.Date
                                      select prod;
                 ViewBag.RecentProducts = recentProducts.Take(3);
 
