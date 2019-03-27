@@ -181,7 +181,7 @@ namespace Licenta.Controllers
             {
                 //convert the user uploaded Photo as Byte Array before save to DB
                 byte[] imageData = null;
-                if (Request.Files.Count > 0)
+                if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
                 {
                     HttpPostedFileBase poImgFile = Request.Files["UserPhoto"];
 
@@ -603,7 +603,32 @@ namespace Licenta.Controllers
             return View(user);
         }
 
-        public FileContentResult UserPhotos()
+        public FileContentResult UserPhotos(string id)
+        {
+            ApplicationUser user = _db.Users.Find(id);
+            var userImage = user.UserPhoto;
+
+            if ((userImage == null) || (userImage.Length <= 0))
+            {
+                string fileName = HttpContext.Server.MapPath(@"~/Images/noProfile.png");
+
+                byte[] imageData = null;
+                FileInfo fileInfo = new FileInfo(fileName);
+                long imageFileLength = fileInfo.Length;
+                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                BinaryReader br = new BinaryReader(fs);
+                imageData = br.ReadBytes((int)imageFileLength);
+
+                return File(imageData, "image/png");
+
+            }
+            else
+                return new FileContentResult(userImage, "image/jpeg");
+
+        }
+
+
+        /*public FileContentResult UserPhotos()
         {
             var fileName = HttpContext.Server.MapPath(@"~/Images/noImg.png");
             var fileInfo = new FileInfo(fileName);
@@ -631,7 +656,9 @@ namespace Licenta.Controllers
             }
 
             return File(imageData, "image/png");
-        }
+        }*/
+
+
 
         #endregion
     }
