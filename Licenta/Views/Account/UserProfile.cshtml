@@ -1,0 +1,91 @@
+﻿@model Licenta.Common.Entities.ApplicationUser
+
+@{
+    ViewBag.Title = "Profilul lui " + Model.UserName;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <img src="@Url.Action("UserPhotos", "Account", new { id = Model.Id } )" style="width:160px;height:160px; background: #FFFFFF;
+    margin: auto;
+    -moz-border-radius: 60px;
+    border-radius: 100px;
+    padding: 6px;
+    box-shadow: 0px 0px 20px #888;" />
+
+    <hr />
+    <br />
+    <h4>Informatii Profil</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        @*<dt>Nume Utilizator</dt>
+            <dd>
+                @Html.DisplayFor(model => model.UserName)
+            </dd>*@
+
+        <dt>Prenume</dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>Nume</dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>Oras</dt>
+        <dd>
+            @Html.DisplayFor(model => model.City.CityName)
+
+        </dd>
+
+
+        <dt>Email</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailConfirmed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailConfirmed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SecurityStamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SecurityStamp)
+        </dd>
+
+        <dt>Numar Telefon</dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+    </dl>
+
+    <hr />
+    <br /><br />
+
+    <h4>Anunturile utilizatorului</h4>
+    <hr />
+    <br />
+
+    <div>@Html.ActionLink("Vezi toate anunturile utilizatorului", "Index", "Product", new { id = Model.Id }, null)</div>
+    <br />
+    @foreach (Licenta.Common.Entities.Product product in ViewBag.recentProducts)
+    {
+        @Html.Partial("ProductInfo", product);
+    }
+    <hr />
+    <br /><br />
+
+
+</div>

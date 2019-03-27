@@ -272,6 +272,7 @@
     <Content Include="Views\Categories\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutNew.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Account\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

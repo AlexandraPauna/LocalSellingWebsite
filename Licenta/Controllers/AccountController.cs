@@ -569,7 +569,7 @@ namespace Licenta.Controllers
             return city;
         }
 
-        public new ActionResult Profile()
+        /*public new ActionResult Profile()
         {
             _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var userId = User.Identity.GetUserId();
@@ -584,6 +584,22 @@ namespace Licenta.Controllers
 
                 return View(user);
             }
+        }*/
+
+        public ActionResult UserProfile(string id)
+        {
+            //ApplicationUser user = db.Users.Find(userId);
+
+            //ApplicationUser user = new ApplicationUser();
+            //user = db.Users.Find(userId);
+            ApplicationUser user = _db.Users.Find(id);
+
+            var recentProducts = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
+                                 where prod.UserId.Equals(id)
+                                 select prod;
+            ViewBag.RecentProducts = recentProducts.Take(3);
+
+            return View(user);
         }
 
         public FileContentResult UserPhotos()
