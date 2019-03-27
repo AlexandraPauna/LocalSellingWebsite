@@ -569,7 +569,7 @@ namespace Licenta.Controllers
             return city;
         }
 
-        public ActionResult Profile()
+        public new ActionResult Profile()
         {
             _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var userId = User.Identity.GetUserId();
@@ -588,43 +588,32 @@ namespace Licenta.Controllers
 
         public FileContentResult UserPhotos()
         {
+            var fileName = HttpContext.Server.MapPath(@"~/Images/noImg.png");
+            var fileInfo = new FileInfo(fileName);
+            var imageFileLength = fileInfo.Length;
+            var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            var br = new BinaryReader(fs);
+            var imageData = br.ReadBytes((int)imageFileLength);
+
             if (User.Identity.IsAuthenticated)
             {
-                String userId = User.Identity.GetUserId();
+                var userId = User.Identity.GetUserId();
 
                 if (userId == null)
                 {
-                    string fileName = HttpContext.Server.MapPath(@"~/Images/noImg.png");
-
-                    byte[] imageData = null;
-                    FileInfo fileInfo = new FileInfo(fileName);
-                    long imageFileLength = fileInfo.Length;
-                    FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                    BinaryReader br = new BinaryReader(fs);
-                    imageData = br.ReadBytes((int)imageFileLength);
-
                     return File(imageData, "image/png");
-
                 }
+
                 // to get the user details to load user Image    
                 var bdUsers = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
-                var userImage = bdUsers.Users.Where(x => x.Id == userId).FirstOrDefault();
+                var userImage = bdUsers.Users.FirstOrDefault(x => x.Id == userId);
 
-                return new FileContentResult(userImage.UserPhoto, "image/jpeg");
+                return userImage?.UserPhoto != null 
+                    ? new FileContentResult(userImage?.UserPhoto, "image/jpeg")
+                    : File(imageData, "image/png");
             }
-            else
-            {
-                string fileName = HttpContext.Server.MapPath(@"~/Images/noImg.png");
 
-                byte[] imageData = null;
-                FileInfo fileInfo = new FileInfo(fileName);
-                long imageFileLength = fileInfo.Length;
-                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                BinaryReader br = new BinaryReader(fs);
-                imageData = br.ReadBytes((int)imageFileLength);
-                return File(imageData, "image/png");
-
-            }
+            return File(imageData, "image/png");
         }
 
         #endregion
