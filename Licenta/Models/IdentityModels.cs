@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Licenta.Models.Categories;
 using Licenta.Models.Data;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using Licenta.Models.Communication;
 
 namespace Licenta.Models
 {
@@ -47,6 +48,8 @@ namespace Licenta.Models
         public DbSet<ProductState> ProductState { get; set; }
         public DbSet<DeliveryCompany> DeliveryCompanies { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
 
         public static ApplicationDbContext Create()
         {

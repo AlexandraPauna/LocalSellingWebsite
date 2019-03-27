@@ -16,8 +16,9 @@ namespace Licenta.Models.Communication
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }
 
-        //[Required]
-        //public string FromUser { get; set; }
+        //
+        [Required]
+        public string SenderId { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
 

@@ -193,7 +193,7 @@ namespace Licenta.Controllers
                     db.SaveChanges();
                     TempData["message"] = "Anuntul a fost adaugat cu succes!";
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Product", "Index", new { id = product.User.Id });
                // }
                // else
                // {

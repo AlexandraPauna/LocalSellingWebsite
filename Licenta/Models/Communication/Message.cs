@@ -11,6 +11,9 @@ namespace Licenta.Models.Communication
         [Key]
         public int MessageId { get; set; }
 
+        [Required]
+        public DateTime Date { get; set; }
+
         [Required(ErrorMessage = "Scrieti mesajul!")]
         //[Display(Name = "Continut")]
         public string Content { get; set; }
@@ -23,9 +26,9 @@ namespace Licenta.Models.Communication
         //public IEnumerable<Conversation> Conversations { get; set; }
 
         [Required]
-        public string FromUserId { get; set; }
+        public string SenderId { get; set; }
 
         [Required]
-        public string ToUserId { get; set; }
+        public string ReceiverId { get; set; }
     }
 }

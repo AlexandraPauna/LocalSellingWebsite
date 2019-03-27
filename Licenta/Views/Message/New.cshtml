@@ -1,0 +1,15 @@
+﻿@model Licenta.Models.Communication.Message
+@{
+    ViewBag.Title = "Mesaj nou";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Hidden("Date", DateTime.Now, new { @class = "form-control" })
+
+@Html.Hidden("Read", false, new { @class = "form-control" })
+
+@Html.Label("Content", "Mesajul")
+<br />
+@Html.TextArea("Content", null, new { @class = "form-control" })
+<br /><br />
