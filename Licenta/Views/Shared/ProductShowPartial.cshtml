@@ -39,6 +39,9 @@
         <div class="container">
             <strong>@Model.City.CityName</strong>
             <i class="glyphicon glyphicon-info-sign">Adaugat La @Model.Date</i>
+            <i class="glyphicon glyphicon-user"></i> <i>Adaugat de</i>
+            <strong>@Html.ActionLink((String)Model.User.UserName, "UserProfile", "Account", new { id = Model.User.Id }, null)</strong>
+
         </div>
         <hr />
 
