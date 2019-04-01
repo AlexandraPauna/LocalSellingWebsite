@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Licenta.Common.Entities;
+using Licenta.Common.Models;
 using Licenta.DataAccess;
 
 namespace Licenta.Controllers
@@ -12,10 +13,6 @@ namespace Licenta.Controllers
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
-        /*public ActionResult Index()
-        {
-            return View();
-        }*/
         public ActionResult Index()
         {
             var categories = from category in _db.Categories
@@ -73,6 +70,32 @@ namespace Licenta.Controllers
         public ActionResult Show(int id)
         {
             Category category = _db.Categories.Find(id);
+            //ViewBag.CategoryId = category.CategoryId;
+            //ViewBag.CategoryName = category.CategoryName;
+
+            var userId = User.Identity.GetUserId();
+            ViewBag.Allow = _db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
+
+            var subCatgs = _db.SubCategories.Where(a => a.CategoryId == id);
+
+            var model = new CategoryViewModel { CategoryId = category.CategoryId,
+                                                CategoryName = category.CategoryName,
+                                                CategoryPhoto = category.CategoryPhoto,
+                                                SubCategories = subCatgs.ToList() };
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+            //ViewBag.SubCategories = subCatgs;
+
+            return View(model);
+        }
+
+        //using ViewBag, not model
+        /*public ActionResult Show(int id)
+        {
+            Category category = _db.Categories.Find(id);
             ViewBag.CategoryId = category.CategoryId;
             ViewBag.CategoryName = category.CategoryName;
             var userId = User.Identity.GetUserId();
@@ -88,7 +111,7 @@ namespace Licenta.Controllers
             ViewBag.SubCategories = subCatgs;
            
             return View();
-        }
+        }*/
 
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult Edit(int id)

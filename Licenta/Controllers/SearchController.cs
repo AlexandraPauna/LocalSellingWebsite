@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Licenta.Common.Models;
 using Licenta.DataAccess;
 
 namespace Licenta.Controllers
@@ -18,7 +19,8 @@ namespace Licenta.Controllers
 
             // TempData["Search"] = search;
             ViewBag.NoResult = true;
-            ViewBag.Products = null;
+            //ViewBag.Products = null;
+            var model = new ProductViewModel { Products = null };
             ViewBag.Search = search;
 
             if (!String.IsNullOrEmpty(search))
@@ -84,8 +86,10 @@ namespace Licenta.Controllers
                 if (sortType == "PriceDesc")
                     products = products.OrderByDescending(x => x.Price);
 
-                //ViewBag.Products = products.OrderByDescending(a => a.Date);
-                ViewBag.products = products;
+                //var model = new ProductViewModel { Products = products.ToList() };
+                model = new ProductViewModel { Products = products.ToList() };
+
+                //ViewBag.products = products;
                 if (products.Count() > 0)
                 {
                     ViewBag.NoResult = false;
@@ -93,7 +97,7 @@ namespace Licenta.Controllers
 
             }
 
-            return View();
+            return View(model);
         }
 
         [NonAction]

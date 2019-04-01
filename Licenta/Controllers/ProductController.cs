@@ -42,6 +42,11 @@ namespace Licenta.Controllers
 
         public ActionResult Index(string id)
         {
+            var user = (from usr in _db.Users
+                       where usr.Id == id
+                       select usr).Single();
+            ViewBag.UserName = user.UserName;
+
             var products = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
                            where prod.UserId.Equals(id)
                            select prod;

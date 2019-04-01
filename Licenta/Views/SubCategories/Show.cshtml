@@ -11,9 +11,9 @@
 
 @if (ViewBag.Allow == true)
 {
-    <a class="btn btn-sm btn-info" href="/SubCategories/Edit/@ViewBag.SubCategoryId">Modifica subcategoria</a>
+    <a class="btn btn-sm btn-info" href="/SubCategories/Edit/@Model.SubcategoryId">Modifica subcategoria</a>
     <br /><br />
-    <form method="post" action="/SubCategories/Delete/@ViewBag.SubCategoryId">
+    <form method="post" action="/SubCategories/Delete/@Model.SubcategoryId">
         @Html.HttpMethodOverride(HttpVerbs.Delete)
         <button class="btn btn-sm btn-danger" type="submit">Sterge subcategoria</button>
     </form>
@@ -21,7 +21,7 @@
 <br />
 <br />
 
-@using (Html.BeginForm("Show", "SubCategories", new { id = ViewBag.SubCategoryId }, FormMethod.Get))
+@using (Html.BeginForm("Show", "SubCategories", new { id = Model.SubCategoryId }, FormMethod.Get))
 {
     <b> Adauga filtre:</b>
     <br />
@@ -66,7 +66,7 @@
     <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
 }
 
-@foreach (Product product in ViewBag.Products)
+@foreach (Product product in Model.Products)
 {
     @Html.Partial("ProductInfo", product);
 }
@@ -97,3 +97,103 @@
 
 
 </script>
+
+@*@using Licenta.Common.Entities
+
+    @{
+        ViewBag.Title = "Afisare Subcategorie";
+    }
+
+    <h2>@ViewBag.Title</h2>
+    <h1>@ViewBag.SubCategoryName</h1>
+
+    <br />
+
+    @if (ViewBag.Allow == true)
+    {
+        <a class="btn btn-sm btn-info" href="/SubCategories/Edit/@ViewBag.SubCategoryId">Modifica subcategoria</a>
+        <br /><br />
+        <form method="post" action="/SubCategories/Delete/@ViewBag.SubCategoryId">
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            <button class="btn btn-sm btn-danger" type="submit">Sterge subcategoria</button>
+        </form>
+    }
+    <br />
+    <br />
+
+    @using (Html.BeginForm("Show", "SubCategories", new { id = ViewBag.SubCategoryId }, FormMethod.Get))
+    {
+        <b> Adauga filtre:</b>
+        <br />
+        @Html.Label("Locatie:");
+        @Html.DropDownList("FromCity", new SelectList(ViewBag.Cities, "Value", "Text"), "Selectati locatia", new { id = "FromCity", @class = "form-control" });
+        <br />
+
+        @Html.Label("Postate dupa data de:");
+        @Html.TextBox("DateMin", null, "{0:dd/mm/yyyy}", new { id = "dateMin", @class = "date-picker" });
+        <br />
+
+        @Html.Label("Pret minim:");
+        @Html.TextBox("PriceMin", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" });
+        <br />
+        @Html.Label("Pret maxim:");
+        @Html.TextBox("PriceMax", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" });
+        <br />
+
+        @Html.Label("Starea:");
+        @Html.DropDownList("State", new SelectList(ViewBag.ProductStates, "Value", "Text"), "Selectati starea produsului", new { id = "State", @class = "form-control" });
+        <br /><br />
+
+        @Html.Label("Sorteaza dupa:");
+        @Html.DropDownList("sortType", new SelectList(
+                                        new List<Object>{
+                                            new { value = "Select" , text = "Selecteaza"  },
+                                            new { value = "Title" , text = "Titlu" },
+                                            new { value = "Date" , text = "Cele mai recente"},
+                                            new { value = "PriceAsc" , text = "Pret crescator"},
+                                            new { value = "PriceDesc" , text = "Pret descrescator"}
+                                       }, "value","text",2), new { id = "sortType", @class = "form-control" });
+
+        <br />
+        <input class="btn btn-primary" type="submit" value="Aplica" />
+        <br />
+        <br />
+    }
+    <br />
+
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    }
+
+    @foreach (Product product in ViewBag.Products)
+    {
+        @Html.Partial("ProductInfo", product);
+    }
+
+    <a class="btn btn-sm btn-success" href="/Product/New">Adauga un anunt</a>
+    <br />
+
+    <!-- Bootstrap -->
+    <!-- Bootstrap DatePicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $.noConflict();
+        jQuery(document).ready(function ($) {
+            $(function () {
+                // This will make every element with the class "date-picker" into a DatePicker element
+                $('.date-picker').datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: 'dd/mm/yyyy',
+                    //dateFormat: "dd-mm-yy",
+                    yearRange: "-60:+0",
+                    showOn: "button"
+
+                });
+            });
+        });
+
+
+    </script>*@

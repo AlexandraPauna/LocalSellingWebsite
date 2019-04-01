@@ -1,7 +1,5 @@
-﻿
-@model Licenta.Common.Entities.SubCategory
-
-@using Microsoft.AspNet.Identity
+﻿@using Microsoft.AspNet.Identity
+@using Licenta.Common.Entities
 
 
 @{
@@ -9,14 +7,14 @@
 }
 
 <h2>@ViewBag.Title</h2>
-<h1>@ViewBag.CategoryName</h1>
+<h1>@Model.CategoryName</h1>
 <br />
 
 @if (ViewBag.Allow == true)
 {
-    <a class="btn btn-sm btn-info" href="/Categories/Edit/@ViewBag.CategoryId">Modifica categoria</a>
+    <a class="btn btn-sm btn-info" href="/Categories/Edit/@Model.CategoryId">Modifica categoria</a>
     <br /><br />
-    <form method="post" action="/Categories/Delete/@ViewBag.CategoryId">
+    <form method="post" action="/Categories/Delete/@Model.CategoryId">
         @Html.HttpMethodOverride(HttpVerbs.Delete)
         <button class="btn btn-sm btn-danger" type="submit">Sterge categoria</button>
     </form>
@@ -25,7 +23,7 @@
 <br />
 
 <ul class="nav flex-column">
-    @foreach (var subCategory in ViewBag.SubCategories)
+    @foreach (var subCategory in Model.SubCategories)
     {
         <li class="nav-item">
             <a class="navbar-link" href="/Subcategories/Show/@subCategory.SubCategoryId">@subCategory.SubCategoryName</a>
@@ -47,3 +45,53 @@
 <br />
 <br />
 
+@*Using ViewBag*@
+@*
+    @model Licenta.Common.Entities.SubCategory
+
+    @using Microsoft.AspNet.Identity
+
+
+    @{
+        ViewBag.Title = "Afisare categorie";
+    }
+
+    <h2>@ViewBag.Title</h2>
+    <h1>@ViewBag.CategoryName</h1>
+    <br />
+
+    @if (ViewBag.Allow == true)
+    {
+        <a class="btn btn-sm btn-info" href="/Categories/Edit/@ViewBag.CategoryId">Modifica categoria</a>
+        <br /><br />
+        <form method="post" action="/Categories/Delete/@ViewBag.CategoryId">
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            <button class="btn btn-sm btn-danger" type="submit">Sterge categoria</button>
+        </form>
+    }
+    <br />
+    <br />
+
+    <ul class="nav flex-column">
+        @foreach (var subCategory in ViewBag.SubCategories)
+        {
+            <li class="nav-item">
+                <a class="navbar-link" href="/Subcategories/Show/@subCategory.SubCategoryId">@subCategory.SubCategoryName</a>
+            </li>
+
+        }
+    </ul>
+
+    <br />
+    <br />
+    @if (ViewBag.Allow == true)
+    {
+        <a class="btn btn-sm btn-info" href="/SubCategories/New">Adauga subcategorie</a>
+        <br /><br />
+    }
+
+    <hr />
+    <a class="btn btn-sm btn-success" href="/Categories/Index">Inapoi la toate categoriile</a>
+    <br />
+    <br />
+*@
