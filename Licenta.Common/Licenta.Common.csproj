@@ -78,7 +78,9 @@
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\City.cs" />
+    <Compile Include="Entities\Conversation.cs" />
     <Compile Include="Entities\DeliveryCompany.cs" />
+    <Compile Include="Entities\Message.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Entities\ProductState.cs" />
     <Compile Include="Entities\SubCategory.cs" />

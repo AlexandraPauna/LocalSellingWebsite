@@ -18,6 +18,8 @@ namespace Licenta.DataAccess
         public DbSet<ProductState> ProductState { get; set; }
         public DbSet<DeliveryCompany> DeliveryCompanies { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         public static ApplicationDbContext Create()
         {
