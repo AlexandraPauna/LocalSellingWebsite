@@ -18,7 +18,7 @@ namespace Licenta.Models.Communication
         //[Display(Name = "Continut")]
         public string Content { get; set; }
 
-        bool Read { get; set; }
+        public bool Read { get; set; }
 
         [Required]
         public int ConversationId { get; set; }

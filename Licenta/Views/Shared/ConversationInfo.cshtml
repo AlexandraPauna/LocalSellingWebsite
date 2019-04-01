@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "ConversationInfo";
+}
+
+
+<div class="panel panel-default">
+    
+    <div class="panel-body">
+        Nume utilizator: <i class="glyphicon glyphicon-user"></i>
+        <strong>@Model.SenderId</strong>
+        <br />
+
+        Anunt:
+        <strong>@Model.Product.Title</strong>
+
+        Data:
+        <span class="label label-info">@Model.Date</span>
+        <br />
+        <i class="glyphicon glyphicon-globe"></i> @Model.SubCategory.SubCategoryName
+    </div>
+    <div class="panel-footer">
+        <a class="btn btn-sm btn-success" href="/Conversation/Show/@Model.ConversationId">Afisare conversatie</a>
+        <a class="btn btn-sm btn-danger" href="/Conversation/Delete/@Model.ConversationId">Sterge conversatie</a>
+    </div>
+</div>
+<br />

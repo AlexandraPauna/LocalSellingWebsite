@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "Conversatiile mele";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@foreach (Licenta.Models.Communication.Conversation conversation in ViewBag.Conversations)
+{
+    @Html.Partial("ConversationInfo", conversation);
+    
+}

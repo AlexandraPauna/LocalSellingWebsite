@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Licenta.Models.Communication;
 
 namespace Licenta.Controllers
 {
@@ -15,6 +16,7 @@ namespace Licenta.Controllers
         //private ProductDBContext db = new ProductDBContext();
         private ApplicationUserManager _userManager;
         private ApplicationDbContext db = new ApplicationDbContext();
+
 
         // GET: /Product/Index
         /*public ActionResult Index()
