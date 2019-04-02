@@ -86,5 +86,43 @@ namespace Licenta.Controllers
             }
 
         }
+
+        [HttpPost]
+        public ActionResult New(Message message)
+        {
+            if (String.IsNullOrEmpty(message.Content))
+            {
+                return Redirect("Show/" + message.ConversationId.ToString());
+            }
+            else
+            {
+                var currentUser = User.Identity.GetUserId();
+                if (currentUser == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+                else
+                {
+                    message.Date = DateTime.Now;
+                    message.Read = false;
+                    message.SenderId = currentUser;
+
+                    //look for receiver user id
+                    var conversation = message.Conversation;
+                    if (conversation.SenderId == currentUser) //the receiver is either the buyer
+                        message.ReceiverId = conversation.SenderId;
+                    else //either the seller
+                        message.ReceiverId = message.Conversation.Product.UserId;
+
+                    _db.Messages.Add(message);
+                    _db.SaveChanges();
+                    TempData["message"] = "Mesaj trimis!";
+
+                    return Redirect(Request.UrlReferrer.ToString());
+                }
+            }
+
+        }
+
     }
 }

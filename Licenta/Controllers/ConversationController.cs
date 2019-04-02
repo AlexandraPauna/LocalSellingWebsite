@@ -1,4 +1,5 @@
 ﻿using Licenta.Common.Entities;
+using Licenta.Common.Models;
 using Licenta.DataAccess;
 using Microsoft.AspNet.Identity;
 using System;
@@ -61,11 +62,52 @@ namespace Licenta.Controllers
                     //ordonare dupa mesaje a conversatiilor?
                 }
 
-
-
                 return View();
             }
 
+        }
+
+        public ActionResult Show(int id)
+        {
+            Conversation conversation = _db.Conversations.Find(id);
+
+            var messages = from msg in _db.Messages.Include("User")
+                           where msg.ConversationId == id
+                           orderby msg.Date
+                           select msg;
+
+            var model = new MessageViewModel
+            {
+                ConversationId = conversation.ConversationId,
+                ProductId = conversation.ProductId,
+                SenderId = conversation.SenderId,
+                Sender = conversation.Sender,
+                Messages = messages.ToList()
+            };
+
+
+            var currentUser = User.Identity.GetUserId();
+            ViewBag.CurrentUser = currentUser;
+
+            if ((conversation.Product.UserId == currentUser) || (conversation.SenderId == currentUser))
+            {
+                return View(model); 
+            }
+            /*ViewBag.Received = true;
+            if (conversation.Product.UserId == User.Identity.GetUserId())
+            {
+                return View(model); 
+            }
+            else
+            if (conversation.SenderId == User.Identity.GetUserId())
+            {
+                ViewBag.Received = false; 
+                return View(model);
+            }*/
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpDelete]

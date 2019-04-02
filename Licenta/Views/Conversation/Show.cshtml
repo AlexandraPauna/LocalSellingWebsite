@@ -1,0 +1,61 @@
+﻿@using Licenta.Common.Entities
+@{
+    ViewBag.Title = "Mesaje";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>@Html.ActionLink((String)Model.Product.User.UserName, "UserProfile", "Account", new { id = Model.Product.User.Id }, null)</strong>
+        <br />
+        <strong>@Model.Product.Title</strong>
+        <br />
+        <span>@Model.Product.Date</span>
+        <br />
+        <a class="btn btn-sm btn-info" href="/Product/Show/@Model.ProductId">Afisare articol</a>
+    </div>
+
+    <div class="panel-body">
+        @foreach (Message message in Model.Messages)
+        {
+            if (message.ReceiverId == ViewBag.CurrentUser)
+            {
+                <div style="float:left; background-color:lightgray">
+                    <strong>@Html.ActionLink((String)message.Sender.UserName, "UserProfile", "Account", new { id = message.SenderId }, null)</strong>
+                    <br />
+                    <p>@message.Date</p>
+                    <br />
+                    <p>@message.Content</p>
+                </div>
+            }
+            else
+            if (message.SenderId == ViewBag.CurentUser)
+            {
+                <div style="float:right; background-color:lightgreen">
+                    <strong>Raspunsul tau</strong>
+                    <br />
+                    <p>@message.Date</p>
+                    <br />
+                    <p>@message.Content</p>
+                    @if (message.Read == true)
+                    {
+                        <i class="glyphicon glyphicon-ok"></i> <p>Citit</p>
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<br />
+<hr />
+<form method="post" action="/Message/New">
+    <input type="hidden" name="ConversationId" value="@Model.ConversationId" />
+    <input type="hidden" name="ConversationId" value="@Model.ConversationId" />
+    <label>Trimite mesaj:</label>
+    <br />
+    <input type="text" name="Content" />
+    <button class="btn btn-sm btn-success" type="submit">Trimite mesaj</button>
+</form>
+
