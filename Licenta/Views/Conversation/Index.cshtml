@@ -5,6 +5,13 @@
 
 <h2>@ViewBag.Title</h2>
 
+@Html.Label("Afiseaza:");
+@Html.DropDownList("sortType", new SelectList(
+                                new List<Object>{
+                                    new { value = "Received" , text = "Mesaje primite"  },
+                                    new { value = "Send" , text = "Mesaje trimite" }
+                               }, "value","text",2), new { id = "sortType", @class = "form-control" });
+
 @foreach (Licenta.Common.Entities.Conversation conversation in ViewBag.conversations)
 {
     @Html.Partial("ConversationInfo", conversation);

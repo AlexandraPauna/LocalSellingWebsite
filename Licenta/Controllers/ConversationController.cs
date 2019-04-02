@@ -14,7 +14,7 @@ namespace Licenta.Controllers
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         // GET: Conversation
-        public ActionResult Index()
+        public ActionResult Index(string sortType)
         {
             var currentUser = User.Identity.GetUserId();
             if (currentUser == null)
@@ -23,21 +23,45 @@ namespace Licenta.Controllers
             }
             else
             {
-                var conversations = from conv in _db.Conversations.Include("Product").Include("User")
-                                    where conv.Product.UserId == currentUser
-                                    select conv;
-                ViewBag.conversations = conversations;
-
-                var latestMessages = new List<Message>(); 
-                foreach(var conv in conversations)
+                if(sortType == "Received")
                 {
-                    var message = (from mess in _db.Messages.Include("User")
-                                   where mess.ConversationId == conv.ConversationId
-                                   orderby mess.Date descending
-                                   select mess).First();
-                    latestMessages.Add(message);
+                    var conversations = from conv in _db.Conversations.Include("Product").Include("User")
+                                        where conv.Product.UserId == currentUser
+                                        select conv;
+                    ViewBag.conversations = conversations;
+
+                    var latestMessages = new List<Message>();
+                    foreach (var conv in conversations)
+                    {
+                        var message = (from mess in _db.Messages.Include("User")
+                                       where mess.ConversationId == conv.ConversationId
+                                       orderby mess.Date descending
+                                       select mess).First();
+                        latestMessages.Add(message);
+                    }
+                    //ordonare dupa mesaje a conversatiilor?
                 }
-                //ordonare dupa mesaje a conversatiilor?
+                else
+                if(sortType == "Send")
+                {
+                    var conversations = from conv in _db.Conversations.Include("Product").Include("User")
+                                        where conv.SenderId == currentUser
+                                        select conv;
+                    ViewBag.conversations = conversations;
+
+                    var latestMessages = new List<Message>();
+                    foreach (var conv in conversations)
+                    {
+                        var message = (from mess in _db.Messages.Include("User")
+                                       where mess.ConversationId == conv.ConversationId
+                                       orderby mess.Date descending
+                                       select mess).First();
+                        latestMessages.Add(message);
+                    }
+                    //ordonare dupa mesaje a conversatiilor?
+                }
+
+
 
                 return View();
             }
