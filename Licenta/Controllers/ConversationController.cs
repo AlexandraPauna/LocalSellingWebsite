@@ -44,6 +44,20 @@ namespace Licenta.Controllers
 
         }
 
+        public ActionResult Show(int id)
+        {
+            Conversation conversation = _db.Conversations.Find(id);
+
+            if (conversation.Product.UserId == User.Identity.GetUserId())
+            {
+                return View(conversation);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
         [HttpDelete]
         public ActionResult Delete(int id)
         {
