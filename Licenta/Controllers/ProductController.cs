@@ -187,12 +187,12 @@ namespace Licenta.Controllers
                     _db.SaveChanges();
                     TempData["message"] = "Anuntul a fost adaugat cu succes!";
 
-                    return RedirectToAction("Index");
-               // }
-               // else
-               // {
-               //     return View(product);
-               // }
+                return RedirectToAction("Show", "SubCategories", new { @id = product.SubCategoryId });
+                // }
+                // else
+                // {
+                //     return View(product);
+                // }
             }
             catch (Exception e)
             {
@@ -417,7 +417,7 @@ namespace Licenta.Controllers
             else
             {
                 TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui anunt care nu va apartine!";
-                return RedirectToAction("Index");
+                return Redirect(Request.UrlReferrer.ToString());
             }
         }
 
