@@ -7,20 +7,21 @@
 
     <div class="panel-body">
         Nume utilizator: <i class="glyphicon glyphicon-user"></i>
-        <strong>@Model.SenderId</strong>
+        <strong>@Model.Conversation.Sender.UserName</strong>
         <br />
 
         Anunt:
-        <strong>@Model.Product.Title</strong>
+        <strong>@Model.Conversation.Product.Title</strong>
 
         Data:
-        <span class="label label-info">@Model.Date</span>
+        <span class="label label-info">@Model.LatestMessage.Date</span>
         <br />
-        <i class="glyphicon glyphicon-globe"></i> @Model.SubCategory.SubCategoryName
+
+        <p>@Model.LatestMessage.Content</p>
     </div>
     <div class="panel-footer">
-        <a class="btn btn-sm btn-success" href="/Conversation/Show/@Model.ConversationId">Afisare conversatie</a>
-        <a class="btn btn-sm btn-danger" href="/Conversation/Delete/@Model.ConversationId">Sterge conversatie</a>
+        <a class="btn btn-sm btn-success" href="/Conversation/Show/@Model.Conversation.ConversationId">Afisare conversatie</a>
+        <a class="btn btn-sm btn-danger" href="/Conversation/Delete/@Model.Conversation.ConversationId">Sterge conversatie</a>
     </div>
 </div>
 <br />

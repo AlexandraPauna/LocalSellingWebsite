@@ -1,4 +1,4 @@
-﻿
+﻿@using Licenta.Common.Models
 @{
     ViewBag.Title = "Conversatiile mele";
 }
@@ -7,14 +7,20 @@
 
 <p>Aici ai raspunsurile la anunturile tale si raspunsurile trimise de tine pentru alte anunturi</p>
 
-@Html.Label("Afiseaza:");
-@Html.DropDownList("sortType", new SelectList(
-                                new List<Object>{
-                                    new { value = "Received" , text = "Mesaje primite"  },
-                                    new { value = "Send" , text = "Mesaje trimite" }
-                               }, "value","text",2), new { id = "sortType", @class = "form-control" });
+@using (Html.BeginForm("Index", "Conversation", FormMethod.Get))
+{
+    @Html.Label("Afiseaza:");
+    @Html.DropDownList("sortType", new SelectList(
+                                        new List<Object>{
+                                        new { value = "Received" , text = "Mesaje primite"  },
+                                        new { value = "Sent" , text = "Mesaje trimise" }
+                                       }, "value", "text", 1), new { id = "sortType", @class = "form-control" });
 
-@foreach (Licenta.Common.Entities.Conversation conversation in ViewBag.conversations)
+    <br />
+    <input class="btn btn-default" type="submit" value="Aplica" />
+}
+
+@foreach (ConversationMessage conversation in Model.Conversations)
 {
     @Html.Partial("ConversationInfo", conversation);
 

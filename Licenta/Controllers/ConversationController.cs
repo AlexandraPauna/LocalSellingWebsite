@@ -17,6 +17,10 @@ namespace Licenta.Controllers
         // GET: Conversation
         public ActionResult Index(string sortType)
         {
+            if(sortType == null)
+            {
+                sortType = "Received";
+            }
             var currentUser = User.Identity.GetUserId();
             if (currentUser == null)
             {
@@ -26,7 +30,10 @@ namespace Licenta.Controllers
             {
                 if(sortType == "Received")
                 {
-                    var conversations = from conv in _db.Conversations.Include("Product").Include("User")
+                    /*var conversations = from conv in _db.Conversations.Include("Product").Include("Sender")
+                                        where conv.Product.UserId == currentUser
+                                        select conv;
+                    var conversations = from conv in _db.Conversations.Include("Product").Include("Sender")
                                         where conv.Product.UserId == currentUser
                                         select conv;
                     ViewBag.conversations = conversations;
@@ -34,18 +41,41 @@ namespace Licenta.Controllers
                     var latestMessages = new List<Message>();
                     foreach (var conv in conversations)
                     {
-                        var message = (from mess in _db.Messages.Include("User")
+                        var message = (from mess in _db.Messages.Include("Sender").Include("Receiver")
                                        where mess.ConversationId == conv.ConversationId
                                        orderby mess.Date descending
                                        select mess).First();
                         latestMessages.Add(message);
+                    }*/
+
+                    var conversations = (from c in _db.Conversations.Include("Product").Include("Sender")
+                                        join m in _db.Messages.Include("Sender").Include("User")
+                                        on c.ConversationId equals m.ConversationId
+                                        where c.Product.UserId == currentUser
+                                        select new { c, m } into x
+                                        group x by new { x.c } into g
+                                        select new
+                                        { Conversation = g.Key.c,
+                                          Message = g.Select(x => x.m).Where(y => y.ConversationId == g.Key.c.ConversationId).OrderByDescending(m => m.Date),
+                                          MessageDate = g.Select(x => x.m).Max(x => x.Date)}).OrderByDescending(y => y.MessageDate);
+
+                    var conversationsMes = new List<ConversationMessage>();
+                    foreach(var conversation in conversations)
+                    {
+                        var convMes = new ConversationMessage { Conversation = conversation.Conversation ,
+                                                               LatestMessage = conversation.Message.Where(m => m.ConversationId== conversation.Conversation.ConversationId).First()
+                                                              };
+
+                        conversationsMes.Add(convMes);
                     }
-                    //ordonare dupa mesaje a conversatiilor?
+                    var model = new ConversationViewModel { Conversations = conversationsMes };
+
+                    return View(model);
                 }
                 else
-                if(sortType == "Send")
+                if(sortType == "Sent")
                 {
-                    var conversations = from conv in _db.Conversations.Include("Product").Include("User")
+                    /*var conversations = from conv in _db.Conversations.Include("Product").Include("Sender")
                                         where conv.SenderId == currentUser
                                         select conv;
                     ViewBag.conversations = conversations;
@@ -53,13 +83,40 @@ namespace Licenta.Controllers
                     var latestMessages = new List<Message>();
                     foreach (var conv in conversations)
                     {
-                        var message = (from mess in _db.Messages.Include("User")
+                        var message = (from mess in _db.Messages.Include("Sender").Include("Receiver")
                                        where mess.ConversationId == conv.ConversationId
                                        orderby mess.Date descending
                                        select mess).First();
                         latestMessages.Add(message);
+                    }*/
+
+                    var conversations = (from c in _db.Conversations.Include("Product").Include("Sender")
+                                         join m in _db.Messages.Include("Sender").Include("User")
+                                         on c.ConversationId equals m.ConversationId
+                                         where c.SenderId == currentUser
+                                         select new { c, m } into x
+                                         group x by new { x.c } into g
+                                         select new
+                                         {
+                                             Conversation = g.Key.c,
+                                             Message = g.Select(x => x.m).Where(y => y.ConversationId == g.Key.c.ConversationId).OrderByDescending(m => m.Date),
+                                             MessageDate = g.Select(x => x.m).Max(x => x.Date)
+                                         }).OrderByDescending(y => y.MessageDate);
+
+                    var conversationsMes = new List<ConversationMessage>();
+                    foreach (var conversation in conversations)
+                    {
+                        var convMes = new ConversationMessage
+                        {
+                            Conversation = conversation.Conversation,
+                            LatestMessage = conversation.Message.Where(m => m.ConversationId == conversation.Conversation.ConversationId).First()
+                        };
+
+                        conversationsMes.Add(convMes);
                     }
-                    //ordonare dupa mesaje a conversatiilor?
+                    var model = new ConversationViewModel { Conversations = conversationsMes };
+
+                    return View(model);
                 }
 
                 return View();
@@ -71,7 +128,7 @@ namespace Licenta.Controllers
         {
             Conversation conversation = _db.Conversations.Find(id);
 
-            var messages = from msg in _db.Messages.Include("User")
+            var messages = from msg in _db.Messages.Include("Sender").Include("Receiver")
                            where msg.ConversationId == id
                            orderby msg.Date
                            select msg;
@@ -80,6 +137,7 @@ namespace Licenta.Controllers
             {
                 ConversationId = conversation.ConversationId,
                 ProductId = conversation.ProductId,
+                Product = conversation.Product,
                 SenderId = conversation.SenderId,
                 Sender = conversation.Sender,
                 Messages = messages.ToList()

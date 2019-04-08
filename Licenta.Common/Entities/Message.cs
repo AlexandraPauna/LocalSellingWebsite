@@ -32,6 +32,6 @@ namespace Licenta.Common.Entities
 
         [Required]
         public string ReceiverId { get; set; }
-        public virtual ApplicationUser Reciver { get; set; }
+        public virtual ApplicationUser Receiver { get; set; }
     }
 }

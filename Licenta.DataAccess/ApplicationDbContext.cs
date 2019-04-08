@@ -33,5 +33,6 @@ namespace Licenta.DataAccess
 
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
         }
+
     }
 }

@@ -17,34 +17,41 @@
     </div>
 
     <div class="panel-body">
-        @foreach (Message message in Model.Messages)
-        {
-            if (message.ReceiverId == ViewBag.CurrentUser)
+        <ul>
+            @foreach (Message message in Model.Messages)
             {
-                <div style="float:left; background-color:lightgray">
-                    <strong>@Html.ActionLink((String)message.Sender.UserName, "UserProfile", "Account", new { id = message.SenderId }, null)</strong>
-                    <br />
-                    <p>@message.Date</p>
-                    <br />
-                    <p>@message.Content</p>
-                </div>
-            }
-            else
-            if (message.SenderId == ViewBag.CurentUser)
-            {
-                <div style="float:right; background-color:lightgreen">
-                    <strong>Raspunsul tau</strong>
-                    <br />
-                    <p>@message.Date</p>
-                    <br />
-                    <p>@message.Content</p>
-                    @if (message.Read == true)
-                    {
-                        <i class="glyphicon glyphicon-ok"></i> <p>Citit</p>
-                    }
-                </div>
-            }
-        }
+                if (message.ReceiverId == ViewBag.CurrentUser)
+                {
+                    <li>
+                        <div style="float:left; background-color:lightgray;">
+                            <strong>@Html.ActionLink((String)message.Sender.UserName, "UserProfile", "Account", new { id = message.SenderId }, null)</strong>
+                            <br />
+                            <p>@message.Date</p>
+                            <br />
+                            <p>@message.Content</p>
+                        </div>
+                    </li>
+                }
+                else
+                if (message.SenderId == ViewBag.CurrentUser)
+                {
+                    <li>
+                        <div style="float:right; background-color:lightgreen;">
+                            <strong>Raspunsul tau</strong>
+                            <br />
+                            <p>@message.Date</p>
+                            <br />
+                            <p>@message.Content</p>
+                            @if (message.Read == true)
+                            {
+                                <i class="glyphicon glyphicon-ok"></i> <p>Citit</p>
+                            }
+                        </div>
+                    </li>
+                }
+                <br />
+             }
+         </ul>
     </div>
 </div>
 
