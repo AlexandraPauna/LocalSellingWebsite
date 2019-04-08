@@ -558,13 +558,18 @@ namespace Licenta.Controllers
         public ActionResult Delete(int id)
         {
             Product product = _db.Products.Find(id);
-            if (product.UserId == User.Identity.GetUserId() || User.IsInRole("Administrator") || User.IsInRole("Editor"))
+            var currentUser = User.Identity.GetUserId();
+            if (product.UserId == currentUser || User.IsInRole("Administrator") || User.IsInRole("Editor"))
             {
+                var productImages = _db.ProductImages.Where(x => x.ProductId == product.ProductId);
+                _db.ProductImages.RemoveRange(productImages);
                 _db.Products.Remove(product);
+
                 _db.SaveChanges();
                 TempData["message"] = "Anuntul a fost sters!";
             }
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Index", "Product", new { id = currentUser});
         }
     }
 }

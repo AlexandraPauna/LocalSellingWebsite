@@ -181,7 +181,7 @@ namespace Licenta.Controllers
                         _db.SaveChanges();
                         TempData["message"] = "Subcategoria a fost modificata!";
                     }
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Show", "Category", new { id = subCategory.CategoryId });
                 }
                 else
                 {
@@ -200,7 +200,16 @@ namespace Licenta.Controllers
         public ActionResult Delete(int id)
         {
             SubCategory subCategory = _db.SubCategories.Find(id);
+            var products = _db.Products.Where(x => x.SubCategoryId == subCategory.SubCategoryId);
+            foreach(var product in products)
+            {
+                var productImages = _db.ProductImages.Where(x => x.ProductId == product.ProductId);
+                _db.ProductImages.RemoveRange(productImages);
+                _db.Products.Remove(product);
+            }
+
             _db.SubCategories.Remove(subCategory);
+
             _db.SaveChanges();
             TempData["message"] = "SubCategoria a fost stearsa!";
             return RedirectToAction("Show", "Categories", new { id = subCategory.CategoryId });

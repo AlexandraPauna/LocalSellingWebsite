@@ -149,11 +149,28 @@ namespace Licenta.Controllers
         }
 
         [HttpDelete]
-        //[Authorize(Roles = "Editor,Administrator")]
+        [Authorize(Roles = "Editor,Administrator")]
         public ActionResult Delete(int id)
         {
             Category category = _db.Categories.Find(id);
             _db.Categories.Remove(category);
+
+            var subcategories = _db.SubCategories.Where(x => x.CategoryId == id);
+            if(subcategories.Count() > 0) { 
+                foreach(var subcategory in subcategories)
+                {
+                    var products = _db.Products.Where(x => x.SubCategoryId == subcategory.SubCategoryId);
+                    foreach (var product in products)
+                    {
+                        var productImages = _db.ProductImages.Where(x => x.ProductId == product.ProductId);
+                        _db.ProductImages.RemoveRange(productImages);
+                        _db.Products.Remove(product);
+                    }
+
+                    _db.SubCategories.Remove(subcategory);
+                }
+            }
+
             _db.SaveChanges();
             TempData["message"] = "Categoria a fost stearsa!";
             return RedirectToAction("Index", "Home");
