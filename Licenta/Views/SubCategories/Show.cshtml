@@ -5,7 +5,7 @@
 }
 
 <h2>@ViewBag.Title</h2>
-<h1>@ViewBag.SubCategoryName</h1>
+<h1>@Model.SubCategoryName</h1>
 
 <br />
 
@@ -17,7 +17,10 @@
         @Html.HttpMethodOverride(HttpVerbs.Delete)
         <button class="btn btn-sm btn-danger" type="submit">Sterge subcategoria</button>
     </form>
+    <br />
 }
+
+<a class="btn btn-sm btn-primary" href="/Categories/Show/@Model.CategoryId">Inapoi la categorie</a>
 <br />
 <br />
 
