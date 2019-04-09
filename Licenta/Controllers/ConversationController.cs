@@ -66,6 +66,7 @@ namespace Licenta.Controllers
                                                                LatestMessage = conversation.Message.Where(m => m.ConversationId== conversation.Conversation.ConversationId).First()
                                                               };
 
+                        convMes.LatestMessage.Content = MessageController.Decrypt(convMes.LatestMessage.Content);
                         conversationsMes.Add(convMes);
                     }
                     var model = new ConversationViewModel { Conversations = conversationsMes };
@@ -111,7 +112,7 @@ namespace Licenta.Controllers
                             Conversation = conversation.Conversation,
                             LatestMessage = conversation.Message.Where(m => m.ConversationId == conversation.Conversation.ConversationId).First()
                         };
-
+                        convMes.LatestMessage.Content = MessageController.Decrypt(convMes.LatestMessage.Content);
                         conversationsMes.Add(convMes);
                     }
                     var model = new ConversationViewModel { Conversations = conversationsMes };
@@ -132,6 +133,11 @@ namespace Licenta.Controllers
                            where msg.ConversationId == id
                            orderby msg.Date
                            select msg;
+
+            foreach(var message in messages)
+            {
+                message.Content = MessageController.Decrypt(message.Content);
+            };
 
             var model = new MessageViewModel
             {

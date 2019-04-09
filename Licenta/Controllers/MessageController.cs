@@ -4,8 +4,10 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Licenta.Controllers
 {
@@ -18,7 +20,51 @@ namespace Licenta.Controllers
         {
             return View();
         }
+        private static readonly UTF8Encoding Encoder = new UTF8Encoding();
 
+        public static string Encrypt(string unencrypted)
+        {
+            if (string.IsNullOrEmpty(unencrypted))
+                return string.Empty;
+
+            try
+            {
+                var encryptedBytes = MachineKey.Protect(Encoder.GetBytes(unencrypted));
+
+                if (encryptedBytes != null && encryptedBytes.Length > 0)
+                    return HttpServerUtility.UrlTokenEncode(encryptedBytes);
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+
+            return string.Empty;
+        }
+
+        public static string Decrypt(string encrypted)
+        {
+            if (string.IsNullOrEmpty(encrypted))
+                return string.Empty;
+
+            try
+            {
+                var bytes = HttpServerUtility.UrlTokenDecode(encrypted);
+                if (bytes != null && bytes.Length > 0)
+                {
+                    var decryptedBytes = MachineKey.Unprotect(bytes);
+                    if (decryptedBytes != null && decryptedBytes.Length > 0)
+                        return Encoder.GetString(decryptedBytes);
+                }
+
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+
+            return string.Empty;
+        }
         [HttpPost]
         public ActionResult New(int? id, Message message)
         {
@@ -40,6 +86,7 @@ namespace Licenta.Controllers
                         message.Date = DateTime.Now;
                         message.Read = false;
                         message.SenderId = currentUser;
+                        message.Content = Encrypt(message.Content);
                         var sender = (from usr in _db.Users
                                       where usr.Id == currentUser
                                       select usr).Single();
@@ -98,7 +145,7 @@ namespace Licenta.Controllers
             {
                 if (String.IsNullOrEmpty(message.Content))
                 {
-                    return Redirect("Show/" + message.ConversationId.ToString());
+                    return RedirectToAction("Show", "Conversation" , new { id = message.ConversationId.ToString() } );
                 }
                 else
                 {
@@ -112,16 +159,16 @@ namespace Licenta.Controllers
                         message.Date = DateTime.Now;
                         message.Read = false;
                         message.SenderId = currentUser;
-
+                        message.Content = Encrypt(message.Content);
                         //look for receiver user id
                         var conversation = (from conv in _db.Conversations.Include("Sender").Include("Product")
                                             where conv.ConversationId == message.ConversationId
                                             select conv).Single();
                         //var conversation = message.Conversation;
-                        if (message.SenderId == currentUser) //the receiver is either the buyer
-                            message.ReceiverId = conversation.SenderId;
-                        else //either the seller
+                        if (conversation.SenderId == currentUser) //the receiver is either the buyer
                             message.ReceiverId = conversation.Product.UserId;
+                        else //either the seller
+                            message.ReceiverId = conversation.SenderId;
 
                         _db.Messages.Add(message);
                         _db.SaveChanges();

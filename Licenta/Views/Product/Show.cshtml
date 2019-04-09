@@ -10,14 +10,25 @@
 
 @Html.Partial("ProductShowPartial")
 
-<a class="btn btn-sm btn-info" href="/Product/Edit/@Model.ProductId">
-    Modifica anunt
-</a>
-<br />
-<form method="post" action="/Product/Delete/@Model.ProductId">
-    @Html.HttpMethodOverride(HttpVerbs.Delete)
-    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Esti sigur?');">Sterge anunt</button>
-</form>
+@if (ViewBag.Allow == true)
+{
+    <a class="btn btn-sm btn-info" href="/Product/Edit/@Model.ProductId">
+        Modifica anunt
+    </a>
+    <br />
+
+    <form method="post" action="/Product/Delete/@Model.ProductId">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Esti sigur?');">Sterge anunt</button>
+    </form>
+    <br/>
+
+    <a class="btn btn-sm btn-danger" href="/Product/Deactivate/@Model.ProductId">
+        Dezactiveaza anunt
+    </a>
+    <br />
+
+}
 
 <hr />
 <a class="btn btn-sm btn-success" href="/Product/Index">Inapoi la anunturile mele</a>

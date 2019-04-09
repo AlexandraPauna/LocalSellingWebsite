@@ -64,6 +64,11 @@ namespace Licenta.Controllers
 
         public ActionResult Show(int id)
         {
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
             Product product = _db.Products.Find(id);
             ViewBag.Product = product;
             ViewBag.City = product.City;
@@ -115,11 +120,12 @@ namespace Licenta.Controllers
             ViewBag.ProductImages = imgList;
 
             var currentUser = User.Identity.GetUserId();
-            if(currentUser != null && currentUser != product.UserId)
+            if (currentUser != null && currentUser != product.UserId)
             {
                 product.Views = product.Views + 1;
                 _db.SaveChanges();
             }
+            ViewBag.Allow = _db.Roles.Any(x => x.Users.Any(y => y.UserId == currentUser) && x.Name == "Administrator");
 
             return View(product);
         }
@@ -422,7 +428,7 @@ namespace Licenta.Controllers
             else
             {
                 TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui anunt care nu va apartine!";
-                return RedirectToAction("Index");
+                return Redirect(Request.UrlReferrer.ToString());
             }
         }
 
@@ -576,5 +582,22 @@ namespace Licenta.Controllers
 
             return RedirectToAction("Index", "Product", new { id = currentUser});
         }
+
+        
+        public ActionResult Deactivate(int id)
+        {
+            Product product = _db.Products.Find(id);
+            var currentUser = User.Identity.GetUserId();
+            if (product.UserId == currentUser || User.IsInRole("Administrator") || User.IsInRole("Editor"))
+            {
+                product.Active = false;
+
+                _db.SaveChanges();
+                TempData["message"] = "Anuntul a fost dezactivat!";
+            }
+
+            return RedirectToAction("Show", "Product", new { id = product.ProductId });
+        }
+
     }
 }
