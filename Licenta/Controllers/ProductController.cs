@@ -114,6 +114,13 @@ namespace Licenta.Controllers
             }
             ViewBag.ProductImages = imgList;
 
+            var currentUser = User.Identity.GetUserId();
+            if(currentUser != null && currentUser != product.UserId)
+            {
+                product.Views = product.Views + 1;
+                _db.SaveChanges();
+            }
+
             return View(product);
         }
 
@@ -128,12 +135,11 @@ namespace Licenta.Controllers
 
             Product product = new Product();
             product.Cities = GetAllCities();
-            //product.Categories = GetAllCategories();
             ViewBag.Categories = GetAllCategories();
             product.ProductStateTypes = GetAllProductStateTypes();
             product.DeliveryCompanies = GetAllDeliveryCompanies();
             product.UserId = User.Identity.GetUserId();
-            //product.Date = DateTime.Now;
+            product.Views = 0;
 
             return View(product);
         }

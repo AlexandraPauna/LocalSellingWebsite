@@ -79,6 +79,12 @@ namespace Licenta.Common.Entities
 
         [Display(Name = "Garantie")]
         public string Warranty { get; set; }
+
+        public bool Active { get; set; }
+
+        [Display(Name = "Vizualizari")]
+        public int Views { get; set; }
+
     }
 
     public class ProductImage
