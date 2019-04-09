@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Licenta.Common.Entities.DeliveryCompany>
+
+@{
+    ViewBag.Title = "Companii curierat";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Adauga", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DeliveryCompanyName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DeliveryCompanyName)
+        </td>
+        <td>
+            @Html.ActionLink("Editeaza", "Edit", new { id=item.DeliveryCompanyId }) |
+            @Html.ActionLink("Detalii", "Show", new { id=item.DeliveryCompanyId }) |
+            @Html.ActionLink("Sterge", "Delete", new { id=item.DeliveryCompanyId })
+        </td>
+    </tr>
+}
+
+</table>

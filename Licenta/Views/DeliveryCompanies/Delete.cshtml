@@ -1,0 +1,32 @@
+﻿@model Licenta.Common.Entities.DeliveryCompany
+
+@{
+    ViewBag.Title = "Sterge";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Esti sigur ca vrei sa stergi asta?</h3>
+<div>
+    <h4>Companie curierat</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DeliveryCompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeliveryCompanyName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Sterge" class="btn btn-default" /> |
+            @Html.ActionLink("Inapoi la lista", "Index")
+        </div>
+    }
+</div>

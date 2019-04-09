@@ -183,7 +183,6 @@ namespace Licenta.Controllers
 
             }
 
-
             //product.SubCategories = GetAllSubCategories();
             try
             {
