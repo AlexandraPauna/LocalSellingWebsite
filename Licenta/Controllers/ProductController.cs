@@ -16,31 +16,7 @@ namespace Licenta.Controllers
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
-        // GET: /Product/Index
-        /*public ActionResult Index()
-        {
-            var userId = User.Identity.GetUserId();
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            //products of current logged in user
-            var products = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
-                where prod.UserId.Equals(userId)
-                select prod;
-
-            var model = new ProductViewModel { Products = products.ToList() };
-
-            if (TempData.ContainsKey("message"))
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
-
-            return View(model);
-        }*/
-
-        public ActionResult Index(string id)
+        /*public ActionResult Index(string id)
         {
             var user = (from usr in _db.Users
                        where usr.Id == id
@@ -59,8 +35,43 @@ namespace Licenta.Controllers
             }
 
             return View(model);
-        }
+        }*/
 
+        public ActionResult Index(string id, string sortType)
+        {
+            var user = (from usr in _db.Users
+                        where usr.Id == id
+                        select usr).Single();
+            //ViewBag.UserName = user.UserName;
+            ViewBag.User = user;
+
+            var products = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
+                           where prod.UserId.Equals(id)
+                           select prod;
+
+            if (sortType == null)
+            {
+                sortType = "Active";
+            }
+            if(sortType == "Active")
+            {
+                products = products.Where(p => p.Active == true);
+            }
+            if(sortType == "Deactivated")
+            {
+                products = products.Where(p => p.Active == false);
+            }
+            products = products.OrderByDescending(p => p.Date);
+
+            var model = new ProductViewModel { Products = products.ToList() };
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
+            return View(model);
+        }
 
         public ActionResult Show(int id)
         {
@@ -125,7 +136,10 @@ namespace Licenta.Controllers
                 product.Views = product.Views + 1;
                 _db.SaveChanges();
             }
-            ViewBag.Allow = _db.Roles.Any(x => x.Users.Any(y => y.UserId == currentUser) && x.Name == "Administrator");
+            if (currentUser == product.UserId || User.IsInRole("Administrator") || User.IsInRole("Editor"))
+                ViewBag.Allow = true;
+            else
+                ViewBag.Allow = false;
 
             return View(product);
         }
@@ -583,7 +597,22 @@ namespace Licenta.Controllers
             return RedirectToAction("Index", "Product", new { id = currentUser});
         }
 
-        
+        public ActionResult Activate(int id)
+        {
+            Product product = _db.Products.Find(id);
+            var currentUser = User.Identity.GetUserId();
+            if (product.UserId == currentUser || User.IsInRole("Administrator") || User.IsInRole("Editor"))
+            {
+                product.Active = true;
+
+                _db.SaveChanges();
+                TempData["message"] = "Anuntul a fost Activat!";
+            }
+
+            //return RedirectToAction("Show", "Product", new { id = product.ProductId });
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+
         public ActionResult Deactivate(int id)
         {
             Product product = _db.Products.Find(id);
@@ -596,7 +625,8 @@ namespace Licenta.Controllers
                 TempData["message"] = "Anuntul a fost dezactivat!";
             }
 
-            return RedirectToAction("Show", "Product", new { id = product.ProductId });
+            //return RedirectToAction("Show", "Product", new { id = product.ProductId });
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
     }

@@ -21,17 +21,26 @@
         @Html.HttpMethodOverride(HttpVerbs.Delete)
         <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Esti sigur?');">Sterge anunt</button>
     </form>
-    <br/>
+    <br />
 
-    <a class="btn btn-sm btn-danger" href="/Product/Deactivate/@Model.ProductId">
-        Dezactiveaza anunt
-    </a>
+    if (Model.Active == true)
+    {
+        <a class="btn btn-sm btn-danger" href="/Product/Deactivate/@Model.ProductId">
+            Dezactiveaza anunt
+        </a>
+    }
+    else
+    {
+        <a class="btn btn-sm btn-success" href="/Product/Activate/@Model.ProductId">
+            Activeaza anunt
+        </a>
+    }
     <br />
 
 }
 
 <hr />
-<a class="btn btn-sm btn-success" href="/Product/Index">Inapoi la anunturile mele</a>
+<a class="btn btn-sm btn-success" href="/SubCategories/Show/@Model.SubCategoryId">Vezi subcategoria</a>
 <a class="btn btn-sm btn-success" href="/Product/New">Adauga anunt</a>
 
 <br />

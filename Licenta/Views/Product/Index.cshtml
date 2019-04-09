@@ -1,7 +1,7 @@
 ﻿@using Licenta.Common.Entities
 
 @{
-    ViewBag.Title = "Anunturile utilizatorului "+ ViewBag.UserName;
+    ViewBag.Title = "Anunturile utilizatorului " + ViewBag.User.UserName;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -10,6 +10,20 @@
 {
     <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
 }
+
+@using (Html.BeginForm("Index", "Product", new { id = ViewBag.User.Id }, FormMethod.Get))
+{
+    @Html.Label("Afiseaza:");
+    @Html.DropDownList("sortType", new SelectList(
+                                        new List<Object>{
+                                        new { value = "Active" , text = "Anunturi active"  },
+                                        new { value = "Deactivated" , text = "Anunturi dezactivate" }
+                                       }, "value", "text", 1), new { id = "sortType", @class = "form-control" });
+
+    <br />
+    <input class="btn btn-default" type="submit" value="Aplica" />
+}
+<br />
 
 @foreach (Product product in Model.Products)
 {
