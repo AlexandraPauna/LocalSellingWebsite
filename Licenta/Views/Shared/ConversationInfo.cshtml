@@ -7,7 +7,14 @@
 
     <div class="panel-body">
         Nume utilizator: <i class="glyphicon glyphicon-user"></i>
-        <strong>@Model.Conversation.Sender.UserName</strong>
+        @if (Context.User.Identity.Name == Model.Conversation.Product.User.UserName)
+        {
+            <strong>@Model.Conversation.Sender.UserName</strong>
+        }
+        else
+        {
+            <strong>@Model.Conversation.Product.User.UserName</strong>
+        }
         <br />
 
         Anunt:

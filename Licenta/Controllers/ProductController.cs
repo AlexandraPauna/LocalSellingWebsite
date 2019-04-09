@@ -16,33 +16,11 @@ namespace Licenta.Controllers
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
-        /*public ActionResult Index(string id)
-        {
-            var user = (from usr in _db.Users
-                       where usr.Id == id
-                       select usr).Single();
-            ViewBag.UserName = user.UserName;
-
-            var products = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
-                           where prod.UserId.Equals(id)
-                           select prod;
-
-            var model = new ProductViewModel { Products = products.ToList() };
-
-            if (TempData.ContainsKey("message"))
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
-
-            return View(model);
-        }*/
-
         public ActionResult Index(string id, string sortType)
         {
             var user = (from usr in _db.Users
                         where usr.Id == id
                         select usr).Single();
-            //ViewBag.UserName = user.UserName;
             ViewBag.User = user;
 
             var products = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
@@ -98,7 +76,6 @@ namespace Licenta.Controllers
                            select categs.CategoryName).Single();
             ViewBag.CategoryName = Convert.ToString(catName);
 
-            //ViewBag.Category = product.Category;
             ViewBag.SubCategory = product.SubCategory;
             ViewBag.DeliveryCompany = product.DeliveryCompany;
 
@@ -169,7 +146,6 @@ namespace Licenta.Controllers
         public ActionResult New([Bind(Exclude = "ProductPhotos")]Product product)
         {
             product.Cities = GetAllCities();
-            //product.Categories = GetAllCategories();
             ViewBag.Categories = GetAllCategories();
             product.ProductStateTypes = GetAllProductStateTypes();
             product.DeliveryCompanies = GetAllDeliveryCompanies();
