@@ -65,6 +65,7 @@ namespace Licenta.Controllers
 
             return string.Empty;
         }
+
         [HttpPost]
         public ActionResult New(int? id, Message message)
         {
@@ -218,5 +219,7 @@ namespace Licenta.Controllers
             }*/
 
         }
+
+        
     }
 }

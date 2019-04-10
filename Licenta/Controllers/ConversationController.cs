@@ -4,6 +4,7 @@ using Licenta.DataAccess;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -134,7 +135,8 @@ namespace Licenta.Controllers
                            orderby msg.Date
                            select msg;
 
-            foreach(var message in messages)
+            var messagesDecrypted = messages;
+            foreach(var message in messagesDecrypted)
             {
                 message.Content = MessageController.Decrypt(message.Content);
             };
@@ -146,26 +148,65 @@ namespace Licenta.Controllers
                 Product = conversation.Product,
                 SenderId = conversation.SenderId,
                 Sender = conversation.Sender,
-                Messages = messages.ToList()
+                Messages = messagesDecrypted.ToList()
             };
 
 
             var currentUser = User.Identity.GetUserId();
             ViewBag.CurrentUser = currentUser;
 
+            /*if ((conversation.Product.UserId == currentUser) || (conversation.SenderId == currentUser))
+            {
+                return View(model); 
+            }*/
+            //ViewBag.Received = true;
             if ((conversation.Product.UserId == currentUser) || (conversation.SenderId == currentUser))
             {
+                var readMessages = messages.Where(m => (m.ReceiverId == currentUser) && (m.Read == false));
+                if (readMessages.Count() > 0)
+                {
+                    foreach (Message messageRead in readMessages)
+                    {
+                        //MarkMessageAsRead(messageRead.MessageId);
+                        messageRead.Read = true;
+                    }
+                    _db.SaveChanges();
+
+                }
+                /*try
+                {
+                    var readMessages = messages.Where(m => m.ReceiverId == currentUser);
+                    foreach (var message in readMessages)
+                        message.Read = true;
+
+                    _db.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var eve in e.EntityValidationErrors)
+                    {
+                        Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                        }
+                    }
+                    throw;
+                }*/
+
+
                 return View(model); 
             }
-            /*ViewBag.Received = true;
-            if (conversation.Product.UserId == User.Identity.GetUserId())
+            /*else
+            if (conversation.SenderId == currentUser)
             {
-                return View(model); 
-            }
-            else
-            if (conversation.SenderId == User.Identity.GetUserId())
-            {
-                ViewBag.Received = false; 
+                //ViewBag.Received = false;
+                var readMessages = messages.Where(m => m.ReceiverId == currentUser);
+                foreach (var message in readMessages)
+                    message.Read = true;
+
                 return View(model);
             }*/
             else
@@ -174,6 +215,17 @@ namespace Licenta.Controllers
             }
         }
 
+        /*[NonAction]
+        public ActionResult MarkMessageAsRead(int id)
+        {
+            Message message = _db.Messages.Find(id);
+            message.Read = true;
+            _db.SaveChanges();
+
+            return Redirect(Request.UrlReferrer.ToString());
+
+        }
+        */
         [HttpDelete]
         public ActionResult Delete(int id)
         {
