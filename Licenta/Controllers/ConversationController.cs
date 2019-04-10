@@ -128,6 +128,9 @@ namespace Licenta.Controllers
 
         public ActionResult Show(int id)
         {
+            var currentUser = User.Identity.GetUserId();
+            ViewBag.CurrentUser = currentUser;
+
             Conversation conversation = _db.Conversations.Find(id);
 
             var messages = from msg in _db.Messages.Include("Sender").Include("Receiver")
@@ -135,10 +138,27 @@ namespace Licenta.Controllers
                            orderby msg.Date
                            select msg;
 
-            var messagesDecrypted = messages;
-            foreach(var message in messagesDecrypted)
+            if ((conversation.Product.UserId == currentUser) || (conversation.SenderId == currentUser))
+            {
+                var readMessages = messages.Where(m => (m.ReceiverId == currentUser) && (m.Read == false)).ToList();
+
+                if (readMessages.Count() > 0)
+                {
+                    foreach (var messageRead in readMessages)
+                    {
+                        messageRead.Read = true;
+                    }
+                    /*foreach (var message in messages)
+                        _db.Entry(message).Property(x => x.Content).IsModified = false;*/
+
+                    _db.SaveChanges();
+                }
+            }
+
+            foreach (var message in messages)
             {
                 message.Content = MessageController.Decrypt(message.Content);
+                //_db.Entry(message).Property(x => x.Content).IsModified = false;
             };
 
             var model = new MessageViewModel
@@ -148,84 +168,20 @@ namespace Licenta.Controllers
                 Product = conversation.Product,
                 SenderId = conversation.SenderId,
                 Sender = conversation.Sender,
-                Messages = messagesDecrypted.ToList()
+                Messages = messages.ToList()
             };
 
 
-            var currentUser = User.Identity.GetUserId();
-            ViewBag.CurrentUser = currentUser;
-
-            /*if ((conversation.Product.UserId == currentUser) || (conversation.SenderId == currentUser))
-            {
-                return View(model); 
-            }*/
-            //ViewBag.Received = true;
             if ((conversation.Product.UserId == currentUser) || (conversation.SenderId == currentUser))
             {
-                var readMessages = messages.Where(m => (m.ReceiverId == currentUser) && (m.Read == false));
-                if (readMessages.Count() > 0)
-                {
-                    foreach (Message messageRead in readMessages)
-                    {
-                        //MarkMessageAsRead(messageRead.MessageId);
-                        messageRead.Read = true;
-                    }
-                    _db.SaveChanges();
-
-                }
-                /*try
-                {
-                    var readMessages = messages.Where(m => m.ReceiverId == currentUser);
-                    foreach (var message in readMessages)
-                        message.Read = true;
-
-                    _db.SaveChanges();
-                }
-                catch (DbEntityValidationException e)
-                {
-                    foreach (var eve in e.EntityValidationErrors)
-                    {
-                        Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                            eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                        foreach (var ve in eve.ValidationErrors)
-                        {
-                            Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                                ve.PropertyName, ve.ErrorMessage);
-                        }
-                    }
-                    throw;
-                }*/
-
-
                 return View(model); 
             }
-            /*else
-            if (conversation.SenderId == currentUser)
-            {
-                //ViewBag.Received = false;
-                var readMessages = messages.Where(m => m.ReceiverId == currentUser);
-                foreach (var message in readMessages)
-                    message.Read = true;
-
-                return View(model);
-            }*/
             else
             {
                 return RedirectToAction("Index");
             }
         }
 
-        /*[NonAction]
-        public ActionResult MarkMessageAsRead(int id)
-        {
-            Message message = _db.Messages.Find(id);
-            message.Read = true;
-            _db.SaveChanges();
-
-            return Redirect(Request.UrlReferrer.ToString());
-
-        }
-        */
         [HttpDelete]
         public ActionResult Delete(int id)
         {
