@@ -61,6 +61,8 @@ namespace Licenta.Controllers
                                                       s.ProductStateId == stateId ||
                                                       s.DeliveryCompanyId == deliveryCompId ||
                                                       subCatsIdOfCat.Any(x => x == s.SubCategoryId));
+
+                products = products.Where(p => p.Active == true);
                 //Filtrarea
                 if (priceMin != null)
                     products = products.Where(s => s.Price >= priceMin);

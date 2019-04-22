@@ -580,6 +580,7 @@ namespace Licenta.Controllers
             if (product.UserId == currentUser || User.IsInRole("Administrator") || User.IsInRole("Editor"))
             {
                 product.Active = true;
+                product.DateLastChecked = DateTime.Now;
 
                 _db.SaveChanges();
                 TempData["message"] = "Anuntul a fost Activat!";
@@ -606,4 +607,5 @@ namespace Licenta.Controllers
         }
 
     }
+
 }

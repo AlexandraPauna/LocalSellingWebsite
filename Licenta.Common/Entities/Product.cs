@@ -85,6 +85,9 @@ namespace Licenta.Common.Entities
         [Display(Name = "Vizualizari")]
         public int Views { get; set; }
 
+        [Display(Name = "Ultima oara activat la")]
+        public DateTime DateLastChecked { get; set; }
+
     }
 
     public class ProductImage

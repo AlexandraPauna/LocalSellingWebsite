@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Licenta.DataAccess;
@@ -11,6 +13,9 @@ namespace Licenta.Controllers
 
         public ActionResult Index()
         {
+            //deactivate old products (that have been active for 30 days at least)
+            CheckProductsActivation(DateTime.Now);
+
             var categories = from category in _db.Categories
                              orderby category.CategoryName
                              select category;
@@ -25,6 +30,21 @@ namespace Licenta.Controllers
                 ViewBag.message = TempData["message"].ToString();
             }
             return View();
+        }
+
+        [NonAction]
+        public EmptyResult CheckProductsActivation(DateTime currentDate)
+        {
+            var products = from prod in _db.Products
+                           //where (currentDate - prod.DateLastChecked).Days >= 30
+                           where DbFunctions.DiffDays(currentDate, prod.DateLastChecked) >= 30
+                           select prod;
+            foreach (var product in products)
+                product.Active = false;
+
+            _db.SaveChanges();
+
+            return new EmptyResult();
         }
 
         public FileContentResult MainProductPhoto(int prodId)

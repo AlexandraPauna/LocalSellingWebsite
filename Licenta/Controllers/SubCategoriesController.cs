@@ -66,6 +66,7 @@ namespace Licenta.Controllers
             ViewBag.Allow = _db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
 
             var products = _db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id);
+            products = products.Where(p => p.Active == true);
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
