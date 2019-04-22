@@ -37,7 +37,7 @@ namespace Licenta.Controllers
         {
             var products = from prod in _db.Products
                            //where (currentDate - prod.DateLastChecked).Days >= 30
-                           where DbFunctions.DiffDays(currentDate, prod.DateLastChecked) >= 30
+                           where DbFunctions.DiffDays(prod.DateLastChecked, currentDate) >= 30
                            select prod;
             foreach (var product in products)
                 product.Active = false;
