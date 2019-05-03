@@ -15,6 +15,7 @@ namespace Licenta.Controllers
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
 
         public ActionResult Index(string id, string sortType)
         {
@@ -117,6 +118,17 @@ namespace Licenta.Controllers
                 ViewBag.Allow = true;
             else
                 ViewBag.Allow = false;
+
+            ViewBag.currentUser = currentUser;
+            var interest = from interests in _db.Interests
+                       where interests.ProductId == id && interests.UserId == currentUser
+                       select interests;
+
+            if (interest.Count() > 0)
+            {
+                ViewBag.interest = interest.First();
+            }
+            else ViewBag.interest = null;
 
             return View(product);
         }
@@ -603,6 +615,42 @@ namespace Licenta.Controllers
             }
 
             //return RedirectToAction("Show", "Product", new { id = product.ProductId });
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+
+        public ActionResult Save(int id)
+        {
+            _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var userId = User.Identity.GetUserId();
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "AccountControler");
+            }
+            else
+            {
+                var interest = from interests in _db.Interests
+                               where interests.ProductId == id && interests.UserId == userId
+                               select interests;
+                if (interest.Count() == 1)
+                {
+                    _db.Interests.Remove(interest.First());
+                }
+                else
+                {
+                    Interest newInterest = new Interest();
+                    newInterest.ProductId = id;
+                    var product = (from prod in _db.Products
+                                  where prod.ProductId == id
+                                  select prod).SingleOrDefault();
+                    newInterest.Product = (Product) product;
+                    newInterest.UserId = userId;
+                    newInterest.Date = DateTime.Now;
+
+                    _db.Interests.Add(newInterest);
+                }
+                _db.SaveChanges();
+            }
+
             return Redirect(Request.UrlReferrer.ToString());
         }
 

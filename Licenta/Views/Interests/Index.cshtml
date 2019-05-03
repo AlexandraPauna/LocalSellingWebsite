@@ -1,0 +1,19 @@
+﻿@using Licenta.Common.Entities
+@{
+    ViewBag.Title = "Anunturile marcate ca favorite";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+
+@if(Model.Interests.Count == 0)
+{
+    <p>Nu ai anunturi marcate ca favorite! </p>
+}
+
+@foreach (Interest interest in Model.Interests)
+{
+    @Html.Partial("ProductInfo", interest.Product);
+}
+

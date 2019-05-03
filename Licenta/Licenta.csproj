@@ -202,6 +202,7 @@
     <Compile Include="Controllers\ConversationController.cs" />
     <Compile Include="Controllers\DeliveryCompaniesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InterestsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
@@ -302,6 +303,7 @@
     <Content Include="Views\DeliveryCompanies\Details.cshtml" />
     <Content Include="Views\DeliveryCompanies\Edit.cshtml" />
     <Content Include="Views\DeliveryCompanies\Index.cshtml" />
+    <Content Include="Views\Interests\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

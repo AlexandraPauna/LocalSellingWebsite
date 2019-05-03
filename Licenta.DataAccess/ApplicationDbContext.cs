@@ -21,6 +21,8 @@ namespace Licenta.DataAccess
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Interest> Interests { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public static ApplicationDbContext Create()
         {

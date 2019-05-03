@@ -80,13 +80,16 @@
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Conversation.cs" />
     <Compile Include="Entities\DeliveryCompany.cs" />
+    <Compile Include="Entities\Interest.cs" />
     <Compile Include="Entities\Message.cs" />
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Entities\ProductState.cs" />
+    <Compile Include="Entities\Rating.cs" />
     <Compile Include="Entities\SubCategory.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CategoryViewModel.cs" />
     <Compile Include="Models\ConversationViewModel.cs" />
+    <Compile Include="Models\InterestViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MessageViewModel.cs" />
     <Compile Include="Models\ProductViewModel.cs" />

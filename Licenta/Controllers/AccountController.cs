@@ -175,7 +175,7 @@ namespace Licenta.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register([Bind(Exclude = "UserPhoto")]RegisterViewModel model)
+        public async Task<ActionResult> Register([Bind(Exclude = "UserPhoto, RatingScore, CommunicationScore, AccuracyScore, TimeScore")]RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -200,7 +200,11 @@ namespace Licenta.Controllers
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     PhoneNumber = model.PhoneNumber,
-                    CityId = cityId
+                    CityId = cityId,
+                    RatingScore = null,
+                    CommunicationScore = null,
+                    AccuracyScore = null,
+                    TimeScore = null
                 };
                 user.UserPhoto = imageData;
 

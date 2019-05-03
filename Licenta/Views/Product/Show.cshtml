@@ -8,6 +8,29 @@
 
 <br />
 
+
+@if (ViewBag.currentUser != null)
+{
+    <br />
+    if (ViewBag.interest != null)
+    {
+    <i class="glyphicon glyphicon-star"></i>
+        <form method="post" action="/Product/Save/@Model.ProductId">
+            <button class="btn" type="submit">Sterge din favorite</button>
+        </form>
+    }
+    else
+    {
+        <i class="glyphicon glyphicon-star-empty"></i>
+        <form method="post" action="/Product/Save/@Model.ProductId">
+            <button class="btn" type="submit">Salveaza ca favorit</button>
+        </form>
+    }
+
+}
+
+<br />
+
 @Html.Partial("ProductShowPartial")
 
 @if (ViewBag.Allow == true)
