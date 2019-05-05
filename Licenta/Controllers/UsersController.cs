@@ -80,6 +80,67 @@ namespace Licenta.Controllers
             ApplicationUser user = _db.Users.Find(id);
 
             //fct ce trimite email utilizatorului anuntandu-l de contul sters
+            var products = from prd in _db.Products
+                           where prd.UserId == id
+                           select prd;
+            foreach(var product in products)
+            {
+                _db.Products.Remove(product);
+            }
+
+            var interests = from intrs in _db.Interests
+                            where intrs.UserId == id
+                            select intrs;
+            foreach(var interest in interests)
+            {
+                _db.Interests.Remove(interest);
+            }
+
+            var ratings = from rtn in _db.Ratings
+                          where rtn.UserId == id
+                          select rtn;
+            foreach(var rating in ratings)
+            {
+                _db.Ratings.Remove(rating);
+            }
+            var ratingsReceived = from rtn in _db.Ratings
+                                  where rtn.RatedUserId == id
+                                  select rtn;
+            foreach(var ratingReceived in ratingsReceived)
+            {
+                _db.Ratings.Remove(ratingReceived);
+            }
+
+            var messagesSent = from msg in _db.Messages
+                               where msg.SenderId == id
+                               select msg;
+            foreach (var messageSent in messagesSent)
+            {
+                _db.Messages.Remove(messageSent);
+            }
+            var messagesReceived = from msg in _db.Messages
+                                   where msg.SenderId == id
+                                   select msg;
+            foreach (var messageReceived in messagesReceived)
+            {
+                _db.Messages.Remove(messageReceived);
+            }
+
+            var conversationsSent = from conv in _db.Conversations
+                                    where conv.SenderId == id
+                                    select conv;
+            foreach(var conversationSent in conversationsSent)
+            {
+                _db.Conversations.Remove(conversationSent);
+            }
+            var conversationsReceived = from conv in _db.Conversations
+                                        where conv.Product.UserId == id
+                                        select conv;
+            foreach (var conversationReceived in conversationsReceived)
+            {
+                _db.Conversations.Remove(conversationReceived);
+            }
+
             _db.Users.Remove(user);
             _db.SaveChanges();
             TempData["message"] = "Userul a fost sters!";
