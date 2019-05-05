@@ -103,6 +103,14 @@
     <hr />
     <div>@Html.ActionLink("Editeaza Informatii Profil", "ChangeProfile", "Manage")</div>
     <div>@Html.ActionLink("Schimba Parola", "ChangePassword", "Manage")</div>
+    <br/>
+    <form method="post" action="/Manage/DeleteAccount">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <button class="btn btn-sm btn-danger" type="submit" 
+                onclick="return confirm('Esti sigur? Toate datele contului vor fi sterse, si nu vor putea fi recuperate!');">
+            Sterge cont
+        </button>
+    </form>
     <hr />
     <br /><br />
 

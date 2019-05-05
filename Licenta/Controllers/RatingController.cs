@@ -117,5 +117,62 @@ namespace Licenta.Controllers
             
                 }
         }
+
+        public ActionResult Edit(int id)
+        {
+            Rating rating = _db.Ratings.Find(id);
+            ViewBag.Rating = rating;
+
+            if (rating.UserId == User.Identity.GetUserId() || User.IsInRole("Administrator") || User.IsInRole("Editor"))
+            {
+                return View(rating);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui calificativ care nu va apartine!";
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+        }
+
+        [HttpPut]
+        public ActionResult Edit(int id, Rating requestRating)
+        {
+            try
+            {
+                Rating rating = _db.Ratings.Find(id);
+
+                rating.Communication = requestRating.Communication;
+                rating.Accuracy = requestRating.Accuracy;
+                rating.Time = requestRating.Time;
+                rating.Text = requestRating.Text;
+
+                double average = (double)(requestRating.Communication + requestRating.Accuracy + requestRating.Time) / 3;
+                rating.Average = Math.Round(average, 1);
+
+                var ratedUserId = rating.RatedUserId;
+                var ratedUser = (from usr in _db.Users
+                                 where usr.Id == ratedUserId.ToString()
+                                 select usr).Single();
+
+                var numberOfRatings = (from rtng in _db.Ratings
+                                       where rtng.RatedUserId == rating.RatedUserId
+                                       select rtng).Count();
+
+                ratedUser.CommunicationScore = Math.Round(((double)ratedUser.CommunicationScore + (double)rating.Communication) / numberOfRatings, 1);
+                ratedUser.AccuracyScore = Math.Round(((double)ratedUser.AccuracyScore + (double)rating.Accuracy) / numberOfRatings, 1);
+                ratedUser.TimeScore = Math.Round(((double)ratedUser.TimeScore + (double)rating.Time) / numberOfRatings, 1);
+                ratedUser.RatingScore = Math.Round(((double)ratedUser.RatingScore + rating.Average) / numberOfRatings, 1);
+
+
+                _db.SaveChanges();
+                TempData["message"] = "Calificativul a fost modificat cu succes!";
+
+                return RedirectToAction("Index", new { id = rating.RatedUserId});
+            }
+            catch (Exception e)
+            {
+                return View();
+            }
+        }
     }
 }

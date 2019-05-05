@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Licenta.Common.Entities;
 using Licenta.Common.Models;
 using Licenta.DataAccess;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 
@@ -112,6 +114,105 @@ namespace Licenta.Controllers
 
                 return View(user);
             }
+        }
+
+        [HttpDelete]
+        public ActionResult DeleteAccount()
+        {
+            var id = User.Identity.GetUserId();
+
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+
+            ApplicationUser user = _db.Users.Find(id);
+
+            //fct ce trimite email utilizatorului anuntandu-l de contul sters
+            var products = from prd in _db.Products
+                           where prd.UserId == id
+                           select prd;
+            foreach (var product in products)
+            {
+                var productImages = from prdImg in _db.ProductImages
+                                    where prdImg.ProductId == product.ProductId
+                                    select prdImg;
+                _db.ProductImages.RemoveRange(productImages);
+
+                var productInterests = from prdIns in _db.Interests
+                                       where prdIns.ProductId == product.ProductId
+                                       select prdIns;
+                _db.Interests.RemoveRange(productInterests);
+
+                _db.Products.Remove(product);
+            }
+
+            var interests = from intrs in _db.Interests
+                            where intrs.UserId == id
+                            select intrs;
+            foreach (var interest in interests)
+            {
+                _db.Interests.Remove(interest);
+            }
+
+            var ratings = from rtn in _db.Ratings
+                          where rtn.UserId == id
+                          select rtn;
+            foreach (var rating in ratings)
+            {
+                _db.Ratings.Remove(rating);
+            }
+            var ratingsReceived = from rtn in _db.Ratings
+                                  where rtn.RatedUserId == id
+                                  select rtn;
+            foreach (var ratingReceived in ratingsReceived)
+            {
+                _db.Ratings.Remove(ratingReceived);
+            }
+
+            var messagesSent = from msg in _db.Messages
+                               where msg.SenderId == id
+                               select msg;
+            foreach (var messageSent in messagesSent)
+            {
+                _db.Messages.Remove(messageSent);
+            }
+            var messagesReceived = from msg in _db.Messages
+                                   where msg.ReceiverId == id
+                                   select msg;
+            foreach (var messageReceived in messagesReceived)
+            {
+                _db.Messages.Remove(messageReceived);
+            }
+
+            var conversationsSent = from conv in _db.Conversations
+                                    where conv.SenderId == id
+                                    select conv;
+            foreach (var conversationSent in conversationsSent)
+            {
+                _db.Conversations.Remove(conversationSent);
+            }
+            var conversationsReceived = from conv in _db.Conversations
+                                        where conv.Product.UserId == id
+                                        select conv;
+            foreach (var conversationReceived in conversationsReceived)
+            {
+                _db.Conversations.Remove(conversationReceived);
+            }
+
+
+            var context = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var userRole = userManager.GetRoles(user.Id).FirstOrDefault();
+            //userManager.RemoveFromRoles(user.Id, userRole);
+            _db.Database.ExecuteSqlCommand(@"delete from aspnetuserroles from aspnetuserroles ur 
+                                             inner join aspnetroles r on r.id=ur.roleid inner join aspnetusers 
+                                             u on u.id=ur.userid where r.name=@role and u.username=@user",
+                                           new SqlParameter("@role", userRole),
+                                           new SqlParameter("@user", user.UserName));
+
+            _db.Users.Remove(user);
+            _db.SaveChanges();
+            TempData["message"] = "Cont sters!";
+
+            return RedirectToAction("Index", "Home");
         }
 
         //
