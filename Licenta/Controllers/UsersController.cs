@@ -85,6 +85,11 @@ namespace Licenta.Controllers
                            select prd;
             foreach(var product in products)
             {
+                var productImages = from prdImg in _db.ProductImages
+                                    where prdImg.ProductId == product.ProductId
+                                    select prdImg;
+                _db.ProductImages.RemoveRange(productImages);
+
                 _db.Products.Remove(product);
             }
 
