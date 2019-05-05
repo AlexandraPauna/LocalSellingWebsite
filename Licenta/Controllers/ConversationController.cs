@@ -182,7 +182,7 @@ namespace Licenta.Controllers
             }
         }
 
-        [HttpDelete]
+        /*[HttpDelete]
         public ActionResult Delete(int id)
         {
             Conversation conversation = _db.Conversations.Find(id);
@@ -192,6 +192,6 @@ namespace Licenta.Controllers
             TempData["message"] = "Conversatia a fost stearsa!";
 
             return RedirectToAction("Index");
-        }
+        }*/
     }
 }
