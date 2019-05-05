@@ -596,6 +596,10 @@ namespace Licenta.Controllers
 
             //ApplicationUser user = new ApplicationUser();
             //user = db.Users.Find(userId);
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
             ApplicationUser user = _db.Users.Find(id);
 
             var recentProducts = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")

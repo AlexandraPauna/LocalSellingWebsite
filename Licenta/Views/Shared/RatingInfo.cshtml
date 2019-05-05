@@ -1,0 +1,30 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">
+        De la:
+        <strong>@Html.ActionLink((String)Model.User.UserName, "UserProfile", "Account", new { id = Model.User.Id }, null)</strong>
+        <br />
+    </div>
+    <div class="panel-body">
+        <strong>Calificativ: </strong>@Model.Average
+        <br/>
+        <hr/>
+        <strong>Detaliere calificativ:</strong>
+        Comunicarea vanzatorului: @Model.Communication
+        <br />
+        Acuratetea descrierii anunturilor: @Model.Accuracy
+        <br/>
+        Timpul de onorare al comenzilor: @Model.Time
+        <br/>
+        @if (Model.Text.IsNullOrEmpty())
+        {
+             <strong>Descriere experienta: </strong> @Model.Text
+             <br/>
+        }
+       
+    </div>
+    
+</div>
+<br />
+
+
+

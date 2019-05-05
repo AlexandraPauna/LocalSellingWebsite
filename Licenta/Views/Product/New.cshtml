@@ -115,8 +115,7 @@
 
                     @Html.Label("DeliveryPrice", "Cost Livrare")
                     <br />
-                    @Html.TextBox("DeliveryPrice", null, new { type = "number", @*min = "0", step = "0.01",*@@class = "form-control"
-                })
+                    @Html.TextBox("DeliveryPrice", null, new { type = "number", @*min = "0", step = "0.01",*@@class = "form-control" })
                     @Html.ValidationMessageFor(model => model.DeliveryPrice, "Camp optional", new { @class = "text-info" })
                     <br /><br />
                 </div>

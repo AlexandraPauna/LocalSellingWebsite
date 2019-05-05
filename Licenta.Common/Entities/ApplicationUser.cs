@@ -23,10 +23,10 @@ namespace Licenta.Common.Entities
         public virtual City City { get; set; }
         public IEnumerable<SelectListItem> Cities { get; set; }
         public byte[] UserPhoto { get; set; }
-        public float? RatingScore { get; set; }
-        public float? TimeScore { get; set; }
-        public float? CommunicationScore { get; set; }
-        public float? AccuracyScore { get; set; }
+        public double? RatingScore { get; set; }
+        public double? TimeScore { get; set; }
+        public double? CommunicationScore { get; set; }
+        public double? AccuracyScore { get; set; }
 
         public IEnumerable<SelectListItem> AllRoles { get; set; }
     }

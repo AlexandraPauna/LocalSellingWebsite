@@ -23,21 +23,21 @@ namespace Licenta.Common.Entities
         public string RatedUserId { get; set; }
         public virtual ApplicationUser RatedUser { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Adaugati calificativul pentru comunicare")]
         [Display(Name = "Comunicarea vanzatorului")]
         public int Communication { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Adaugati calificativul pentru acuratete")]
         [Display(Name = "Acuratetea anuntului")]
         public int Accuracy { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Adaugati calificativul pentru timpul onorarii comenzii")]
         [Display(Name = "Timp livrare")]
         public int Time { get; set; }
 
         [Required]
         [Display(Name = "Medie")]
-        public float Average { get; set; }
+        public double Average { get; set; }
 
         [Display(Name = "Descrieti-va experienta (optional)")]
         [MinLength(10, ErrorMessage = "Descrierea este prea scurta! Va rugam adaugati detalii!")]

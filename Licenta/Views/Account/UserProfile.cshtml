@@ -5,87 +5,150 @@
 }
 
 <h2>@ViewBag.Title</h2>
+@if (TempData.ContainsKey("message"))
+{
+    <h3 class="alert alert-danger" role="alert">@ViewBag.message</h3>
+}
 
-<div>
-    <img src="@Url.Action("UserPhotos", "Account", new { id = Model.Id } )" style="width:160px;height:160px; background: #FFFFFF;
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+    <div>
+        <img src="@Url.Action("UserPhotos", "Account", new { id = Model.Id } )" style="width:160px;height:160px; background: #FFFFFF;
     margin: auto;
     -moz-border-radius: 60px;
     border-radius: 100px;
     padding: 6px;
     box-shadow: 0px 0px 20px #888;" />
 
-    <hr />
-    <br />
-    <h4>Informatii Profil</h4>
-    <hr />
-    <dl class="dl-horizontal">
+        <hr />
+        <br />
+        <h4>Informatii Profil</h4>
+        <hr />
+        <dl class="dl-horizontal">
 
-        @*<dt>Nume Utilizator</dt>
+            @*<dt>Nume Utilizator</dt>
             <dd>
                 @Html.DisplayFor(model => model.UserName)
             </dd>*@
 
-        <dt>Prenume</dt>
-        <dd>
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
+            <dt>Prenume</dt>
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
 
-        <dt>Nume</dt>
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
+            <dt>Nume</dt>
+            <dd>
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
 
-        <dt>Oras</dt>
-        <dd>
-            @Html.DisplayFor(model => model.City.CityName)
+            <dt>Oras</dt>
+            <dd>
+                @Html.DisplayFor(model => model.City.CityName)
 
-        </dd>
-
-
-        <dt>Email</dt>
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.EmailConfirmed)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EmailConfirmed)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.SecurityStamp)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SecurityStamp)
-        </dd>
-
-        <dt>Numar Telefon</dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-
-    </dl>
-
-    <hr />
-    <br /><br />
-
-    <h4>Anunturile utilizatorului</h4>
-    <hr />
-    <br />
-
-    <div>@Html.ActionLink("Vezi toate anunturile utilizatorului", "Index", "Product", new { id = Model.Id }, null)</div>
-    <br />
-    @foreach (Licenta.Common.Entities.Product product in ViewBag.recentProducts)
-    {
-        @Html.Partial("ProductInfo", product);
-    }
-    <hr />
-    <br /><br />
+            </dd>
 
 
-</div>
+            <dt>Email</dt>
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.EmailConfirmed)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.EmailConfirmed)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SecurityStamp)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SecurityStamp)
+            </dd>
+
+            <dt>Numar Telefon</dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+
+        </dl>
+
+        <hr />
+        <br /><br />
+
+        <h4>Anunturile utilizatorului</h4>
+        <hr />
+        <br />
+
+        <div>@Html.ActionLink("Vezi toate anunturile utilizatorului", "Index", "Product", new { id = Model.Id }, null)</div>
+        <br />
+        @foreach (Licenta.Common.Entities.Product product in ViewBag.recentProducts)
+        {
+            @Html.Partial("ProductInfo", product);
+        }
+        <hr />
+        <br /><br />
+
+        <h4>Calificativele utilizatorului</h4>
+        <hr />
+        <br />
+
+        @if (Model.RatingScore == null)
+        {
+            <p>Nu exista calificative pentru utilizator! </p>
+        }
+        else
+        {
+            <strong>Calificativ general: </strong> @Model.RatingScore
+            <br /><br/>
+            <strong>Rating detaliat utilizator: </strong>
+            <br />
+            <span>Comunicarea vanzatorului: </span>@Model.CommunicationScore
+            <br />
+            <span>Acuratetea descrierii anunturilor: </span>@Model.AccuracyScore
+            <br />
+            <span>Timpul de onorare al comenzilor: </span>@Model.TimeScore
+            <br />
+            <br />
+
+            <div>@Html.ActionLink("Vezi toate calificativele utilizatorului", "Index", "Rating", new { id = Model.Id }, null)</div>
+            <br />
+        }
+
+        <form method="post" action="/Rating/New">
+            @*<input type="hidden" name="Date" value="@DateTime.Now" />*@
+            @Html.Hidden("Date", DateTime.Now)
+            @Html.Hidden("RatedUserId", Model.Id)
+            <label>Acorda calificativ:</label>
+            <hr />
+
+            @Html.Label("Communication", "Comunicare")
+            <br />
+            @Html.TextBox("Communication", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+            <br />
+
+            @Html.Label("Accuracy", "Acuratetea anunturilor")
+            <br />
+            @Html.TextBox("Accuracy", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+            <br />
+
+            @Html.Label("Time", "Timpul de onorare a comenzii")
+            <br />
+            @Html.TextBox("Time", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+            <br />
+
+            @Html.Label("Text", "Descrieti-va experienta (optional)")
+            <br />
+            @Html.TextArea("Text", null, new { minLength = 10, maxlength = 100, @class = "form-control" })
+            <br />
+
+            <button class="btn btn-sm btn-success" type="submit">Trimite</button>
+        </form>
+        <hr />
+        <br /><br />
+
+    </div>

@@ -206,6 +206,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\RatingController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SubCategoriesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -304,6 +305,8 @@
     <Content Include="Views\DeliveryCompanies\Edit.cshtml" />
     <Content Include="Views\DeliveryCompanies\Index.cshtml" />
     <Content Include="Views\Interests\Index.cshtml" />
+    <Content Include="Views\Shared\RatingInfo.cshtml" />
+    <Content Include="Views\Rating\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

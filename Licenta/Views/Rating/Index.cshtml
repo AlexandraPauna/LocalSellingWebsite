@@ -1,0 +1,78 @@
+﻿@using Licenta.Common.Entities
+@{
+    ViewBag.Title = "Calificativele utilizatorului " + Model.RatedUser.UserName;
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+<br />
+@if (TempData.ContainsKey("message"))
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    <br/>
+}
+
+@if (Model.Ratings.Count == 0)
+{
+    <p>Nu exista calificative pentru utilizator! </p>
+}
+else
+{
+    <strong>Calificativ general: </strong> @Model.RatedUser.RatingScore
+    <br /><br/>
+    <strong>Rating detaliat utilizator: </strong>
+    <br />
+    <span>Comunicarea vanzatorului: </span>@Model.RatedUser.CommunicationScore
+    <br />
+    <span>Acuratetea descrierii anunturilor: </span>@Model.RatedUser.AccuracyScore
+    <br />
+    <span>Timpul de onorare al comenzilor: </span>@Model.RatedUser.TimeScore
+    <br />
+    <br />
+
+    <h4>Calificative primite</h4>
+    <hr />
+    <br />
+}
+
+
+@foreach (Rating rating in Model.Ratings)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            De la:
+            <strong>@Html.ActionLink((String)rating.User.UserName, "UserProfile", "Account", new { id = rating.User.Id }, null)</strong>
+            <br />
+        </div>
+        <div class="panel-body">
+            <strong>Calificativ: </strong>@rating.Average
+            <hr />
+
+            <strong>Data: </strong> @rating.Date.ToString("dd/MM/yyyy")
+            <br />
+
+            <strong>Detaliere calificativ:</strong>
+            <br />
+            Comunicarea vanzatorului: @rating.Communication
+            <br />
+            Acuratetea descrierii anunturilor: @rating.Accuracy
+            <br />
+            Timpul de onorare al comenzilor: @rating.Time
+            <br />
+
+            @if (!String.IsNullOrEmpty(rating.Text))
+            {
+                <strong>Descriere experienta: </strong> @rating.Text
+                <br />
+            }
+
+        </div>
+
+    </div>
+    <br />
+}
+
+
+
+
+

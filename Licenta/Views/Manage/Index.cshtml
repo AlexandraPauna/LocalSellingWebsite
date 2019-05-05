@@ -121,6 +121,34 @@
 
     <h4>Anunturile salvate ca favorite</h4>
     @Html.ActionLink("Vezi anunturile favorite", "Index", "Interests")
+    <hr />
+    <br /><br />
+
+    <h4>Calificativele mele</h4>
+    <hr />
+    <br />
+
+    @if (Model.RatingScore == null)
+    {
+        <p>Nu ai calificative! </p>
+    }
+    else
+    {
+        <strong>Calificativ general: </strong> @Model.RatingScore
+        <br /><br />
+        <strong>Rating detaliat utilizator: </strong>
+        <br />
+        <span>Comunicarea vanzatorului: </span>@Model.CommunicationScore
+        <br />
+        <span>Acuratetea descrierii anunturilor: </span>@Model.AccuracyScore
+        <br />
+        <span>Timpul de onorare al comenzilor: </span>@Model.TimeScore
+        <br />
+        <br />
+
+        <div>@Html.ActionLink("Vezi toate calificativele", "Index", "Rating", new { id = Model.Id }, null)</div>
+        <br />
+    }
 
 
 </div>
