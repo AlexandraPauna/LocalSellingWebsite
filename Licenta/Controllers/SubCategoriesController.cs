@@ -206,6 +206,18 @@ namespace Licenta.Controllers
             {
                 var productImages = _db.ProductImages.Where(x => x.ProductId == product.ProductId);
                 _db.ProductImages.RemoveRange(productImages);
+
+                var conversations = _db.Conversations.Where(x => x.ProductId == product.ProductId);
+                foreach (var conversation in conversations)
+                {
+                    var messages = _db.Messages.Where(x => x.ConversationId == conversation.ConversationId);
+                    _db.Messages.RemoveRange(messages);
+                }
+                _db.Conversations.RemoveRange(conversations);
+
+                var interests = _db.Interests.Where(x => x.ProductId == product.ProductId);
+                _db.Interests.RemoveRange(interests);
+
                 _db.Products.Remove(product);
             }
 
