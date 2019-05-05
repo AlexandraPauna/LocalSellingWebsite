@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.Owin;
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -44,44 +47,44 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
 
-    <script>
+    @*<script>
 
-        $('.carousel').carousel();
-        $.noConflict();
-        jQuery(document).ready(function ($) {
+            $('.carousel').carousel();
+            $.noConflict();
+            jQuery(document).ready(function ($) {
 
-            $(function () {
-                var availableTags = [
-                    "ActionScript",
-                    "AppleScript",
-                    "Asp",
-                    "BASIC",
-                    "C",
-                    "C++",
-                    "Clojure",
-                    "COBOL",
-                    "ColdFusion",
-                    "Erlang",
-                    "Fortran",
-                    "Groovy",
-                    "Haskell",
-                    "Java",
-                    "JavaScript",
-                    "Lisp",
-                    "Perl",
-                    "PHP",
-                    "Python",
-                    "Ruby",
-                    "Scala",
-                    "Scheme"
-                ];
+                $(function () {
+                    var availableTags = [
+                        "ActionScript",
+                        "AppleScript",
+                        "Asp",
+                        "BASIC",
+                        "C",
+                        "C++",
+                        "Clojure",
+                        "COBOL",
+                        "ColdFusion",
+                        "Erlang",
+                        "Fortran",
+                        "Groovy",
+                        "Haskell",
+                        "Java",
+                        "JavaScript",
+                        "Lisp",
+                        "Perl",
+                        "PHP",
+                        "Python",
+                        "Ruby",
+                        "Scala",
+                        "Scheme"
+                    ];
 
-                $("#Search").autocomplete({
-                    source: availableTags
+                    $("#Search").autocomplete({
+                        source: availableTags
+                    });
                 });
             });
-        });
-    </script>
+        </script>*@
 
 
 
@@ -96,21 +99,21 @@
                     <span class="icon-bar"></span>
                 </button>
                 @*<a class="navbar-brand" runat="server" href="~/">
-                    <img src="http://placehold.it/200x40/3A1B37/ffffff/?text=Apllicatin">
-                </a>*@
+                        <img src="http://placehold.it/200x40/3A1B37/ffffff/?text=Apllicatin">
+                    </a>*@
                 @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
 
             <div class="col-md-6 col-sm-8 col-xs-11 navbar-left">
                 <div class="navbar-form " role="search">
                     @using (Html.BeginForm("Index", "Search", FormMethod.Get@*,FormMethod.Post, new { @class = "form-group", @style = "max-width: 100%; width: 100%;" }*@))
-                    {
-                        @Html.TextBox("Search");
-                        <input class="btn btn-primary" style="background: rgb(72, 166, 72);" type="submit" value="Cauta" />
+{
+@Html.TextBox("Search");
+<input class="btn btn-primary" style="background: rgb(72, 166, 72);" type="submit" value="Cauta" />
 
-                        <br />
-                        <br />
-                    }
+<br />
+<br />
+}
 
                     @*<div class="input-group">
                             <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term" style="max-width: 100%; width: 100%;">
@@ -126,16 +129,48 @@
                     <li class="navbar-brand  visible-md visible-lg visible-sm" style="visibility: hidden;" runat="server">
                         <img src="http://placehold.it/200x40/3A1B37/ffffff/?text=Apllicatin" />
                     </li>
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Acasa", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Utilizatori", "Index", "Users")</li>
+                    <li>@Html.ActionLink("Categorii", "Index", "Categories")</li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
+                        var role = userManager.GetRoles(User.Identity.GetUserId()).FirstOrDefault();
+
+                        if (role == "User")
+                        {
+                            <li>@Html.ActionLink("Mesaje", "Index", "Conversation")</li>
+                            <li>@Html.ActionLink("Anunturi salvate", "Index", "Interests")</li>
+                            <li>@Html.ActionLink("Anunturile mele", "Index", "Product", new { id = User.Identity.GetUserId() }, null)</li>
+                            <li>@Html.ActionLink("Adauga Anunt", "New", "Product")</li>
+
+                        }
+
+                        if (role == "Editor")
+                        {
+                            <li>@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
+                            <li>@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
+                        }
+
+                        if (role == "Administrator")
+                        {
+                            <li>@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
+                            <li>@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
+                            <li>@Html.ActionLink("Utilizatori", "Index", "Users")</li>
+                        }
+
+
+                    }
+
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
     <br /><br /><br />
-   
+
     <div class="container body-content">
         @RenderBody()
         <hr />
