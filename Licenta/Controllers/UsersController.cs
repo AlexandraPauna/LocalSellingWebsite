@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Licenta.Common.Entities;
 using Licenta.DataAccess;
+using System.Data.SqlClient;
 
 namespace Licenta.Controllers
 {
@@ -90,6 +91,11 @@ namespace Licenta.Controllers
                                     select prdImg;
                 _db.ProductImages.RemoveRange(productImages);
 
+                var productInterests = from prdIns in _db.Interests
+                                       where prdIns.ProductId == product.ProductId
+                                       select prdIns;
+                _db.Interests.RemoveRange(productInterests);
+
                 _db.Products.Remove(product);
             }
 
@@ -124,7 +130,7 @@ namespace Licenta.Controllers
                 _db.Messages.Remove(messageSent);
             }
             var messagesReceived = from msg in _db.Messages
-                                   where msg.SenderId == id
+                                   where msg.ReceiverId == id
                                    select msg;
             foreach (var messageReceived in messagesReceived)
             {
@@ -145,6 +151,17 @@ namespace Licenta.Controllers
             {
                 _db.Conversations.Remove(conversationReceived);
             }
+
+
+            var context = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var userRole = userManager.GetRoles(user.Id).FirstOrDefault();
+            //userManager.RemoveFromRoles(user.Id, userRole);
+            _db.Database.ExecuteSqlCommand(@"delete from aspnetuserroles from aspnetuserroles ur 
+                                             inner join aspnetroles r on r.id=ur.roleid inner join aspnetusers 
+                                             u on u.id=ur.userid where r.name=@role and u.username=@user",
+                                           new SqlParameter("@role", userRole),
+                                           new SqlParameter("@user", user.UserName));
 
             _db.Users.Remove(user);
             _db.SaveChanges();

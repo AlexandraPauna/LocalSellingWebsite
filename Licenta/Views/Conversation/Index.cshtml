@@ -4,6 +4,10 @@
 }
 
 <h2>@ViewBag.Title</h2>
+@if (TempData.ContainsKey("message"))
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+}
 
 <p>Aici ai raspunsurile la anunturile tale si raspunsurile trimise de tine pentru alte anunturi</p>
 

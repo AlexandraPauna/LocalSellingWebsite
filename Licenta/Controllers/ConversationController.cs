@@ -18,7 +18,12 @@ namespace Licenta.Controllers
         // GET: Conversation
         public ActionResult Index(string sortType)
         {
-            if(sortType == null)
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
+            if (sortType == null)
             {
                 sortType = "Received";
             }
@@ -128,6 +133,11 @@ namespace Licenta.Controllers
 
         public ActionResult Show(int id)
         {
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
             var currentUser = User.Identity.GetUserId();
             ViewBag.CurrentUser = currentUser;
 
