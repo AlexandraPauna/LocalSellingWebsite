@@ -1,4 +1,5 @@
 ﻿@using Licenta.Common.Entities
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Calificativele utilizatorului " + Model.RatedUser.UserName;
 }
@@ -9,7 +10,7 @@
 @if (TempData.ContainsKey("message"))
 {
     <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
-    <br/>
+    <br />
 }
 
 @if (Model.Ratings.Count == 0)
@@ -19,7 +20,7 @@
 else
 {
     <strong>Calificativ general: </strong> @Model.RatedUser.RatingScore
-    <br /><br/>
+    <br /><br />
     <strong>Rating detaliat utilizator: </strong>
     <br />
     <span>Comunicarea vanzatorului: </span>@Model.RatedUser.CommunicationScore
@@ -67,10 +68,16 @@ else
             }
 
         </div>
+        @if (User.Identity.GetUserId() == rating.UserId)
+        {
+        <div class="panel-footer">
+            <a class="btn btn-sm btn-info" href="/Rating/Edit/@rating.RatingId">Editeaza</a>
+        </div>
+        }
 
-    </div>
-    <br />
-}
+</div>
+        <br />
+        }
 
 
 

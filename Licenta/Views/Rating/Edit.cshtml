@@ -1,0 +1,35 @@
+﻿@model Licenta.Common.Entities.Rating
+
+@{
+    ViewBag.Titlu = "Editare Calificativ";
+}
+<h2>Editare Calificativ</h2>
+
+<form method="post" action="/Rating/Edit/@Model.RatingId">
+    @Html.Hidden("Date", DateTime.Now)
+    @Html.Hidden("RatedUserId", Model.RatedUserId)
+    <label>Acorda calificativ:</label>
+    <hr />
+
+    @Html.Label("Communication", "Comunicare")
+    <br />
+    @Html.TextBox("Communication", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+    <br />
+
+    @Html.Label("Accuracy", "Acuratetea anunturilor")
+    <br />
+    @Html.TextBox("Accuracy", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+    <br />
+
+    @Html.Label("Time", "Timpul de onorare a comenzii")
+    <br />
+    @Html.TextBox("Time", null, new { type = "number", min = "1", required = "required", max = "5", step = "1", @class = "form-control" })
+    <br />
+
+    @Html.Label("Text", "Descrieti-va experienta (optional)")
+    <br />
+    @Html.TextArea("Text", null, new { minLength = 10, maxlength = 100, @class = "form-control" })
+    <br />
+
+    <button class="btn btn-sm btn-success" type="submit">Editeaza</button>
+</form>
