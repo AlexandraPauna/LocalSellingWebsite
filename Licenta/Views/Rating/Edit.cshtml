@@ -6,6 +6,7 @@
 <h2>Editare Calificativ</h2>
 
 <form method="post" action="/Rating/Edit/@Model.RatingId">
+    @Html.HttpMethodOverride(HttpVerbs.Put)
     @Html.Hidden("Date", DateTime.Now)
     @Html.Hidden("RatedUserId", Model.RatedUserId)
     <label>Acorda calificativ:</label>

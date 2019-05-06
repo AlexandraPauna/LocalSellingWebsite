@@ -141,6 +141,18 @@ namespace Licenta.Controllers
             {
                 Rating rating = _db.Ratings.Find(id);
 
+                var ratedUserId = rating.RatedUserId;
+                var ratedUser = (from usr in _db.Users
+                                 where usr.Id == ratedUserId.ToString()
+                                 select usr).Single();
+                var numberOfRatings = (from rtng in _db.Ratings
+                                       where rtng.RatedUserId == rating.RatedUserId
+                                       select rtng).Count();
+                ratedUser.CommunicationScore = ratedUser.CommunicationScore * numberOfRatings - rating.Communication;
+                ratedUser.AccuracyScore = ratedUser.AccuracyScore * numberOfRatings - rating.Accuracy;
+                ratedUser.TimeScore = ratedUser.TimeScore * numberOfRatings - rating.Time;
+                ratedUser.RatingScore = ratedUser.RatingScore * numberOfRatings - rating.Average;
+
                 rating.Communication = requestRating.Communication;
                 rating.Accuracy = requestRating.Accuracy;
                 rating.Time = requestRating.Time;
@@ -149,14 +161,9 @@ namespace Licenta.Controllers
                 double average = (double)(requestRating.Communication + requestRating.Accuracy + requestRating.Time) / 3;
                 rating.Average = Math.Round(average, 1);
 
-                var ratedUserId = rating.RatedUserId;
-                var ratedUser = (from usr in _db.Users
-                                 where usr.Id == ratedUserId.ToString()
-                                 select usr).Single();
+                
 
-                var numberOfRatings = (from rtng in _db.Ratings
-                                       where rtng.RatedUserId == rating.RatedUserId
-                                       select rtng).Count();
+                
 
                 ratedUser.CommunicationScore = Math.Round(((double)ratedUser.CommunicationScore + (double)rating.Communication) / numberOfRatings, 1);
                 ratedUser.AccuracyScore = Math.Round(((double)ratedUser.AccuracyScore + (double)rating.Accuracy) / numberOfRatings, 1);
