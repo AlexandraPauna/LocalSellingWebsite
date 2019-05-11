@@ -10,6 +10,13 @@
     <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
 }
 
+<ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="navbar-link" href="/Conversation/Index/Received">Mesaje primite</a>
+                <a class="navbar-link" href="/Conversation/Index/Sent">Mesaje trimise</a>
+            </li>
+</ul>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <strong>@Html.ActionLink((String)Model.Product.User.UserName, "UserProfile", "Account", new { id = Model.Product.User.Id }, null)</strong>

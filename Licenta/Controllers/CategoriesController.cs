@@ -190,10 +190,10 @@ namespace Licenta.Controllers
 
         public FileContentResult DisplayCategoryPhoto(int categoryId)
         {
-            var category = from cat in _db.Categories
+            var category = (from cat in _db.Categories
                           where cat.CategoryId.Equals(categoryId)
-                          select cat;
-            var catImage = category.FirstOrDefault().CategoryPhoto;
+                          select cat).Single();
+            var catImage = category.CategoryPhoto;
 
             if (catImage == null || catImage.Length <= 0)
             {

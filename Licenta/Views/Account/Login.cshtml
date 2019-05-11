@@ -42,9 +42,7 @@
                         <input type="submit" value="Logare" class="btn btn-default" />
                     </div>
                 </div>
-                <p>
-                    @Html.ActionLink("Creare cont", "Register")
-                </p>
+                
                 @* Enable this once you have account confirmation enabled for password reset functionality
                     <p>
                         @Html.ActionLink("Forgot your password?", "ForgotPassword")
@@ -54,7 +52,10 @@
     </div>
     <div class="col-md-4">
         <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+            <h4>Inca nu ai cont?</h4>
+            <br />
+            @Html.ActionLink("Creaza-ti cont", "Register")
+            @*@Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })*@
         </section>
     </div>
 </div>

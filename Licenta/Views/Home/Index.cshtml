@@ -5,28 +5,32 @@
 }
 
 <div class="jumbotron">
-    <h1>TransH</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <h1>Bine ati venit pe </h1>
+    <p class="lead">
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+    </p>
     @if (TempData.ContainsKey("message"))
     {
         <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
     }
 
 
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <p><a href='@Url.Action("New", "Product")' class="btn btn-primary btn-lg">Adauga anunt</a></p>
 </div>
 
-    <ul class="nav flex-column">
+<h3>Gaseste in functie de categorie</h3>
+    <div >
         @foreach (var category in ViewBag.Categories)
         {
-
-            <li class="nav-item">
+        <img src="@Url.Action("DisplayCategoryPhoto", "Categories", new { categoryId = category.CategoryId } )" style="width:160px;height:160px; background: #FFFFFF;"/>
+            <div>
                 <a class="navbar-link" href="/Categories/Show/@category.CategoryId">@category.CategoryName</a>
-            </li>
-
+            </div>
+           
         }
-    </ul>
+    </div>
 
+<h3>Anunturi recente</h3>
 @foreach (Product products in ViewBag.LatestProducts)
 {
     <div class="card" style="width: 18rem;">

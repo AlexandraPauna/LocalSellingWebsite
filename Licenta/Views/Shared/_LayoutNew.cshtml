@@ -136,6 +136,8 @@
                     {
                         var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
+                        var userId = User.Identity.GetUserId();
+
                         var role = userManager.GetRoles(User.Identity.GetUserId()).FirstOrDefault();
 
                         if (role == "User")

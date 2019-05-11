@@ -1,4 +1,19 @@
-﻿<div class="panel panel-default">
+﻿<div>
+    <i class="glyphicon glyphicon-user"></i> <i>Anunt adaugat de</i>
+    <strong>@Html.ActionLink((String)Model.User.UserName, "UserProfile", "Account", new { id = Model.User.Id }, null)</strong>
+    <br />
+    Numar telefon: @Model.User.PhoneNumber
+    <br />
+    Pe site din:
+    <br />
+    Calificativ: @Model.User.RatingScore
+    <br />
+    <a href='@Url.Action("UserProfile", "Account", new { id = Model.User.Id }, null)' class="btn btn-default">Vezi profil</a></p>
+
+</div>
+<br/>
+
+<div class="panel panel-default">
     <div class="panel-heading">@Model.Title</div>
     <div class="panel-body">
 
