@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-//using System.Transactions;
-//using BDPR.Common.Exceptions;
-//using BDPR.Common.Services;
+using System.Transactions;
 
 namespace Licenta.Services
 {
@@ -17,7 +12,7 @@ namespace Licenta.Services
     /// <summary>
     /// Implementeaza diferite metode legate de trimiterea de email-uri.
     /// </summary>
-    public class EmailService : IEmailService
+    public class EmailService
     {
         private const string EmailHost = "smtp.gmail.com";
         private const int EmailPort = 587;
@@ -29,7 +24,7 @@ namespace Licenta.Services
         /// </summary>
         /// <param name="emailAddress">Adresa de email de verificat</param>
         /// <returns>True daca este valida, false daca nu.</returns>
-        public bool IsValidEmailAddress(string emailAddress)
+        private bool IsValidEmailAddress(string emailAddress)
         {
             if (string.IsNullOrWhiteSpace(emailAddress))
             {
@@ -79,20 +74,20 @@ namespace Licenta.Services
         {
             if (toAddresses == null || toAddresses.Length == 0)
             {
-                throw new InvalidEmailAddressException("EmailService: toAddresses is null or empty.");
+                throw new Exception("EmailService: toAddresses is null or empty.");
             }
 
             foreach (var toAddress in toAddresses)
             {
                 if (!IsValidEmailAddress(toAddress))
                 {
-                    throw new InvalidEmailAddressException($"EmailService: toAddress is not a valid email address: '{toAddress}'.");
+                    throw new Exception($"EmailService: toAddress is not a valid email address: '{toAddress}'.");
                 }
             }
 
             if (!IsValidEmailAddress(fromAddress))
             {
-                throw new InvalidEmailAddressException($"EmailService: fromAddress is not a valid email address: '{fromAddress}'.");
+                throw new Exception($"EmailService: fromAddress is not a valid email address: '{fromAddress}'.");
             }
 
             var mail = new MailMessage
