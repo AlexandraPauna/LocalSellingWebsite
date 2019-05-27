@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -67,7 +68,8 @@ namespace Licenta.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(int? id, Message message)
+        //public ActionResult New(int? id, Message message)
+        public async Task<ActionResult> New(int? id, Message message)
         {
             if (id != null)
             {
@@ -127,6 +129,10 @@ namespace Licenta.Controllers
                             _db.SaveChanges();
                             TempData["message"] = "Mesaj trimis!";
 
+                            //send email
+                            string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + product.Title + ". De la " + message.Sender.UserName;
+                            await EmailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
+
                             return RedirectToAction("Index", "Conversation");
                         }
                         else
@@ -136,6 +142,10 @@ namespace Licenta.Controllers
                             _db.Messages.Add(message);
                             _db.SaveChanges();
                             TempData["message"] = "Mesaj trimis!";
+
+                            //send email
+                            string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + product.Title + ". De la " + message.Sender.UserName;
+                            await EmailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
 
                             return RedirectToAction("Index", "Conversation");
                         }
@@ -174,6 +184,10 @@ namespace Licenta.Controllers
                         _db.Messages.Add(message);
                         _db.SaveChanges();
                         TempData["message"] = "Mesaj trimis!";
+
+                        //send email
+                        string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + message.Conversation.Product.Title + ". De la " + message.Sender.UserName;
+                        await EmailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
 
                         return Redirect(Request.UrlReferrer.ToString());
                     }
