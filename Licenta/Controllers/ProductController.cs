@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Licenta.Common.Entities;
 using Licenta.Common.Models;
 using Licenta.DataAccess;
+using System.Threading.Tasks;
 
 namespace Licenta.Controllers
 {
@@ -16,6 +17,7 @@ namespace Licenta.Controllers
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
+        private readonly EmailService _emailService = new EmailService();
 
         public ActionResult Index(string id, string sortType)
         {
@@ -155,13 +157,19 @@ namespace Licenta.Controllers
 
         // POST: /Product/New
         [HttpPost]
-        public ActionResult New([Bind(Exclude = "ProductPhotos")]Product product)
+       // public ActionResult New([Bind(Exclude = "ProductPhotos")]Product product)
+        public async Task<ActionResult> New([Bind(Exclude = "ProductPhotos")]Product product)
         {
             product.Cities = GetAllCities();
             ViewBag.Categories = GetAllCategories();
             product.ProductStateTypes = GetAllProductStateTypes();
             product.DeliveryCompanies = GetAllDeliveryCompanies();
             product.UserId = User.Identity.GetUserId();
+            var currentUserId = User.Identity.GetUserId();
+            var user = (from users in _db.Users
+                        where users.Id == currentUserId
+                        select users).Single();
+            product.User = (ApplicationUser)user;
 
             //convert the user uploaded Photo as Byte Array before save to DB
             //byte[] imageData = null;
@@ -200,7 +208,11 @@ namespace Licenta.Controllers
                     _db.SaveChanges();
                     TempData["message"] = "Anuntul a fost adaugat cu succes!";
 
-                    return RedirectToAction("Show", "SubCategories", new { @id = product.SubCategoryId });
+                    //send email
+                    string content = "Buna " + user.UserName + ", \n" + "Felicitari! Anuntul tau a fost adaugat cu succes! Anunt:" + product.Title + ".";
+                    await _emailService.SendEmailAsync(user.Email, "site_anunturi@yahoo.com", "Site anunturi", "Anunt nou", content);
+
+                return RedirectToAction("Show", "SubCategories", new { @id = product.SubCategoryId });
                 // }
                 // else
                 // {
@@ -435,7 +447,8 @@ namespace Licenta.Controllers
         }
 
         [HttpPut]
-        public ActionResult Edit([Bind(Exclude = "ProductPhotos")]int id, Product requestProduct)
+        //public ActionResult Edit([Bind(Exclude = "ProductPhotos")]int id, Product requestProduct)
+        public async Task<ActionResult> Edit([Bind(Exclude = "ProductPhotos")]int id, Product requestProduct)
         {
             try
             {
@@ -457,7 +470,19 @@ namespace Licenta.Controllers
                 _db.SaveChanges();
                 TempData["message"] = "Anuntul a fost modificat cu succes!";
 
-                return RedirectToAction("Index");
+                //send email
+
+                var usersInterested = from interests in _db.Interests
+                                      where interests.ProductId == id
+                                      select interests.User;
+                foreach(var user in usersInterested)
+                {
+                    string content = "Buna " + user.UserName + ", \n" + "Un anunt de care esti interesat a fost modificat. Anunt: " + product.Title + ".";
+                    await _emailService.SendEmailAsync(user.Email, "site_anunturi@yahoo.com", "Site anunturi", "Notificare modificare anunt", content);
+
+                }
+
+                return RedirectToAction("Show", "SubCategories", new { @id = product.SubCategoryId });
             }
             catch (Exception e)
             {

@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,6 +14,7 @@ namespace Licenta.Controllers
     public class RatingController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly EmailService _emailService = new EmailService();
 
         // GET: Rating
         public ActionResult Index(string id)
@@ -35,7 +37,8 @@ namespace Licenta.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(Rating rating)
+        //public ActionResult New(Rating rating)
+        public async Task<ActionResult> New(Rating rating)
         {
             var currentUserId = User.Identity.GetUserId();
 
@@ -104,6 +107,10 @@ namespace Licenta.Controllers
                             _db.SaveChanges();
                             TempData["message"] = "Calificativ adaugat!";
 
+                            //send email
+                            string content = "Buna " + rating.RatedUser.UserName + ", \n" + "Ai primit un calificativ nou de la " + rating.User.UserName + ".";
+                            await _emailService.SendEmailAsync(rating.RatedUser.Email, "site_anunturi@yahoo.com", "Site anunturi", "Calificativ nou", content);
+
                             return RedirectToAction("Index", "Rating", new { id = rating.RatedUserId});
                             //return Redirect(Request.UrlReferrer.ToString());
 
@@ -135,7 +142,8 @@ namespace Licenta.Controllers
         }
 
         [HttpPut]
-        public ActionResult Edit(int id, Rating requestRating)
+        //public ActionResult Edit(int id, Rating requestRating)
+        public async Task<ActionResult> Edit(int id, Rating requestRating)
         {
             try
             {
@@ -161,10 +169,6 @@ namespace Licenta.Controllers
                 double average = (double)(requestRating.Communication + requestRating.Accuracy + requestRating.Time) / 3;
                 rating.Average = Math.Round(average, 1);
 
-                
-
-                
-
                 ratedUser.CommunicationScore = Math.Round(((double)ratedUser.CommunicationScore + (double)rating.Communication) / numberOfRatings, 1);
                 ratedUser.AccuracyScore = Math.Round(((double)ratedUser.AccuracyScore + (double)rating.Accuracy) / numberOfRatings, 1);
                 ratedUser.TimeScore = Math.Round(((double)ratedUser.TimeScore + (double)rating.Time) / numberOfRatings, 1);
@@ -173,6 +177,11 @@ namespace Licenta.Controllers
 
                 _db.SaveChanges();
                 TempData["message"] = "Calificativul a fost modificat cu succes!";
+
+                //send email
+                string content = "Buna " + rating.RatedUser.UserName + ", \n" + "Calificativul primit de la  " + rating.User.UserName + " a fost modificat!";
+                await _emailService.SendEmailAsync(rating.RatedUser.Email, "site_anunturi@yahoo.com", "Site anunturi", "Calificativ modificat", content);
+
 
                 return RedirectToAction("Index", new { id = rating.RatedUserId});
             }
