@@ -209,7 +209,7 @@ namespace Licenta.Controllers
                     TempData["message"] = "Anuntul a fost adaugat cu succes!";
 
                     //send email
-                    string content = "Buna " + user.UserName + ", \n" + "Felicitari! Anuntul tau a fost adaugat cu succes! Anunt:" + product.Title + ".";
+                    string content = "Buna " + user.UserName + ", \r\n" + "Felicitari! Anuntul tau a fost adaugat cu succes! Anunt:" + product.Title + ".";
                     await _emailService.SendEmailAsync(user.Email, "site_anunturi@yahoo.com", "Site anunturi", "Anunt nou", content);
 
                 return RedirectToAction("Show", "SubCategories", new { @id = product.SubCategoryId });
