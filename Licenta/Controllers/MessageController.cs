@@ -2,7 +2,6 @@
 using Licenta.DataAccess;
 using Microsoft.AspNet.Identity;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +14,7 @@ namespace Licenta.Controllers
     public class MessageController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly EmailService _emailService = new EmailService();
 
         // GET: Message
         public ActionResult Index()
@@ -131,7 +131,7 @@ namespace Licenta.Controllers
 
                             //send email
                             string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + product.Title + ". De la " + message.Sender.UserName;
-                            await EmailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
+                            await _emailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
 
                             return RedirectToAction("Index", "Conversation");
                         }
@@ -145,7 +145,7 @@ namespace Licenta.Controllers
 
                             //send email
                             string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + product.Title + ". De la " + message.Sender.UserName;
-                            await EmailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
+                            await _emailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
 
                             return RedirectToAction("Index", "Conversation");
                         }
@@ -187,7 +187,7 @@ namespace Licenta.Controllers
 
                         //send email
                         string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + message.Conversation.Product.Title + ". De la " + message.Sender.UserName;
-                        await EmailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
+                        await _emailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
 
                         return Redirect(Request.UrlReferrer.ToString());
                     }
