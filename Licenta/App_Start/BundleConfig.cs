@@ -24,6 +24,9 @@ namespace Licenta
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap_v4/css/bootstrap.css",
                       "~/Content/css/style.css"));
+
+            bundles.Add(new ScriptBundle("~/Content/js").Include(
+                        "~/Scripts/jquery-{version}.js"));
         }
     }
 }
