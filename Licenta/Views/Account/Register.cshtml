@@ -17,105 +17,165 @@
     }
 </script>
 
-<h2>Creare Cont</h2>
-
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
-{
     @Html.AntiForgeryToken()
-    <hr />
+    <div class="row">
+        <div class="col-md-8 page-content">
+            <div class="inner-box category-content">
+                <h2 class="title-2"><i class="icon-user-add"></i> Creati-va propriul cont, este gratis! </h2>
 
-    <br />
-    <h4>Informatii cont</h4>
-    <hr />
+                <div class="row">
+                    <div class="col-sm-12">
+                        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+                        {
+                        <fieldset>
 
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            <br />
+                            <h4>Informatii cont</h4>
+                            <hr />
+
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                            <div class="form-group  row required">
+                                @Html.LabelFor(m => m.Email, new { @class = "col-md-4 control-label" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", required = "required"})
+                                </div>
+                            </div>
+                            <div class="form-group  row required">
+                                @Html.LabelFor(m => m.Password, new { @class = "col-md-4 control-label" })
+                                <div class="col-md-8">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group  row required">
+                                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-4 control-label" })
+                                <div class="col-md-8">
+                                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <br />
+                            <h4>Informatii de contact</h4>
+                            <hr />
+
+                            <div class="form-group  row required">
+                                @Html.LabelFor(m => m.FirstName, new { @class = "col-md-4 control-label" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group  row required">
+                                @Html.LabelFor(m => m.LastName, new { @class = "col-md-4 control-label" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group  row required">
+                                @Html.LabelFor(m => m.UserName, new { @class = "col-md-4 control-label" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group  row required">
+                                @Html.LabelFor(m => m.UserPhoto, new { @class = "col-md-4 control-label" })
+                                <div class="col-md-8">
+                                    <input type="file" name="UserPhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+                                </div>
+                            </div>
+
+                            <div class="form-group  row required">
+                                @*<label>Selectati Orasul</label>*@
+                                @Html.LabelFor(m => m.CityId, new { @class = "col-md-4 control-label" })
+
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(m => m.CityId, new SelectList(Model.Cities, "Value", "Text"), "Selectati orasul", new { @class = "form-control" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group  row required">
+                                @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-4 control-label" })
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div style="color:Red">@ViewBag.Message</div>
+
+
+                            <div class="form-group row">
+                                <label class="col-md-4 control-label"></label>
+
+                                <div class="col-md-8">
+                                    <div class="termbox mb10">
+                                        <div class="col-auto my-1 no-padding">
+                                                @Html.CheckBox("Condition", false, new { @id = "chkcondition" })
+                                                <label class="control-label" for="chkcondition">
+                                                    <span class="custom-control-description">
+                                                        Sunt de acord cu <a href="#">Termenii si Conditiile</a>
+                                                    </span>
+                                                </label>
+                                           
+                                        </div>
+
+                                    </div>
+                                    <div style="clear:both"></div>
+                                    <input type="submit" class="btn btn-primary" value="Inregistrare" onclick="javascript:return AcceptTermAndcondition();" />
+                                </div>
+                            </div>
+
+                        </fieldset>
+                        }
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 reg-sidebar">
+            <div class="reg-sidebar-inner text-center">
+                <div class="promo-text-box">
+                    <i class=" icon-picture fa fa-4x icon-color-1"></i>
+
+                    <h3><strong>Poti adauga anunturi nelimitate gratis</strong></h3>
+
+                    <p>
+                        Acest site iti ofera posibilitatea de a publica anunturi gratuite pentru orasul tau si imprejurimile sale. 
+                        Vei gasi usor anunturi gratuite interesante din Bucuresti, Ilfov si alte orase din tara si vei putea intra usor in legatura cu cei care le-au publicat. 
+                        Te asteapta o varietate de produse la preturi mici.
+                    </p>
+                </div>
+                <div class="promo-text-box">
+                    <i class=" icon-pencil-circled fa fa-4x icon-color-2"></i>
+
+                    <h3><strong>Adauga anunturi si manageriaza-le</strong></h3>
+
+                    <p>
+                        Daca vrei sa vinzi ceva vei putea adauga foarte usor anunturi gratuite
+                        
+                    </p>
+                </div>
+                <div class="promo-text-box">
+                    <i class="  icon-heart-2 fa fa-4x icon-color-3"></i>
+
+                    <h3><strong>Creaza-ti propria lista de anunturi favorite.</strong></h3>
+
+                    <p>
+                        Daca vrei sa cumperi ceva aici vei putea gasi produsele care te intereseaza la preturi mai mici decat in orice magazin.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-        </div>
-    </div>
-
-    <hr />
-    <br />
-    <h4>Informatii de contact</h4>
-    <hr />
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.UserPhoto, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            <input type="file" name="UserPhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        @*<label>Selectati Orasul</label>*@
-        @Html.LabelFor(m => m.CityId, new { @class = "col-md-2 control-label" })
-
-        <div class="col-md-10">
-            @Html.DropDownListFor(m => m.CityId, new SelectList(Model.Cities, "Value", "Text"), "Selectati orasul", new { @class = "form-control" })
-
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-        </div>
-    </div>
 
 
-    <hr />
-    <br />
-    <h4>Termeni si Conditii</h4>
-    <hr />
 
-    @Html.CheckBox("Condition", false, new { @id = "chkcondition" })<label>Sunt de acord cu <a href="#">Termenii si Conditiile</a></label>
-    <br />
-    <br />
-    <div style="color:Red">@ViewBag.Message</div>
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Inregistrare" onclick="javascript:return AcceptTermAndcondition();" />
-        </div>
-    </div>
-}
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

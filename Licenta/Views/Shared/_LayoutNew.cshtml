@@ -9,176 +9,99 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <style>
-        .navbar-inverse .navbar-nav > li > a {
-            color: white !important;
-        }
-
-            .navbar-inverse .navbar-nav > li > a:hover {
-                text-decoration: underline;
-            }
-
-        .navbar-collapse ul li {
-            padding-top: 0px;
-            padding-bottom: 0px;
-        }
-
-            .navbar-collapse ul li a {
-                padding-top: 0px;
-                padding-bottom: 0px;
-            }
-
-        .navbar-brand img {
-            width: 200px;
-            height: 40px;
-        }
-
-        .navbar-inverse {
-            background-color: #3A1B37;
-        }
-    </style>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    @*<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>*@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
 
-    @*<script>
-
-            $('.carousel').carousel();
-            $.noConflict();
-            jQuery(document).ready(function ($) {
-
-                $(function () {
-                    var availableTags = [
-                        "ActionScript",
-                        "AppleScript",
-                        "Asp",
-                        "BASIC",
-                        "C",
-                        "C++",
-                        "Clojure",
-                        "COBOL",
-                        "ColdFusion",
-                        "Erlang",
-                        "Fortran",
-                        "Groovy",
-                        "Haskell",
-                        "Java",
-                        "JavaScript",
-                        "Lisp",
-                        "Perl",
-                        "PHP",
-                        "Python",
-                        "Ruby",
-                        "Scala",
-                        "Scheme"
-                    ];
-
-                    $("#Search").autocomplete({
-                        source: availableTags
-                    });
-                });
-            });
-        </script>*@
-
-
-
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @*<a class="navbar-brand" runat="server" href="~/">
-                        <img src="http://placehold.it/200x40/3A1B37/ffffff/?text=Apllicatin">
-                    </a>*@
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
+    <div id="wrapper">
 
-            <div class="col-md-6 col-sm-8 col-xs-11 navbar-left">
-                <div class="navbar-form " role="search">
-                    @using (Html.BeginForm("Index", "Search", FormMethod.Get@*,FormMethod.Post, new { @class = "form-group", @style = "max-width: 100%; width: 100%;" }*@))
-{
-@Html.TextBox("Search");
-<input class="btn btn-primary" style="background: rgb(72, 166, 72);" type="submit" value="Cauta" />
+        <div class="header">
+            <nav class="navbar navbar-site navbar-light navbar-bodered bg-light navbar-expand-md"
+                 role="navigation">
+                <div class="container">
 
-<br />
-<br />
-}
+                    <div class="navbar-identity">
 
-                    @*<div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term" style="max-width: 100%; width: 100%;">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" style="background: rgb(72, 166, 72);" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                            </div>
-                        </div>*@
+                        <a href='@Url.Action("Index", "Home")' class="navbar-brand logo logo-title">
+                            <span class="logo-icon">
+                                <i class="icon icon-search-1 ln-shadow-logo shape-0"></i>
+                            </span>BOOT<span>CLASSIFIED </span>
+                        </a>
+
+
+                        <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
+                                type="button">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22" /></svg>
+
+
+                        </button>
+
+
+
+                    </div>
+
+
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li class="nav-item">@Html.ActionLink("Acasa", "Index", "Home")</li>
+                            <li class="nav-item">@Html.ActionLink("Categorii", "Index", "Categories")</li>
+                            @if (Request.IsAuthenticated)
+                            {
+                                var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
+                                var userId = User.Identity.GetUserId();
+
+                                var role = userManager.GetRoles(User.Identity.GetUserId()).FirstOrDefault();
+
+                                @*if (role == "Editor")
+                                {
+                                    <li class="dropdown no-arrow nav-item">
+                                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+
+                                            <span>Adauga</span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
+                                            <li class="dropdown-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
+                                        </ul>
+                                    </li>
+                                }*@
+
+                                if (role == "Administrator")
+                                {
+                                    @*<li class="nav-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
+                                    <li class="nav-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>*@
+                                    <li class="nav-item">@Html.ActionLink("Utilizatori", "Index", "Users")</li>
+                                }
+                            }
+                        </ul>
+
+                        
+                         @Html.Partial("_LoginPartial")
+                            
+                    </div>
+                    <!--/.nav-collapse -->
                 </div>
-            </div>
+                <!-- /.container-fluid -->
+            </nav>
+        </div>
 
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="navbar-brand  visible-md visible-lg visible-sm" style="visibility: hidden;" runat="server">
-                        <img src="http://placehold.it/200x40/3A1B37/ffffff/?text=Apllicatin" />
-                    </li>
-                    <li>@Html.ActionLink("Acasa", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Categorii", "Index", "Categories")</li>
-                    @if (Request.IsAuthenticated)
-                    {
-                        var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-
-                        var userId = User.Identity.GetUserId();
-
-                        var role = userManager.GetRoles(User.Identity.GetUserId()).FirstOrDefault();
-
-                        if (role == "User")
-                        {
-                            <li>@Html.ActionLink("Mesaje", "Index", "Conversation")</li>
-                            <li>@Html.ActionLink("Anunturi salvate", "Index", "Interests")</li>
-                            <li>@Html.ActionLink("Anunturile mele", "Index", "Product", new { id = User.Identity.GetUserId() }, null)</li>
-                            <li>@Html.ActionLink("Adauga Anunt", "New", "Product")</li>
-
-                        }
-
-                        if (role == "Editor")
-                        {
-                            <li>@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
-                            <li>@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
-                        }
-
-                        if (role == "Administrator")
-                        {
-                            <li>@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
-                            <li>@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
-                            <li>@Html.ActionLink("Utilizatori", "Index", "Users")</li>
-                        }
-
-
-                    }
-
-
-                </ul>
-                @Html.Partial("_LoginPartial")
+        <div class="main-container">
+            <div class="container">
+                @RenderBody()
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                </footer>
             </div>
         </div>
-    </div>
-    <br /><br /><br />
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

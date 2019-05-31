@@ -1,23 +1,172 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@*@using Microsoft.AspNet.Identity
+    @using Microsoft.AspNet.Identity.Owin;
+
+    @if (Request.IsAuthenticated)
+    {
+        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav ml-auto navbar-right">
+
+        <li class="dropdown no-arrow nav-item">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+
+                <span>Bine ai venit, @User.Identity.GetUserName() !</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i>
+            </a>
+            <ul class="dropdown-menu user-menu dropdown-menu-right">
+                <li class="active dropdown-item">
+
+                    <a href='@Url.Action("Index", "Manage")'>
+                        <i class="icon-home"></i> Profilul meu
+
+                    </a>
+                </li>
+
+                @if (Request.IsAuthenticated)
+                {
+                    var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+
+                    var userId = User.Identity.GetUserId();
+
+                    var role = userManager.GetRoles(User.Identity.GetUserId()).FirstOrDefault();
+
+                    if (role == "User")
+                    {
+                        <li class="dropdown-item">
+                            <a href='@Url.Action("Index", "Product", new { id = User.Identity.GetUserId() }, null)'><i class="icon-th-thumb"></i> Anunturile mele </a>
+                        </li>
+
+                        <li class="dropdown-item">
+                            <a href='@Url.Action("Index", "Interests")'><i class="icon-heart"></i> Anunturi favorite </a>
+                        </li>
+
+                        <li class="dropdown-item">
+                            <a href='@Url.Action("Index", "Conversation")'>
+                                <i class="icon-mail"></i> Mesaje
+
+                            </a>
+                        </li>
+
+                    }
+                }
+
+
+                <li class="dropdown-item"><a href="javascript:document.getElementById('logoutForm').submit()"><i class=" icon-logout "></i> Deconectare</a></li>
+            </ul>
+
+        </li>
+
+        <li class="postadd nav-item">
+            <a class="btn btn-block   btn-border btn-post btn-danger nav-link" href='@Url.Action("Index", "Interests")'>Adauga Anunt</a>
+        </li>
+    </ul>
+
+        }
+    }
+    else
+    {
+        <ul class="nav navbar-nav ml-auto navbar-right">
+            <li class="nav-item">@Html.ActionLink("Inregistrare", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+            <li class="nav-item">@Html.ActionLink("Conectare", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>
+    }*@
+
+@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.Owin;
+
+
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
+    var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                @*@Html.ActionLink("Bine ai venit, " + User.Identity.GetUserName() + "!", "Profile", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })*@
-                @Html.ActionLink("Bine ai venit, " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+    var userId = User.Identity.GetUserId();
+
+    var role = userManager.GetRoles(User.Identity.GetUserId()).FirstOrDefault();
+
+
+    <ul class="nav navbar-nav ml-auto navbar-right">
+
+        <li class="dropdown no-arrow nav-item">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                <span>@User.Identity.GetUserName()</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i>
+            </a>
+            
+            <ul class="dropdown-menu user-menu dropdown-menu-right">
+                <li class="active dropdown-item">
+                    <a href='@Url.Action("Index", "Manage")'>
+                        <i class="icon-home"></i> Profilul meu
+                    </a>
+                </li>
+
+                @if (Request.IsAuthenticated)
+                {
+                    if (role == "User")
+                    {
+                        <li class="dropdown-item">
+                            <a href='@Url.Action("Index", "Product", new { id = User.Identity.GetUserId() }, null)'><i class="icon-th-thumb"></i> Anunturile mele </a>
+                        </li>
+
+                        <li class="dropdown-item">
+                            <a href='@Url.Action("Index", "Interests")'><i class="icon-heart"></i> Anunturi favorite </a>
+                        </li>
+
+                        <li class="dropdown-item">
+                            <a href='@Url.Action("Index", "Conversation")'>
+                                <i class="icon-mail"></i> Mesaje
+                            </a>
+                        </li>
+                    }
+                    @*if (role == "Administrator")
+                    {
+                        <li class="dropdown-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
+                        <li class="dropdown-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
+                    }*@
+
+                    <li class="dropdown-item">
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <a href="javascript:document.getElementById('logoutForm').submit()"><i class=" icon-logout "></i> Deconectare</a>
+                        }
+                    </li>
+                }
+
+            </ul>
+
+        </li>
+
+        @if (role == "User")
+        {
+            <li class="postadd nav-item">
+                <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "Product")'>Adauga Anunt</a>
             </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-        </ul>
-    }
-}
+        }
+        @if (role == "Administrator" || role == "Editor")
+        {
+            <li class="postadd nav-item">
+                <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "Categories")'>Categorie Noua</a>
+            </li>
+
+            <li class="postadd nav-item">
+                <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "SubCategories")'>Subcategorie Noua</a>
+            </li>
+        }
+    </ul>
+    
+ }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Inregistrare", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Conectare", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    <ul class="nav navbar-nav ml-auto navbar-right">
+        <li class="nav-item">@Html.ActionLink("Inregistrare", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li class="nav-item">@Html.ActionLink("Conectare", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }
+
+
+
+
+
+
+
+
