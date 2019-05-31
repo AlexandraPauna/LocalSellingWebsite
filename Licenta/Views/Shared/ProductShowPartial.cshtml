@@ -14,23 +14,16 @@
 <br/>
 
 <div class="panel panel-default">
-    <div class="panel-heading">@Model.Title</div>
+    @*@<div class="panel-heading">@Model.Title</div>*@
     <div class="panel-body">
 
-        <h3> Galerie Foto </h3>
+        @*<h3> Galerie Foto </h3>
         
         <div id="ProductPhotosGallery" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 @{
                     var first = true;
                 }
-                @*@foreach (var item in ViewBag.ProductImages)
-                    {
-                        <div class="carousel-item @(first?Html.Raw("active"):Html.Raw(""))">
-                        <img class="d-block w-100" src="@item.ImageData" alt="@item.Id">
-                    </div>
-                    first = false;
-                    }*@
                 @foreach (var item in ViewBag.ProductImages)
                 {
                     <div class="item @(first?Html.Raw("active"):Html.Raw(""))">
@@ -60,27 +53,26 @@
             <i class="glyphicon glyphicon-eye-open"> Vizualizari: @Model.Views</i>
 
         </div>
-        <hr />
+        <hr />*@
 
         <h3>Informatii Produs</h3>
         <div class="container">
-            <div class="row">
+            @*<div class="row">
                 <div class="col-sm">Stare</div>
                 <div class="col-sm">@Model.ProductState.ProductStateName</div>
-            </div>
-            <div class="row">
+            </div>*@
+            @*<div class="row">
                 <div class="col-sm">Pret</div>
                 <div class="col-sm">@Model.Price</div>
-            </div>
+            </div>*@
         </div>
 
         <div class="container">
-            <p>@Model.Description</p>
-            @*Categorie: <i class="glyphicon glyphicon-globe"></i> @Model.Category.CategoryName / @Model.SubCategory.SubCategoryName*@
+            @*<p>@Model.Description</p>*@
+            
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">@ViewBag.CategoryName</a></li>
-                    @*<li class="breadcrumb-item"><a href="#">@Model.Category.CategoryName</a></li>*@
                     <li class="breadcrumb-item active" aria-current="page">@Model.SubCategory.SubCategoryName</li>
                 </ol>
             </nav>

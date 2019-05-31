@@ -4,75 +4,371 @@
     ViewBag.Title = "Afisare Anunt";
 }
 
-<h2>@ViewBag.Titlu</h2>
+@*@Html.Partial("ProductShowPartial")*@
 
-<br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+            <nav aria-label="breadcrumb" role="navigation" class="pull-left">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#"><i class="icon-home fa"></i></a></li>
+                    <li class="breadcrumb-item"><a href='@Url.Action("Show","Categories",new { id = ViewBag.Category })'>@ViewBag.CategoryName</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.SubCategory.SubCategoryName</li>
+                </ol>
+            </nav>
 
 
-@if (ViewBag.currentUser != null)
-{
-    <br />
-    if (ViewBag.interest != null)
-    {
-    <i class="glyphicon glyphicon-star"></i>
-        <form method="post" action="/Product/Save/@Model.ProductId">
-            <button class="btn" type="submit">Sterge din favorite</button>
-        </form>
-    }
-    else
-    {
-        <i class="glyphicon glyphicon-star-empty"></i>
-        <form method="post" action="/Product/Save/@Model.ProductId">
-            <button class="btn" type="submit">Salveaza ca favorit</button>
-        </form>
-    }
+            <div class="pull-right backtolist">
+                <a href='@Url.Action("Show","SubCategories",new { id = @Model.SubCategory.SubCategoryId })'>
+                    <i class="fa fa-angle-double-left"></i> Inapoi la subcategorie
+                </a>
+            </div>
 
-}
+        </div>
+    </div>
+</div>
 
-<br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 page-content col-thin-right">
+            <div class="inner inner-box ads-details-wrapper">
+                <h2>
+                    @Model.Title
+                    @*<small class="label label-default adlistingtype">Company ad</small>*@
+                </h2>
+                <span class="info-row">
+                    <span class="date"><i class=" icon-clock"> </i> @Model.Date </span> -
+                    <span class="category">@ViewBag.CategoryName</span> -
+                    <span class="category">@Model.SubCategory.SubCategoryName</span> -
+                    <span class="item-location">
+                        <i class="fa fa-map-marker-alt"></i> @Model.City.CityName
+                    </span>
+                </span>
 
-@Html.Partial("ProductShowPartial")
+                <div class="ads-image ads-img-v2">
+                    <div class="img-slider-box">
+                        <div class="slider-left">
+                            <ul class="bxslider">
+                                @foreach (var item in ViewBag.ProductImages)
+                                {
+                                    <li><img src="@item" alt="Imagine produs" /></li>
+                                }
+                            </ul>
+                        </div>
 
-@if (ViewBag.Allow == true)
-{
-    <a class="btn btn-sm btn-info" href="/Product/Edit/@Model.ProductId">
-        Modifica anunt
-    </a>
-    <br />
+                        <div id="bx-pager" class="scrollbar">
+                            @{
+                                var indexNr = 0;
+                            }
+                            @foreach (var item in ViewBag.ProductImages)
+                            {
+                                if (indexNr < 3)
+                                {
+                                    <a class="thumb-item-link" data-slide-index="@indexNr" href="">
+                                        <img src="@item" alt="Imagine Produs" />
+                                    </a>
+                                    indexNr = indexNr + 1;
+                                }
+                                else
+                                {
+                                    indexNr = 0;
+                                }
+                            }
 
-    <form method="post" action="/Product/Delete/@Model.ProductId">
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Esti sigur?');">Sterge anunt</button>
-    </form>
-    <br />
 
-    if (Model.Active == true)
-    {
-        <a class="btn btn-sm btn-danger" href="/Product/Deactivate/@Model.ProductId">
-            Dezactiveaza anunt
-        </a>
-    }
-    else
-    {
-        <a class="btn btn-sm btn-success" href="/Product/Activate/@Model.ProductId">
-            Activeaza anunt
-        </a>
-    }
-    <br />
+                        </div>
+                    </div>
+                    <!--ads-image-->
 
-}
+                </div>
 
-<hr />
-<a class="btn btn-sm btn-success" href="/SubCategories/Show/@Model.SubCategoryId">Vezi subcategoria</a>
-<a class="btn btn-sm btn-success" href="/Product/New">Adauga anunt</a>
 
-<br />
+                <div class="Ads-Details">
+                    <h5 class="list-title"><strong>Informatii Produs</strong></h5>
 
-<hr />
-<form method="post" action="/Message/New/@Model.ProductId">
-    @*<input type="hidden" name="ProductId" value="@Model.ProductId" />*@
-    <label>Trimite mesaj:</label>
-    <br />
-    <input type="text" name="Content" />
-    <button class="btn btn-sm btn-success" type="submit">Trimite mesaj</button>
-</form>
+                    <div class="row">
+                        <div class="ads-details-info col-md-8">
+                            @Model.Description
+
+                            @if (Model.Site != null || Model.Warranty != null || Model.ReturnPolicy != null)
+                            {
+                                <br /><br />
+                                <h4>Informatii suplimentare</h4>
+                                <ul class="list-circle">
+                                    @if (Model.Site != null)
+                                    {
+                                        <li>
+                                            <span>Site: </span>
+                                            <a href="@Model.Site">Mergi spre site</a>
+                                        </li>
+                                    }
+                                    @if (Model.Warranty != null)
+                                    {
+                                        <li>
+                                            <span>Garantie: </span>@Model.Warranty
+                                        </li>
+                                    }
+                                    @if (Model.ReturnPolicy != null)
+                                    {
+                                        <li>
+                                            <span>Politica de retur: </span> @Model.ReturnPolicy
+                                        </li>
+                                    }
+                                </ul>
+                            }
+
+                            <h4>Informatii livrare</h4>
+                            <ul class="list-circle">
+                                @if (Model.PersonalDelivery == true)
+                                {
+                                    <li>
+                                        <span>Livrare personala: </span> Da
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <span>Livrare personala: </span> Nu
+                                    </li>
+                                }
+
+                                @if (Model.DeliveryCompanyId != null)
+                                {
+                                    <li>
+                                        <span>Livrare prin curier: </span> @Model.DeliveryCompany.DeliveryCompanyName
+                                    </li>
+                                    if (Model.DeliveryPrice != null)
+                                    {
+                                        <li>
+                                            <span>Cost livrare estimativ: </span> @Model.DeliveryPrice
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li>
+                                        <span>Livrare prin curier: </span> Nu
+                                    </li>
+                                }
+
+                                @if (Model.DeliveryDetails != null)
+                                {
+                                    <li>
+                                        <span>Detalii livrare: </span>@Model.DeliveryDetails
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+
+                        <div class="col-md-4">
+                            <aside class="panel panel-body panel-details">
+                                <ul>
+                                    <li>
+                                        <p class=" no-margin "><strong>Pret:</strong> @Model.Price</p>
+                                    </li>
+                                    <li>
+                                        <p class="no-margin"><strong>Stare:</strong> @Model.ProductState.ProductStateName</p>
+                                    </li>
+                                    <li>
+                                        <p class="no-margin"><strong>Locatie:</strong> @Model.City.CityName </p>
+                                    </li>
+
+                                </ul>
+                            </aside>
+
+                            <div class="ads-action">
+                                @if (ViewBag.currentUser != null)
+                                {
+                                <ul class="list-border">
+                                    <li><a href='@Url.Action("Index", "Product", new { id = Model.UserId})'> <i class=" fa fa-user"></i> Vezi anunturile vanzatorului </a></li>
+                                    <li>
+                                        @if (ViewBag.interest != null)
+                                        {
+
+                                            <form method="post" action="/Product/Save/@Model.ProductId">
+                                                <i class=" fa fa-heart" style="color:#16A085"></i>
+                                                <button type="submit" style="border:none; background:none; color:#16A085; padding-left:inherit; cursor:pointer">Sterge din favorite</button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <form method="post" action="/Product/Save/@Model.ProductId">
+                                                <i class=" fa fa-heart" style="color:#16A085"></i>
+                                                <button type="submit" style="border:none; background:none; color:#16A085; padding-left:inherit; cursor:pointer">Salveaza ca favorit</button>
+                                            </form>
+                                        }
+                                    </li>
+
+                                    @if (ViewBag.Allow == true)
+                                    {
+                                        <li>
+                                            <a href="/Product/Edit/@Model.ProductId">
+                                                <i class=" fa fa-pen"></i> Modifica anunt
+                                            </a>
+                                        </li>
+
+                                        if (Model.Active == true)
+                                        {
+                                            <li>
+                                                <a href="/Product/Deactivate/@Model.ProductId" style="color:#ff0000">
+                                                    <i class=" fa fa-power-off" style="color:#ff0000"></i> Dezactiveaza anunt
+                                                </a>
+                                            </li>
+
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <a href="/Product/Activate/@Model.ProductId" style="color:#ff0000">
+                                                    <i class=" fa fa-power-off" style="color:#ff0000"></i> Activeaza anunt
+                                                </a>
+                                            </li>
+
+                                        }
+
+                                        <li>
+                                            <form method="post" action="/Product/Delete/@Model.ProductId">
+                                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                                <i class=" fa fa-times" style="color:#ff0000"></i>
+                                                <button type="submit" style="border:none; background:none; padding-left:inherit; color:#ff0000; cursor:pointer" onclick="return confirm('Esti sigur?');">Sterge anunt</button>
+                                            </form>
+                                        </li>
+
+
+
+                                    }
+                                </ul>
+
+                                }
+                            </div>
+
+                            @*<div class="ads-action">
+
+                    <ul class="list-border">
+                        <li><a href="#"> <i class=" fa fa-user"></i> Vezi anunturile vanzatorului </a></li>
+                        <li><a href="#"> <i class=" fa fa-heart"></i> Salveaza ca favorit </a></li>
+                    </ul>
+                </div>*@
+                        </div>
+
+                    </div>
+
+                    <div class="content-footer text-left">
+                        @*<div class="row">*@
+                        
+                        <form class="row" method="post" action="/Message/New/@Model.ProductId">
+                            <div class="col-md-8">
+                                @*<input class="form-control" type="text" name="Content"/>*@
+                                @Html.TextArea("Content", "", new { @class = "form-control", rows = 3 })
+                            </div>
+                            
+                            <div class="col-md-4">
+                                    @*<div style="clear:both"></div>*@
+                                    <button class="btn  btn-default" type="submit" @*data-toggle="modal"*@>
+                                        <i class=" icon-mail-2"></i> Trimite mesaj
+                                    </button>
+                            </div>
+                            
+                        </form>
+                         @*</div>*@
+
+                    </div>
+
+
+                </div>
+            </div>
+            <!--/.ads-details-wrapper-->
+
+        </div>
+        <!--/.page-content-->
+
+        <div class="col-md-3  page-sidebar-right">
+            <aside>
+
+                <div class="card card-user-info sidebar-card">
+                    <div class="block-cell user">
+
+                        <div class="cell-media"><img src=@ViewBag.UserImage alt=""></div>
+                        <div class="cell-content">
+                            <h5 class="title">Postat de</h5>
+                            <span class="name"><a href='@Url.Action("UserProfile", "Account", new { id = Model.User.Id })'>@Model.User.UserName </a></span>
+                            @if (Model.User.RatingScore > 4)
+                            {
+                                <span class="rating">top rated</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body text-left">
+                            <div class="grid-col">
+                                <div class="col from">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Locatie</span>
+                                </div>
+                                <div class="col to">
+                                    <span>@Model.User.City.CityName</span>
+                                </div>
+                            </div>
+
+                            <div class="grid-col">
+                                <div class="col from">
+                                    <i class="fas fa-user"></i>
+                                    <span>Pe site din</span>
+                                </div>
+                                <div class="col to">
+                                    <span>12.06.2019</span>
+                                </div>
+                            </div>
+
+                            @if (Model.User.RatingScore != null)
+                            {
+                                <div class="grid-col">
+                                    <div class="col from">
+                                        <i class="fas fa-star"></i>
+                                        <span>Calificativ</span>
+                                    </div>
+                                    <div class="col to">
+                                        <span>@Model.User.RatingScore</span>
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+
+                        <div class="ev-action">
+                            <a class="btn btn-success btn-block"  href='@Url.Action("Index", "Rating", new { id = Model.UserId})'>
+                                <i class=" icon-star"></i> Calificative utilizator
+                            </a>
+                            <a class="btn  btn-info btn-block">
+                                <i class=" icon-phone-1"></i>@Model.User.PhoneNumber
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card sidebar-card">
+                    <div class="card-header">
+                        Sfaturi de siguranță pentru cumpărători
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body text-left">
+                            <ul class="list-check">
+                                <li>Intalneste-te cu cumparatorul intr-un loc publicMeet seller at a public place</li>
+                                <li>Verifica produsul inainte de a-l cumpara</li>
+                                <li>Plateste de-abia dupa ce ai facut rost de produs</li>
+                            </ul>
+                           
+                        </div>
+                    </div>
+                </div>
+                <!--/.categories-list-->
+            </aside>
+        </div>
+        <!--/.page-side-bar-->
+    </div>
+
+</div>

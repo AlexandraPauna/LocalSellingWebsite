@@ -69,10 +69,6 @@ namespace Licenta.Controllers
                          where categs.SubCategoryId.Equals(product.SubCategoryId)
                          select categs.CategoryId).Single();
             ViewBag.Category = Convert.ToInt32(catId);
-            /*var catId = from categs in db.SubCategories
-                        where categs.SubCategoryId.Equals(product.SubCategoryId)
-                        select categs.CategoryId;
-            ViewBag.Category = catId.First();*/
            
             var catName = (from categs in _db.Categories
                            where categs.CategoryId.Equals(catId)
@@ -86,29 +82,17 @@ namespace Licenta.Controllers
                                 where prodImages.ProductId.Equals(product.ProductId)
                                 select prodImages.Id;
 
-            /*if (productImages == null)
-            {
-                string fileName = HttpContext.Server.MapPath(@"~/Images/noImg.png");
-
-                byte[] imageData = null;
-                FileInfo fileInfo = new FileInfo(fileName);
-                long imageFileLength = fileInfo.Length;
-                FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                BinaryReader br = new BinaryReader(fs);
-                imageData = br.ReadBytes((int)imageFileLength);
-
-                return File(imageData, "image/png");
-            }
-
-            ViewBag.ProductImages = productImages;*/
-            //ViewBag.ProductImages = new FileContentResult(productImages, "image/jpeg");
+            
             var imgList = new List<String>();
             foreach (var img in productImages)
             {
-                //var imgData = new FileContentResult(img.ImageData, "image/jpeg");
                 imgList.Add("/Product/ProductPhoto/?photoId=" + img);
             }
             ViewBag.ProductImages = imgList;
+
+            //user profile image
+            var userImage = "/Account/UserPhotos/?id="+product.UserId;
+            ViewBag.UserImage = userImage;
 
             var currentUser = User.Identity.GetUserId();
             if (currentUser != null && currentUser != product.UserId)

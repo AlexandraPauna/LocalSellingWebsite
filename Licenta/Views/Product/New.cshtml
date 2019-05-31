@@ -5,287 +5,288 @@
 }
 
 @*<h2>@ViewBag.Titlu</h2>*@
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 page-content">
+            <div class="inner-box category-content">
+                <h2 class="title-2 uppercase">
+                    <strong>
+                        <i class="icon-docs"></i> Posteaza-ti anuntul
+                    </strong>
+                </h2>
 
-<div class="row">
-    <div class="col-md-9 page-content">
-        <div class="inner-box category-content">
-            <h2 class="title-2 uppercase">
-                <strong>
-                    <i class="icon-docs"></i> Posteaza-ti anuntul
-                </strong>
-            </h2>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="/Product/New" enctype="multipart/form-data" class="form-horizontal">
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-            <div class="row">
-                <div class="col-sm-12">
-                    <form method="post" action="/Product/New" enctype="multipart/form-data" class="form-horizontal">
-                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                            @Html.Hidden("Date", DateTime.Now, new { @class = "form-control" })
 
-                        @Html.Hidden("Date", DateTime.Now, new { @class = "form-control" })
+                            @Html.Hidden("DateLastChecked", DateTime.Now, new { @class = "form-control" })
 
-                        @Html.Hidden("DateLastChecked", DateTime.Now, new { @class = "form-control" })
+                            @Html.Hidden("Active", true, new { @class = "form-control" })
 
-                        @Html.Hidden("Active", true, new { @class = "form-control" })
-
-                        <div class="content-subheading">
-                            <i class="icon-tag"></i>
-                            <strong>
-                                Titlu si Categorie
-                            </strong>
-                        </div>
-
-                        <div class="form-group row">
-                            @Html.Label("Title", "Titlu Anunt", new { @class = "col-sm-3 col-form-label" })
-                            <div class="col-sm-8">
-                                @Html.TextBox("Title", null, new { @class = "form-control" })
+                            <div class="content-subheading">
+                                <i class="icon-tag"></i>
+                                <strong>
+                                    Titlu si Categorie
+                                </strong>
                             </div>
-                        </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Selectati Categoria</label>
-                            <div class="col-sm-8">
-                                @Html.DropDownList("catList", new SelectList(ViewBag.Categories, "Value", "Text"), "Selectati categoria", new { id = "catList", @class = "form-control" })
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Selectati Subcategoria</label>
-                            <div class="col-sm-8">
-                                @Html.DropDownListFor(m => m.SubCategoryId, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Selectati subcategoria", new { id = "subcatList", @class = "form-control" })
-                            </div>
-                        </div>
-
-
-                        <div class="content-subheading">
-                            <i class="icon-camera"></i>
-                            <strong>
-                                Adauga Fotografii
-                            </strong>
-                        </div>
-
-                        @*<div class="form-group row">
-                                @Html.Label("ProductPhotos", "Poze Anunt", new { @class = "col-sm-3 col-form-label" })
+                            <div class="form-group row">
+                                @Html.Label("Title", "Titlu Anunt", new { @class = "col-sm-3 col-form-label" })
                                 <div class="col-sm-8">
-                                    <input type="file" class="form-control" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
-                                </div>
-                            </div>*@
-
-                        <div class="form-group row">
-                            @Html.Label("ProductPhotos", "Poze Anunt", new { @class = "col-sm-3 col-form-label" })
-                            <div class="col-lg-8">
-                                <div class="mb10">
-                                    <input type="file" class="file" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" data-preview-file-type="text" />
+                                    @Html.TextBox("Title", null, new { @class = "form-control" })
                                 </div>
                             </div>
-                        </div>
 
-
-                        <div class="content-subheading">
-                            <i class="icon-book-open"></i>
-                            <strong>
-                                Detalii produs
-                            </strong>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Selectati Starea Produsului</label>
-                            <div class="col-sm-8">
-                                @Html.DropDownListFor(m => m.ProductStateId, new SelectList(Model.ProductStateTypes, "Value", "Text"), "Selectati starea", new { @class = "form-control" })
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            @Html.Label("Description", "Descriere Anunt", new { @class = "col-sm-3 col-form-label" })
-                            <div class="col-sm-8">
-                                @Html.TextArea("Description", "Descrie ce face acest anunt unic", new { @class = "form-control", rows = 5 })
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            @Html.Label("ReturnPolicy", "Politica de retur", new { @class = "col-sm-3 col-form-label" })
-                            <div class="col-sm-8">
-                                @Html.TextArea("ReturnPolicy", null, new { @class = "form-control", rows = 3 })
-                                <small id="" class="form-text text-muted">
-                                    Camp optional
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            @Html.Label("Warranty", "Garantie", new { @class = "col-sm-3 col-form-label" })
-                            <div class="col-sm-8">
-                                @Html.TextArea("Warranty", null, new { @class = "form-control", rows = 3 })
-                                <small id="" class="form-text text-muted">
-                                    Camp optional
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            @Html.Label("Site", "Link-ul site-ului de prezentare", new { @class = "col-sm-3 col-form-label" })
-                            <div class="col-sm-8">
-                                @Html.TextArea("Site", null, new { @class = "form-control", rows = 2 })
-                                <small id="" class="form-text text-muted">
-                                    Camp optional
-                                </small>
-                            </div>
-                        </div>
-
-
-                        <div class="content-subheading">
-                            <i class="icon-money"></i>
-                            <strong>
-                                Pret si modalitati de vanzare
-                            </strong>
-                        </div>
-
-                        <div class="form-group row">
-                            @Html.Label("Price", "Pret", new { @class = "col-sm-3 col-form-label" })
-                            <div class="input-group col-sm-8">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">RON</span>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Selectati Categoria</label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownList("catList", new SelectList(ViewBag.Categories, "Value", "Text"), "Selectati categoria", new { id = "catList", @class = "form-control" })
                                 </div>
-                                @Html.TextBox("Price", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" })
-
                             </div>
-                        </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Selectati Orasul</label>
-                            <div class="col-sm-8">
-                                @Html.DropDownListFor(m => m.CityId, new SelectList(Model.Cities, "Value", "Text"), "Selectati orasul", new { @class = "form-control" })
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            @Html.Label("PersonalDelivery", "Predare personala", new { @class = "col-sm-3 col-form-label" })
-                            <div class="col-sm-8">
-                                @Html.CheckBox("PersonalDelivery", false, new { @class = "checkbox" })
-                            </div>
-                        </div>
-
-
-                        <div class="content-subheading">
-                            <i class="icon-truck-1"></i>
-                            <strong>
-                                Livrare prin curier
-                            </strong>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Selectati firma de curierat</label>
-                            <div class="col-sm-8">
-                                @Html.DropDownListFor(m => m.DeliveryCompanyId, new SelectList(Model.DeliveryCompanies, "Value", "Text"), "Selectati compania de curierat", new { @class = "form-control" })
-                                <small id="" class="form-text text-muted">
-                                    Camp optional
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            @Html.Label("DeliveryDetails", "Detalii livrare", new { @class = "col-sm-3 col-form-label" })
-                            <div class="col-sm-8">
-                                @Html.TextArea("DeliveryDetails", null, new { @class = "form-control", rows = 3 })
-                                <small id="" class="form-text text-muted">
-                                    Camp optional
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            @Html.Label("DeliveryPrice", "Cost Livrare", new { @class = "col-sm-3 col-form-label" })
-                            <div class="input-group col-sm-8">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">RON</span>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Selectati Subcategoria</label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(m => m.SubCategoryId, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Selectati subcategoria", new { id = "subcatList", @class = "form-control" })
                                 </div>
-                                @Html.TextBox("DeliveryPrice", null, new { type = "number", @*min = "0", step = "0.01",*@@class = "form-control"
-                            })
                             </div>
-                        </div>
 
 
-                        <br />
-                        <!-- Button  -->
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label"></label>
-                            <div class="col-sm-8">
-                                <div style="clear:both"></div>
-                                <button class="btn btn-primary" type="submit">Adauga anunt</button>
+                            <div class="content-subheading">
+                                <i class="icon-camera"></i>
+                                <strong>
+                                    Adauga Fotografii
+                                </strong>
                             </div>
-                        </div>
+
+                            @*<div class="form-group row">
+                                    @Html.Label("ProductPhotos", "Poze Anunt", new { @class = "col-sm-3 col-form-label" })
+                                    <div class="col-sm-8">
+                                        <input type="file" class="form-control" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+                                    </div>
+                                </div>*@
+
+                            <div class="form-group row">
+                                @Html.Label("ProductPhotos", "Poze Anunt", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-lg-8">
+                                    <div class="mb10">
+                                        <input type="file" class="file" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" data-preview-file-type="text" />
+                                    </div>
+                                </div>
+                            </div>
 
 
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+                            <div class="content-subheading">
+                                <i class="icon-book-open"></i>
+                                <strong>
+                                    Detalii produs
+                                </strong>
+                            </div>
 
-    <div class="col-md-3 reg-sidebar">
-        <div class="reg-sidebar-inner text-center">
-            <div class="promo-text-box">
-                <i class=" icon-picture fa fa-4x icon-color-1"></i>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Selectati Starea Produsului</label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(m => m.ProductStateId, new SelectList(Model.ProductStateTypes, "Value", "Text"), "Selectati starea", new { @class = "form-control" })
+                                </div>
+                            </div>
 
-                <h3><strong>Poti adauga anunturi nelimitate gratis</strong></h3>
+                            <div class="form-group row">
+                                @Html.Label("Description", "Descriere Anunt", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextArea("Description", "Descrie ce face acest anunt unic", new { @class = "form-control", rows = 5 })
+                                </div>
+                            </div>
 
-                <p>
-                    Acest site iti ofera posibilitatea de a publica anunturi gratuite pentru orasul tau si imprejurimile sale.
-                    Vei gasi usor anunturi gratuite interesante din Bucuresti, Ilfov si alte orase din tara si vei putea intra usor in legatura cu cei care le-au publicat.
-                    Te asteapta o varietate de produse la preturi mici.
-                </p>
-            </div>
+                            <div class="form-group row">
+                                @Html.Label("ReturnPolicy", "Politica de retur", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextArea("ReturnPolicy", null, new { @class = "form-control", rows = 3 })
+                                    <small id="" class="form-text text-muted">
+                                        Camp optional
+                                    </small>
+                                </div>
+                            </div>
 
-            <div class="card sidebar-card">
-                <div class="card-header uppercase">
-                    <small><strong>Cum poti vinde mai rapid?</strong></small>
-                </div>
-                <div class="card-content">
-                    <div class="card-body text-left">
-                        <ul class="list-check">
-                            <li> Utilizati un titlu si o descriere a anuntului scurta si la obiect</li>
-                            <li> Asigura-te ca inacdrezi anuntul in categoria si subcategoria potrivita</li>
-                            <li> Adauga fotografii clare</li>
-                            <li> Adauga un pret rezonanil</li>
-                            <li> Verificati ce ati completat inainte de a publica anuntul</li>
+                            <div class="form-group row">
+                                @Html.Label("Warranty", "Garantie", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextArea("Warranty", null, new { @class = "form-control", rows = 3 })
+                                    <small id="" class="form-text text-muted">
+                                        Camp optional
+                                    </small>
+                                </div>
+                            </div>
 
-                        </ul>
+                            <div class="form-group row">
+                                @Html.Label("Site", "Link-ul site-ului de prezentare", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextArea("Site", null, new { @class = "form-control", rows = 2 })
+                                    <small id="" class="form-text text-muted">
+                                        Camp optional
+                                    </small>
+                                </div>
+                            </div>
+
+
+                            <div class="content-subheading">
+                                <i class="icon-money"></i>
+                                <strong>
+                                    Pret si modalitati de vanzare
+                                </strong>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.Label("Price", "Pret", new { @class = "col-sm-3 col-form-label" })
+                                <div class="input-group col-sm-8">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">RON</span>
+                                    </div>
+                                    @Html.TextBox("Price", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Selectati Orasul</label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(m => m.CityId, new SelectList(Model.Cities, "Value", "Text"), "Selectati orasul", new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.Label("PersonalDelivery", "Predare personala", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.CheckBox("PersonalDelivery", false, new { @class = "checkbox" })
+                                </div>
+                            </div>
+
+
+                            <div class="content-subheading">
+                                <i class="icon-truck-1"></i>
+                                <strong>
+                                    Livrare prin curier
+                                </strong>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Selectati firma de curierat</label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(m => m.DeliveryCompanyId, new SelectList(Model.DeliveryCompanies, "Value", "Text"), "Selectati compania de curierat", new { @class = "form-control" })
+                                    <small id="" class="form-text text-muted">
+                                        Camp optional
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.Label("DeliveryDetails", "Detalii livrare", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextArea("DeliveryDetails", null, new { @class = "form-control", rows = 3 })
+                                    <small id="" class="form-text text-muted">
+                                        Camp optional
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.Label("DeliveryPrice", "Cost Livrare", new { @class = "col-sm-3 col-form-label" })
+                                <div class="input-group col-sm-8">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">RON</span>
+                                    </div>
+                                    @Html.TextBox("DeliveryPrice", null, new { type = "number", @*min = "0", step = "0.01",*@@class = "form-control"
+                                })
+                                </div>
+                            </div>
+
+
+                            <br />
+                            <!-- Button  -->
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-8">
+                                    <div style="clear:both"></div>
+                                    <button class="btn btn-primary" type="submit">Adauga anunt</button>
+                                </div>
+                            </div>
+
+
+                        </form>
                     </div>
                 </div>
             </div>
-
-
         </div>
+
+        <div class="col-md-3 reg-sidebar">
+            <div class="reg-sidebar-inner text-center">
+                <div class="promo-text-box">
+                    <i class=" icon-picture fa fa-4x icon-color-1"></i>
+
+                    <h3><strong>Poti adauga anunturi nelimitate gratis</strong></h3>
+
+                    <p>
+                        Acest site iti ofera posibilitatea de a publica anunturi gratuite pentru orasul tau si imprejurimile sale.
+                        Vei gasi usor anunturi gratuite interesante din Bucuresti, Ilfov si alte orase din tara si vei putea intra usor in legatura cu cei care le-au publicat.
+                        Te asteapta o varietate de produse la preturi mici.
+                    </p>
+                </div>
+
+                <div class="card sidebar-card">
+                    <div class="card-header uppercase">
+                        <small><strong>Cum poti vinde mai rapid?</strong></small>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body text-left">
+                            <ul class="list-check">
+                                <li> Utilizati un titlu si o descriere a anuntului scurta si la obiect</li>
+                                <li> Asigura-te ca inacdrezi anuntul in categoria si subcategoria potrivita</li>
+                                <li> Adauga fotografii clare</li>
+                                <li> Adauga un pret rezonanil</li>
+                                <li> Verificati ce ati completat inainte de a publica anuntul</li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!--/.reg-sidebar-->
     </div>
-    <!--/.reg-sidebar-->
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-<script type="text/javascript">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script type="text/javascript">
 
-    $(document).ready(function () {
-        $(document).on("change", "#catList", function () {
-            var cID = $(this).val();
-            $.getJSON("/Product/New/LoadSubCategories/" + cID, {},
-                function (data) {
-                    var select = $("#subcatList");
-                    select.empty();
-                    select.append($('<option/>', {
-                        value: 0,
-                        text: "Selecteaza o subcategorie"
-                    }));
-                    $.each(data, function (index, itemData) {
+        $(document).ready(function () {
+            $(document).on("change", "#catList", function () {
+                var cID = $(this).val();
+                $.getJSON("/Product/New/LoadSubCategories/" + cID, {},
+                    function (data) {
+                        var select = $("#subcatList");
+                        select.empty();
                         select.append($('<option/>', {
-                            value: itemData.Value,
-                            text: itemData.Text
+                            value: 0,
+                            text: "Selecteaza o subcategorie"
                         }));
+                        $.each(data, function (index, itemData) {
+                            select.append($('<option/>', {
+                                value: itemData.Value,
+                                text: itemData.Text
+                            }));
+                        });
                     });
-                });
+            });
         });
-    });
-</script>
+    </script>
 
-<!-- include jquery file upload plugin  -->
-<script src="../../Content/js/fileinput.min.js" type="text/javascript"></script>
-<script>
-    $("#fileUpload").fileinput();
-</script>
+    <!-- include jquery file upload plugin  -->
+    <script src="../../Content/js/fileinput.min.js" type="text/javascript"></script>
+    <script>
+        $("#fileUpload").fileinput();
+    </script>

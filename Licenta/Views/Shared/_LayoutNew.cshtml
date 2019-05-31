@@ -94,13 +94,13 @@
         </div>
 
         <div class="main-container">
-            <div class="container">
+            @*<div class="container">*@
                 @RenderBody()
                 <hr />
                 <footer>
                     <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
                 </footer>
-            </div>
+            @*</div>*@
         </div>
     </div>
 
@@ -124,3 +124,12 @@
         $('.dropdown-toggle').dropdown();
     });
 </script>
+
+<!--primul l-am adaugat eu pt ca nu fct bine-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.css" rel="stylesheet" />
+<script>
+    $('.bxslider').bxSlider({
+        pagerCustom: '#bx-pager'
+    });
+</script>
+
