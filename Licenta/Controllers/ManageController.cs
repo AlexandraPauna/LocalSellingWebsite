@@ -340,6 +340,33 @@ namespace Licenta.Controllers
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
+            var userId = User.Identity.GetUserId();
+
+            var unreadMessages = (from mess in _db.Messages
+                                  where mess.ReceiverId == userId && mess.Read == false
+                                  select mess).Count();
+            ViewBag.UnreadMessages = unreadMessages;
+
+            var adViews = _db.Products.GroupBy(a => a.UserId).Select(x => new
+            {
+                UserId = x.Key,
+                Value = x.Sum((c => c.Views)),
+
+            }).Where(x => x.UserId == userId).FirstOrDefault();
+            if (adViews != null)
+                ViewBag.AdViews = (int)adViews.Value;
+            else
+                ViewBag.AdViews = 0;
+
+            var nrAds = _db.Products.Where(x => x.UserId == userId).Count();
+            ViewBag.NrAds = nrAds;
+
+            var nrRatings = _db.Ratings.Where(x => x.RatedUserId == userId).Count();
+            ViewBag.NrRatings = nrRatings;
+
+            var nrInterests = _db.Interests.Where(x => x.UserId == userId).Count();
+            ViewBag.NrInterests = nrInterests;
+
             return View();
         }
 
@@ -515,6 +542,31 @@ namespace Licenta.Controllers
                 model.PhoneNumber = user.PhoneNumber;
                 //model.UserPhoto = user.UserPhoto;
                 model.Cities = GetAllCities();
+
+                var unreadMessages = (from mess in _db.Messages
+                                      where mess.ReceiverId == userId && mess.Read == false
+                                      select mess).Count();
+                ViewBag.UnreadMessages = unreadMessages;
+
+                var adViews = _db.Products.GroupBy(a => a.UserId).Select(x => new
+                {
+                    UserId = x.Key,
+                    Value = x.Sum((c => c.Views)),
+
+                }).Where(x => x.UserId == userId).FirstOrDefault();
+                if (adViews != null)
+                    ViewBag.AdViews = (int)adViews.Value;
+                else
+                    ViewBag.AdViews = 0;
+
+                var nrAds = _db.Products.Where(x => x.UserId == userId).Count();
+                ViewBag.NrAds = nrAds;
+
+                var nrRatings = _db.Ratings.Where(x => x.RatedUserId == userId).Count();
+                ViewBag.NrRatings = nrRatings;
+
+                var nrInterests = _db.Interests.Where(x => x.UserId == userId).Count();
+                ViewBag.NrInterests = nrInterests;
 
                 return View(model);
             }
