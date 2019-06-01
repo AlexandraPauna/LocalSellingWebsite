@@ -68,7 +68,7 @@ namespace Licenta.Controllers
             return Json(result == null, JsonRequestBehavior.AllowGet);
         }
 
-        //
+        //foarte vechi
         // GET: /Manage/Index
         /*public async Task<ActionResult> Index(ManageMessageId? message)
         {
@@ -93,28 +93,11 @@ namespace Licenta.Controllers
             return View(model);
         }*/
 
-        public ActionResult Index()
+        public ActionResult Delete()
         {
-            _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var userId = User.Identity.GetUserId();
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "AccountControler");
-            }
-            else
-            {
-                ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
-                user.Cities = GetAllCities();
-
-                var recentProducts = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
-                                     where prod.UserId.Equals(userId)
-                                     orderby prod.Date
-                                     select prod;
-                ViewBag.RecentProducts = recentProducts.Take(3);
-
-                return View(user);
-            }
+            return View();
         }
+       
 
         [HttpDelete]
         public ActionResult DeleteAccount()
@@ -383,6 +366,131 @@ namespace Licenta.Controllers
             AddErrors(result);
             return View(model);
         }
+
+        public ActionResult Index()
+        {
+            _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var userId = User.Identity.GetUserId();
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "AccountControler");
+            }
+            else
+            {
+                ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
+                user.Cities = GetAllCities();
+
+                var recentProducts = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
+                                     where prod.UserId.Equals(userId)
+                                     orderby prod.Date
+                                     select prod;
+                ViewBag.RecentProducts = recentProducts.Take(3);
+
+                var unreadMessages = (from mess in _db.Messages
+                                     where mess.ReceiverId == userId && mess.Read == false
+                                     select mess).Count();
+                ViewBag.UnreadMessages = unreadMessages;
+
+                var adViews = _db.Products.GroupBy(a => a.UserId).Select(x => new
+                    {
+                        UserId = x.Key,
+                        Value = x.Sum((c => c.Views)),
+
+                    }).Where(x => x.UserId == userId).FirstOrDefault();
+                if (adViews != null)
+                    ViewBag.AdViews = (int)adViews.Value;
+                else
+                    ViewBag.AdViews = 0;
+
+                var nrAds = _db.Products.Where(x => x.UserId == userId).Count();
+                ViewBag.NrAds = nrAds;
+
+                var nrRatings = _db.Ratings.Where(x => x.RatedUserId == userId).Count();
+                ViewBag.NrRatings = nrRatings;
+
+                var nrInterests = _db.Interests.Where(x => x.UserId == userId).Count();
+                ViewBag.NrInterests = nrInterests;
+
+                return View(user);
+            }
+        }
+
+        //merge intre Index si ChangeProfile
+       /* [HttpGet]
+        public ActionResult Index()
+        {
+            _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var userId = User.Identity.GetUserId();
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "AccountControler");
+            }
+            else
+            {
+                ApplicationUser user = _userManager.FindByIdAsync(userId).Result;
+                user.Cities = GetAllCities();
+
+                var recentProducts = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
+                                     where prod.UserId.Equals(userId)
+                                     orderby prod.Date
+                                     select prod;
+                ViewBag.RecentProducts = recentProducts.Take(3);
+
+                return View(user);
+            }
+        }
+
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Index([Bind(Exclude = "UserPhoto")]ApplicationUser model)
+        {
+            _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var userId = User.Identity.GetUserId();
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "AccountControler");
+            }
+            else
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var user = UserManager.FindById(User.Identity.GetUserId());
+
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.UserName = model.UserName;
+                user.PhoneNumber = model.PhoneNumber;
+                user.CityId = model.CityId;
+
+                byte[] imageData = null;
+                if (Request.Files.Count > 0)
+                {
+                    HttpPostedFileBase poImgFile = Request.Files["UserPhoto"];
+
+                    using (var binary = new BinaryReader(poImgFile.InputStream))
+                    {
+                        imageData = binary.ReadBytes(poImgFile.ContentLength);
+                    }
+
+                    //UserPhoto is not updated if no file is chosen
+                    if (imageData.Length > 0)
+                    {
+                        user.UserPhoto = imageData;
+                    }
+                }
+
+                UserManager.Update(user);
+
+                //sign in user automatically after change of UserName
+                await SignInManager.SignInAsync(user, true, true);
+
+                //return RedirectToAction("Profile", "Account");
+                return RedirectToAction("Index", "Manage");
+            }
+        }*/
 
         //
         //GET: /Manage/ChangeProfile

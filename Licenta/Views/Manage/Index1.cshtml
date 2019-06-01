@@ -1,0 +1,230 @@
+﻿@model Licenta.Common.Entities.ApplicationUser
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+@*<h2>Bine ai venit, @Model.UserName !</h2>*@
+
+<div>
+    <img src="@Url.Action("UserPhotos", "Account", new { id = Model.Id } )" style="width:160px;height:160px; background: #FFFFFF;
+    margin: auto;
+    -moz-border-radius: 60px;
+    border-radius: 100px;
+    padding: 6px;
+    box-shadow: 0px 0px 20px #888;" />
+
+    @*@using (Html.BeginForm("ChangeProfile", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))*@
+    @using (Html.BeginForm("Index1", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+    {
+        @Html.Hidden("RatingScore", Model.RatingScore, new { @class = "form-control" })
+        @Html.Hidden("TimeScore", Model.TimeScore, new { @class = "form-control" })
+        @Html.Hidden("CommunicationScore", Model.CommunicationScore, new { @class = "form-control" })
+        @Html.Hidden("AccuracyScore", Model.AccuracyScore, new { @class = "form-control" })
+        @Html.Hidden("AllRoles", Model.AllRoles, new { @class = "form-control" })
+
+        @Html.AntiForgeryToken()
+        <h4>Schimba informatiile contului!</h4>
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.FirstName, Model.FirstName, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.LastName, Model.LastName, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.UserName, Model.UserName, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*<label>Selectati Orasul</label>*@
+            @Html.LabelFor(m => m.CityId, new { @class = "col-md-2 control-label" })
+
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.CityId, new SelectList(Model.Cities, "Value", "Text"), "Selectati orasul", new { @class = "form-control" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.PhoneNumber, Model.PhoneNumber, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.UserPhoto, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                <input type="file" name="UserPhoto" title="Incarca alta poza" value="@Model.UserPhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Salveaza Modificari" class="btn btn-default" />
+            </div>
+        </div>
+
+    }
+
+    @*<hr />
+        <br />
+        <h4>Informatii Profil</h4>
+        <hr />
+        <dl class="dl-horizontal">
+
+            <dt>Nume Utilizator</dt>
+            <dd>
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+
+            <dt>Prenume</dt>
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+
+            <dt>Nume</dt>
+            <dd>
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+
+            <dt>Oras</dt>
+            <dd>
+                @Html.DisplayFor(model => model.City.CityName)
+
+            </dd>
+
+
+            <dt>Email</dt>
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.EmailConfirmed)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.EmailConfirmed)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SecurityStamp)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SecurityStamp)
+            </dd>
+
+            <dt>Numar Telefon</dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PhoneNumberConfirmed)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TwoFactorEnabled)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TwoFactorEnabled)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.LockoutEnabled)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.LockoutEnabled)
+            </dd>
+
+
+        </dl>*@
+
+    @*<hr />
+        <br />
+        <h4>Setari Profil</h4>
+        <hr />
+        <div>@Html.ActionLink("Editeaza Informatii Profil", "ChangeProfile", "Manage")</div>
+        <div>@Html.ActionLink("Schimba Parola", "ChangePassword", "Manage")</div>
+        <br />
+        <form method="post" action="/Manage/DeleteAccount">
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            <button class="btn btn-sm btn-danger" type="submit"
+                    onclick="return confirm('Esti sigur? Toate datele contului vor fi sterse, si nu vor putea fi recuperate!');">
+                Sterge cont
+            </button>
+        </form>
+        <hr />
+        <br /><br />
+
+        <h4>Anunturile mele</h4>
+        <hr />
+        <br />
+
+        <div>@Html.ActionLink("Vezi toate anunturile mele", "Index", "Product", new { id = Model.Id }, null)</div>
+        <br />
+        @foreach (Licenta.Common.Entities.Product product in ViewBag.recentProducts)
+        {
+            @Html.Partial("ProductInfo", product);
+        }
+        <hr />
+        <br /><br />
+
+        <h4>Anunturile salvate ca favorite</h4>
+        @Html.ActionLink("Vezi anunturile favorite", "Index", "Interests")
+        <hr />
+        <br /><br />
+
+        <h4>Calificativele mele</h4>
+        <hr />
+        <br />
+
+        @if (Model.RatingScore == null)
+        {
+            <p>Nu ai calificative! </p>
+        }
+        else
+        {
+            <strong>Calificativ general: </strong> @Model.RatingScore
+            <br /><br />
+            <strong>Rating detaliat utilizator: </strong>
+            <br />
+            <span>Comunicarea vanzatorului: </span>@Model.CommunicationScore
+            <br />
+            <span>Acuratetea descrierii anunturilor: </span>@Model.AccuracyScore
+            <br />
+            <span>Timpul de onorare al comenzilor: </span>@Model.TimeScore
+            <br />
+            <br />
+
+            <div>@Html.ActionLink("Vezi toate calificativele", "Index", "Rating", new { id = Model.Id }, null)</div>
+            <br />
+        }*@
+
+
+</div>
+

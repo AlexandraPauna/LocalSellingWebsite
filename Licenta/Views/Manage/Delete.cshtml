@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "Delete";
+}
+
+
+<div class="container">
+    <div class="row">
+    <div class="col-md-3 page-sidebar">
+        <aside>
+            <div class="inner-box">
+                <div class="user-panel-sidebar">
+                    <div class="collapse-box">
+                        <h5 class="collapse-title no-border">
+                            Contul Meu <a href="#MyClassified" aria-expanded="true" data-toggle="collapse"
+                                          class="pull-right">
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </h5>
+
+                        <div class="panel-collapse collapse show" id="MyClassified">
+                            <ul class="acc-list">
+                                <li>
+                                    <a href='@Url.Action("Index", "Manage")'>
+                                        <i class="icon-home"></i>
+                                        Profilul Meu
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("ChangeProfile", "Manage")'>
+                                        <i class="icon-pencil"></i>
+                                        Editeaza Profilul
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("ChangePassword", "Manage")'>
+                                        <i class="icon-lock"></i>
+                                        Schimba Parola
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.collapse-box  -->
+                    <div class="collapse-box">
+                        <h5 class="collapse-title">
+                            Anunturi <a href="#MyAds" aria-expanded="true" data-toggle="collapse"
+                                        class="pull-right">
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </h5>
+
+                        <div class="panel-collapse collapse show" id="MyAds">
+                            <ul class="acc-list">
+                                <li>
+                                    <a href="account-myads.html">
+                                        <i class="icon-docs"></i> Anunturile mele <span class="badge">@ViewBag.NrAds</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Index", "Interests")'>
+                                        <i class="icon-heart"></i>
+                                        Anunturi favorite <span class="badge badge-secondary">@ViewBag.NrInterests</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href=''>
+                                        <i class="icon-star"></i>
+                                        Calificativele Mele <span class="badge badge-secondary">@ViewBag.NrRatings</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href='@Url.Action("Index", "Conversation")'>
+                                        <i class="icon-mail"></i> Messaje <span class="badge">@ViewBag.UnreadMessages</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.collapse-box  -->
+
+                    <div class="collapse-box">
+                        <h5 class="collapse-title">
+                            Inchidere Cont <a href="#TerminateAccount"
+                                                 aria-expanded="true" data-toggle="collapse"
+                                                 class="pull-right">
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </h5>
+
+                        <div class="panel-collapse collapse show" id="TerminateAccount">
+                            <ul class="acc-list">
+                                <li>
+                                    <a class="active" href='@Url.Action("Delete", "Manage")'>
+                                        <i class="icon-cancel-circled "></i> Sterge-ti Contul
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.collapse-box  -->
+                </div>
+            </div>
+            <!-- /.inner-box  -->
+
+        </aside>
+    </div>
+    <!--/.page-sidebar-->
+
+    <div class="col-md-9 page-content">
+
+
+        <div class="inner-box">
+            <h2 class="title-2"><i class="icon-cancel-circled "></i> Sterge-ti contul </h2>
+
+            <p>Esti sigur ca doresti sa-ti stergi contul?</p>
+
+            <div>
+                
+                <form method="post" action="/Manage/DeleteAccount">
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button class="btn btn-danger" type="submit"
+                            onclick="return confirm('Toate datele contului vor fi sterse, si nu vor putea fi recuperate!');">
+                        Da, vreau sa-mi sterg contul
+                    </button>
+                </form>
+
+
+            </div>
+            <br>
+
+
+        </div>
+        <!--/.inner-box-->
+    </div>
+    <!--/.page-content-->
+</div>
+    <!--/.row-->
+</div>
+<!--/.container-->

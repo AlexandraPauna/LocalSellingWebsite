@@ -1,251 +1,360 @@
 ﻿@model Licenta.Common.Entities.ApplicationUser
+
 @{
     ViewBag.Title = "Profile";
 }
 
-<h2>Bine ai venit, @Model.UserName !</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 page-sidebar">
+            <aside>
+                <div class="inner-box">
+                    <div class="user-panel-sidebar">
+                        <div class="collapse-box">
+                            <h5 class="collapse-title no-border">
+                                Contul Meu <a href="#MyClassified" aria-expanded="true" data-toggle="collapse"
+                                                 class="pull-right">
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                            </h5>
 
-<div>
-    <img src="@Url.Action("UserPhotos", "Account", new { id = Model.Id } )" style="width:160px;height:160px; background: #FFFFFF;
-    margin: auto;
-    -moz-border-radius: 60px;
-    border-radius: 100px;
-    padding: 6px;
-    box-shadow: 0px 0px 20px #888;" />
+                            <div class="panel-collapse collapse show" id="MyClassified">
+                                <ul class="acc-list">
+                                    <li>
+                                        <a class="active" href='@Url.Action("Index", "Manage")'>
+                                            <i class="icon-home"></i>
+                                            Profilul Meu
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("ChangeProfile", "Manage")'>
+                                            <i class="icon-pencil"></i>
+                                            Editeaza Profilul
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("ChangePassword", "Manage")'>
+                                            <i class="icon-lock"></i>
+                                            Schimba Parola
+                                        </a>
+                                    </li>
 
-    <hr />
-    <br />
-    <h4>Informatii Profil</h4>
-    <hr />
-    <dl class="dl-horizontal">
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.collapse-box  -->
+                        <div class="collapse-box">
+                            <h5 class="collapse-title">
+                                Anunturi <a href="#MyAds" aria-expanded="true" data-toggle="collapse"
+                                          class="pull-right">
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                            </h5>
 
-        <dt>Nume Utilizator</dt>
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
+                            <div class="panel-collapse collapse show" id="MyAds">
+                                <ul class="acc-list">
+                                    <li>
+                                        <a href="account-myads.html">
+                                            <i class="icon-docs"></i> Anunturile mele <span class="badge">@ViewBag.NrAds</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Index", "Interests")'>
+                                            <i class="icon-heart"></i>
+                                            Anunturi favorite <span class="badge badge-secondary">@ViewBag.NrInterests</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href=''>
+                                            <i class="icon-star"></i>
+                                            Calificativele Mele <span class="badge badge-secondary">@ViewBag.NrRatings</span>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href='@Url.Action("Index", "Conversation")'>
+                                            <i class="icon-mail"></i> Messaje <span class="badge">@ViewBag.UnreadMessages</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.collapse-box  -->
 
-        <dt>Prenume</dt>
-        <dd>
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
+                        <div class="collapse-box">
+                            <h5 class="collapse-title">
+                                Inchidere Cont <a href="#TerminateAccount"
+                                                     aria-expanded="true" data-toggle="collapse"
+                                                     class="pull-right">
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                            </h5>
 
-        <dt>Nume</dt>
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
+                            <div class="panel-collapse collapse show" id="TerminateAccount">
+                                <ul class="acc-list">
+                                    <li>
+                                        <a href='@Url.Action("Delete", "Manage")'>
+                                            <i class="icon-cancel-circled "></i> Sterge-ti Contul
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.collapse-box  -->
+                    </div>
+                </div>
+                <!-- /.inner-box  -->
 
-        <dt>Oras</dt>
-        <dd>
-            @*@Html.Action("DisplayCity", "Account")*@
-            @Html.DisplayFor(model => model.City.CityName)
+            </aside>
+        </div>
+        <!--/.page-sidebar-->
 
-        </dd>
+        <div class="col-md-9 page-content">
+            <div class="inner-box">
+                <div class="row">
+                    <div class="col-md-5 col-xs-4 col-xxs-12">
+                        <h3 class="no-padding text-center-480 useradmin">
+                            <a href="">
+                                <img class="userImg"
+                                     src="@Url.Action("UserPhotos", "Account", new { id = Model.Id } )"
+                                     alt="user"> @Model.UserName
+                            </a>
+                        </h3>
+                    </div>
+                    <div class="col-md-7 col-xs-8 col-xxs-12">
+                        <div class="header-data text-center-xs">
+                            <div class="hdata">
+                                <div class="mcol-left">
+                                    <!-- Icon with red background -->
+                                    <i class="fas fa-envelope ln-shadow"></i>
+                                </div>
+                                <div class="mcol-right">
+                                    <!-- Number of visitors -->
+                                    <p><a href="account-message-inbox.html">@ViewBag.UnreadMessages</a> <em>Mesaje noi</em></p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!-- Traffic data -->
+                            <div class="hdata">
+                                <div class="mcol-left">
+                                    <!-- Icon with red background -->
+                                    <i class="fa fa-eye ln-shadow"></i>
+                                </div>
+                                <div class="mcol-right">
+                                    <!-- Number of visitors -->
+                                    <p><a href="#">@ViewBag.AdViews</a> <em>Vizite anunturi</em></p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!-- revenue data -->
+                            <div class="hdata">
+                                <div class="mcol-left">
+                                    <!-- Icon with green background -->
+                                    <i class="icon-th-thumb ln-shadow"></i>
+                                </div>
+                                <div class="mcol-right">
+                                    <!-- Number of visitors -->
+                                    <p><a href="#">@ViewBag.NrAds</a><em>Anunturi postate</em></p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!-- revenue data -->
+                            <div class="hdata">
+                                <div class="mcol-left">
+                                    <!-- Icon with blue background -->
+                                    <i class="fa fa-user ln-shadow"></i>
+                                </div>
+                                <div class="mcol-right">
+                                    <!-- Number of visitors -->
+                                    <p><a href="#">@ViewBag.NrRatings</a> <em>Calificative primite</em></p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inner-box">
+                <div class="welcome-msg">
+                    <h3 class="page-sub-header2 clearfix no-padding">Bine ai venit, @Model.UserName</h3>
+                    <span class="page-sub-header-sub small">Cont creat la: 01-06-2019</span>
+                </div>
+                <div id="accordion" class="panel-group">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <a href="#collapseB1" aria-expanded="true" data-toggle="collapse">
+                                    Informatiile contului
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse show" id="collapseB1">
+                            <div class="card-body">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Prenume</label>
+
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" readonly="readonly" placeholder="@Model.FirstName">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Nume</label>
+
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" readonly="readonly" placeholder="@Model.LastName">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Email</label>
+
+                                        <div class="col-sm-9">
+                                            <input type="email" class="form-control" readonly="readonly"
+                                                   placeholder="@Model.Email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Localitate</label>
+
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" readonly="readonly" placeholder="@Model.City.CityName">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Phone" class="col-sm-3 control-label">Telefon</label>
+
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="Phone" readonly="readonly"
+                                                   placeholder="@Model.PhoneNumber">
+                                        </div>
+                                    </div>
+                                    @if (Model.RatingScore != null)
+                                    {
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Calificativ</label>
+
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" readonly="readonly" placeholder="@Model.RatingScore">
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.CommunicationScore != null)
+                                    {
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" >Calificativ comunicare</label>
+
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" readonly="readonly" placeholder="@Model.CommunicationScore">
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.AccuracyScore != null)
+                                    {
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" style="display:inline">Calificativ acuratetea descrierii anuturilor</label>
+
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" readonly="readonly" placeholder="@Model.AccuracyScore">
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.TimeScore != null)
+                                    {
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" style="display:inline">Calificativ timpul de onorare al comenzii</label>
+
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" readonly="readonly" placeholder="@Model.TimeScore">
+                                            </div>
+                                        </div>
+                                    }
 
 
-        <dt>Email</dt>
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <a href="#collapseB2" aria-expanded="true" data-toggle="collapse"> Setari </a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse" id="collapseB2">
+                            <div class="card-body">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    Comments are enabled on my ads
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">New Password</label>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.EmailConfirmed)
-        </dt>
+                                        <div class="col-sm-9">
+                                            <input type="password" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Confirm Password</label>
 
-        <dd>
-            @Html.DisplayFor(model => model.EmailConfirmed)
-        </dd>
+                                        <div class="col-sm-9">
+                                            <input type="password" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-9">
+                                            <button type="submit" class="btn btn-default">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <a href="#collapseB3" aria-expanded="true" data-toggle="collapse">
+                                    Preferences
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="panel-collapse collapse" id="collapseB3">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox">
+                                                I want to receive newsletter.
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox">
+                                                I want to receive advice on buying and selling.
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/.row-box End-->
 
-        <dt>
-            @Html.DisplayNameFor(model => model.SecurityStamp)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SecurityStamp)
-        </dd>
-
-        <dt>Numar Telefon</dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumberConfirmed)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TwoFactorEnabled)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TwoFactorEnabled)
-        </dd>
-
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LockoutEnabled)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LockoutEnabled)
-        </dd>
-
-
-    </dl>
-
-    <hr />
-    <br />
-    <h4>Setari Profil</h4>
-    <hr />
-    <div>@Html.ActionLink("Editeaza Informatii Profil", "ChangeProfile", "Manage")</div>
-    <div>@Html.ActionLink("Schimba Parola", "ChangePassword", "Manage")</div>
-    <br/>
-    <form method="post" action="/Manage/DeleteAccount">
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button class="btn btn-sm btn-danger" type="submit" 
-                onclick="return confirm('Esti sigur? Toate datele contului vor fi sterse, si nu vor putea fi recuperate!');">
-            Sterge cont
-        </button>
-    </form>
-    <hr />
-    <br /><br />
-
-    <h4>Anunturile mele</h4>
-    <hr />
-    <br />
-
-    <div>@Html.ActionLink("Vezi toate anunturile mele", "Index", "Product", new { id = Model.Id }, null)</div>
-    <br />
-    @foreach (Licenta.Common.Entities.Product product in ViewBag.recentProducts)
-    {
-        @Html.Partial("ProductInfo", product);
-    }
-    <hr />
-    <br /><br />
-
-    <h4>Anunturile salvate ca favorite</h4>
-    @Html.ActionLink("Vezi anunturile favorite", "Index", "Interests")
-    <hr />
-    <br /><br />
-
-    <h4>Calificativele mele</h4>
-    <hr />
-    <br />
-
-    @if (Model.RatingScore == null)
-    {
-        <p>Nu ai calificative! </p>
-    }
-    else
-    {
-        <strong>Calificativ general: </strong> @Model.RatingScore
-        <br /><br />
-        <strong>Rating detaliat utilizator: </strong>
-        <br />
-        <span>Comunicarea vanzatorului: </span>@Model.CommunicationScore
-        <br />
-        <span>Acuratetea descrierii anunturilor: </span>@Model.AccuracyScore
-        <br />
-        <span>Timpul de onorare al comenzilor: </span>@Model.TimeScore
-        <br />
-        <br />
-
-        <div>@Html.ActionLink("Vezi toate calificativele", "Index", "Rating", new { id = Model.Id }, null)</div>
-        <br />
-    }
-
-
-</div>
-
-
-@*@model Licenta.Models.IndexViewModel
-    @{
-        ViewBag.Title = "Manage";
-    }
-    <h2>@ViewBag.Title.</h2>
-    <p class="text-success">@ViewBag.StatusMessage</p>
-    <div>
-        <h4>Change your account settings</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>Password:</dt>
-            <dd>
-                [
-                @if (Model.HasPassword)
-                {
-                    @Html.ActionLink("Change your password", "ChangePassword")
-                }
-                else
-                {
-                    @Html.ActionLink("Create", "SetPassword")
-                }
-                ]
-            </dd>
-            <dt>External Logins:</dt>
-            <dd>
-                @Model.Logins.Count [
-                @Html.ActionLink("Manage", "ManageLogins") ]
-            </dd>*@
-
-@*
-    Phone Numbers can used as a second factor of verification in a two-factor authentication system.
-     See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-        for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-     Uncomment the following block after you have set up two-factor authentication
-*@
-@*
-    <dt>Phone Number:</dt>
-    <dd>
-        @(Model.PhoneNumber ?? "None")
-        @if (Model.PhoneNumber != null)
-        {
-            <br />
-            <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
-            using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
-            }
-        }
-        else
-        {
-            <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
-        }
-    </dd>
-*@
-@*
-    <dt>Two-Factor Authentication:</dt>
-    <dd>
-        <p>
-            There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-            for details on setting up this ASP.NET application to support two-factor authentication.
-        </p>*@
-@*@if (Model.TwoFactor)
-    {
-        using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-        {
-            @Html.AntiForgeryToken()
-            <text>Enabled
-            <input type="submit" value="Disable" class="btn btn-link" />
-            </text>
-        }
-    }
-    else
-    {
-        using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-        {
-            @Html.AntiForgeryToken()
-            <text>Disabled
-            <input type="submit" value="Enable" class="btn btn-link" />
-            </text>
-        }
-    }*@
-@*
-    </dd>
-        </dl>
+            </div>
+        </div>
+        <!--/.page-content-->
     </div>
-*@
+    <!--/.row-->
+</div>
+<!--/.container-->

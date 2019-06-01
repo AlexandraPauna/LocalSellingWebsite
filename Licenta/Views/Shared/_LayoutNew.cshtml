@@ -95,11 +95,11 @@
 
         <div class="main-container">
             @*<div class="container">*@
-                @RenderBody()
-                <hr />
-                <footer>
-                    <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-                </footer>
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>
             @*</div>*@
         </div>
     </div>
@@ -118,6 +118,9 @@
 <!-- include custom script for site  -->
 <script src="../../Content/js/main.min.js"></script>
 
+<script src="../../Content/js/pace.min.js"></script>
+<script src="../../Content/plugins/modernizr/modernizr-custom.js"></script>
+
 <!--used for dropdown menu-->
 <script>
     $(document).ready(function () {
@@ -132,4 +135,11 @@
         pagerCustom: '#bx-pager'
     });
 </script>
+
+<script>
+    paceOptions = {
+        elements: true
+    };
+</script>
+
 
