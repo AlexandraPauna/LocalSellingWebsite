@@ -12,7 +12,7 @@
     <!-- styles needed for carousel slider -->
     <link href="../../Content/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="../../Content/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
-
+    <link href="../../Content/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -64,23 +64,23 @@
                                 var role = userManager.GetRoles(User.Identity.GetUserId()).FirstOrDefault();
 
                                 @*if (role == "Editor")
-                                {
-                                    <li class="dropdown no-arrow nav-item">
-                                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                    {
+                                        <li class="dropdown no-arrow nav-item">
+                                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
-                                            <span>Adauga</span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li class="dropdown-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
-                                            <li class="dropdown-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
-                                        </ul>
-                                    </li>
-                                }*@
+                                                <span>Adauga</span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
+                                                <li class="dropdown-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
+                                            </ul>
+                                        </li>
+                                    }*@
 
                                 if (role == "Administrator")
                                 {
                                     @*<li class="nav-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
-                                    <li class="nav-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>*@
+                                        <li class="nav-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>*@
                                     <li class="nav-item">@Html.ActionLink("Utilizatori", "Index", "Users")</li>
                                 }
                             }
@@ -97,6 +97,7 @@
         </div>
 
         @RenderSection("HomeImageSection", required: false)
+        @RenderSection("SubcategoryShowHeader", required: false)
 
         <div class="main-container">
             @RenderBody()
@@ -162,6 +163,6 @@
 
 <script type="text/javascript" src="../../Content/plugins/autocomplete/autocomplete-demo.js"></script>
 
-
+<script type="text/javascript" src="../../Content/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
 
 

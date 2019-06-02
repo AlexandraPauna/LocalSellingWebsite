@@ -25,5 +25,11 @@ namespace Licenta.Common.Models
         public virtual Category Category { get; set; }
 
         public IList<Product> Products { get; set; }
+
+        public int NrProducts { get; set; }
+
+        public IList<SubCategory> SubCategories { get; set; }
+
+        public IList<Interest> Interests { get; set; }
     }
 }

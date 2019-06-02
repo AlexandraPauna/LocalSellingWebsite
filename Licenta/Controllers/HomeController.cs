@@ -25,7 +25,7 @@ namespace Licenta.Controllers
 
             ViewBag.Categories = categories.Take(12);
 
-            var products = _db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Include("User").OrderByDescending(a => a.Date);
+            var products = _db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Include("User").Where(x => x.Active == true).OrderByDescending(a => a.Date);
             ViewBag.LatestProducts = products.Take(15);
 
             var locations = (from c in _db.Cities

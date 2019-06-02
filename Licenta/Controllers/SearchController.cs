@@ -12,7 +12,7 @@ namespace Licenta.Controllers
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         // GET: Search
-        public ActionResult Index(string search, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType)
+        public ActionResult Index(string search, int? categoryId, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType)
         {
             ViewBag.Cities = GetAllCities(); //used to load cities in dropdown
             ViewBag.ProductStates = GetAllProductStates(); 
@@ -23,7 +23,7 @@ namespace Licenta.Controllers
             var model = new ProductViewModel { Products = null };
             ViewBag.Search = search;
 
-            if (!String.IsNullOrEmpty(search) || fromCity!=null)
+            if (!String.IsNullOrEmpty(search) || fromCity!=null || categoryId!=null)
             {
                 //var products = db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User");
 
@@ -52,6 +52,9 @@ namespace Licenta.Controllers
                                       where subcategs.CategoryId.Equals(catId)
                                       select subcategs.SubCategoryId).ToList();
 
+                var subCatsIdOfCatForm = (from subcategs in _db.SubCategories
+                                      where subcategs.CategoryId == categoryId
+                                      select subcategs.SubCategoryId).ToList();
 
                 var products = _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
                                           .Where(s => s.Title.Contains(search) ||
@@ -59,6 +62,7 @@ namespace Licenta.Controllers
                                                       s.SubCategoryId == subCatId ||
                                                       s.CityId == cityId ||
                                                       s.CityId == fromCity ||
+                                                      subCatsIdOfCatForm.Any(x => x == s.SubCategoryId) ||
                                                       s.ProductStateId == stateId ||
                                                       s.DeliveryCompanyId == deliveryCompId ||
                                                       subCatsIdOfCat.Any(x => x == s.SubCategoryId));

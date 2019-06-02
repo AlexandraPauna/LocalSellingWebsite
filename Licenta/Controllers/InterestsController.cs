@@ -25,7 +25,7 @@ namespace Licenta.Controllers
             {
                 var interests = (from ints in _db.Interests.Include("Product")
                                  where ints.UserId == currentUser
-                                 select ints).OrderByDescending(x => x.Date);
+                                 select ints).Where(x => x.Product.Active == true).OrderByDescending(x => x.Date);
 
                 var model = new InterestViewModel { Interests = interests.ToList() };
 

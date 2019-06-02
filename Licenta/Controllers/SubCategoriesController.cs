@@ -59,6 +59,7 @@ namespace Licenta.Controllers
         {
             ViewBag.Cities = GetAllCities();
             ViewBag.ProductStates = GetAllProductStates();
+            ViewBag.Categories = GetAllCategories();
 
             SubCategory subCategory = _db.SubCategories.Find(id);
             var userId = User.Identity.GetUserId();
@@ -71,6 +72,8 @@ namespace Licenta.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
+            var currentUser = User.Identity.GetUserId();
+            var interests = _db.Interests.Where(i => i.UserId == currentUser);
 
             //Filtrarea
             if (priceMin != null)
@@ -83,6 +86,11 @@ namespace Licenta.Controllers
                 products = products.Where(s => s.ProductStateId == state);
             if (dateMin != null)
                 products = products.Where(s => s.Date >= dateMin);
+            ViewBag.PriceMin = priceMin;
+            ViewBag.PriceMax = priceMax;
+            ViewBag.FromCity = fromCity;
+            ViewBag.State = state;
+            ViewBag.DateMin = dateMin;
 
             //Sortarea
             if (sortType == "Title")
@@ -97,12 +105,19 @@ namespace Licenta.Controllers
             if (sortType == "PriceDesc")
                 products = products.OrderByDescending(x => x.Price);
 
+            var subcategories = from subc in _db.SubCategories
+                                where subc.CategoryId == subCategory.CategoryId && subc.SubCategoryId != subCategory.SubCategoryId
+                                select subc;
+
             //ViewBag.Products = products;
             var model = new SubCategoryViewModel { SubCategoryId = subCategory.SubCategoryId,
                                                    SubCategoryName = subCategory.SubCategoryName,
                                                    CategoryId = subCategory.CategoryId,
                                                    Category = subCategory.Category,
-                                                   Products = products.ToList() };
+                                                   Products = products.ToList(),
+                                                   NrProducts = products.ToList().Count(),
+                                                   SubCategories = subcategories.ToList(),
+                                                   Interests = interests.ToList()};
 
             return View(model);
         }
