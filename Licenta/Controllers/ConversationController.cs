@@ -146,6 +146,21 @@ namespace Licenta.Controllers
 
         public ActionResult Show(int id)
         {
+            var userId = User.Identity.GetUserId();
+            var unreadMessages = (from mess in _db.Messages
+                                  where mess.ReceiverId == userId && mess.Read == false
+                                  select mess).Count();
+            ViewBag.UnreadMessages = unreadMessages;
+
+            var nrAds = _db.Products.Where(x => x.UserId == userId).Count();
+            ViewBag.NrAds = nrAds;
+
+            var nrRatings = _db.Ratings.Where(x => x.RatedUserId == userId).Count();
+            ViewBag.NrRatings = nrRatings;
+
+            var nrInterests = _db.Interests.Where(x => x.UserId == userId).Count();
+            ViewBag.NrInterests = nrInterests;
+
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();

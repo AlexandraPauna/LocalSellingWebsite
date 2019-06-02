@@ -170,6 +170,10 @@ namespace Licenta.Controllers
                         message.Date = DateTime.Now;
                         message.Read = false;
                         message.SenderId = currentUser;
+                        var sender = (from usr in _db.Users
+                                        where usr.Id == currentUser
+                                        select usr).Single();
+                        message.Sender = sender;
                         message.Content = Encrypt(message.Content);
                         //look for receiver user id
                         var conversation = (from conv in _db.Conversations.Include("Sender").Include("Product")
@@ -177,9 +181,21 @@ namespace Licenta.Controllers
                                             select conv).Single();
                         //var conversation = message.Conversation;
                         if (conversation.SenderId == currentUser) //the receiver is either the buyer
+                        {
                             message.ReceiverId = conversation.Product.UserId;
+                            var receiver = (from usr in _db.Users
+                                            where usr.Id == conversation.Product.UserId
+                                            select usr).Single();
+                            message.Receiver = receiver;
+                        }
                         else //either the seller
+                        {
                             message.ReceiverId = conversation.SenderId;
+                            var receiver = (from usr in _db.Users
+                                            where usr.Id == conversation.SenderId
+                                            select usr).Single();
+                            message.Receiver = receiver;
+                        }
 
                         _db.Messages.Add(message);
                         _db.SaveChanges();

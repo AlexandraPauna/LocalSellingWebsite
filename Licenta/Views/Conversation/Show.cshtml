@@ -1,81 +1,250 @@
 ﻿@using Licenta.Common.Entities
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Mesaje";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="container">
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    }
+        <div class="row">
+            <div class="col-md-3 page-sidebar">
+                <aside>
+                    <div class="inner-box">
+                        <div class="user-panel-sidebar">
+                            <div class="collapse-box">
+                                <h5 class="collapse-title no-border">
+                                    Contul Meu <a href="#MyClassified" aria-expanded="true" data-toggle="collapse"
+                                                  class="pull-right">
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
+                                </h5>
 
-@if (TempData.ContainsKey("message"))
-{
-    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
-}
+                                <div class="panel-collapse collapse show" id="MyClassified">
+                                    <ul class="acc-list">
+                                        <li>
+                                            <a href='@Url.Action("Index", "Manage")'>
+                                                <i class="icon-home"></i>
+                                                Profilul Meu
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href='@Url.Action("ChangeProfile", "Manage")'>
+                                                <i class="icon-pencil"></i>
+                                                Editeaza Profilul
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href='@Url.Action("ChangePassword", "Manage")'>
+                                                <i class="icon-lock"></i>
+                                                Schimba Parola
+                                            </a>
+                                        </li>
 
-<ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="navbar-link" href="/Conversation/Index/Received">Mesaje primite</a>
-                <a class="navbar-link" href="/Conversation/Index/Sent">Mesaje trimise</a>
-            </li>
-</ul>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- /.collapse-box  -->
+                            <div class="collapse-box">
+                                <h5 class="collapse-title">
+                                    Anunturi <a href="#MyAds" aria-expanded="true" data-toggle="collapse"
+                                                class="pull-right">
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
+                                </h5>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <strong>@Html.ActionLink((String)Model.Product.User.UserName, "UserProfile", "Account", new { id = Model.Product.User.Id }, null)</strong>
-        <br />
-        <strong>@Model.Product.Title</strong>
-        <br />
-        <span>@Model.Product.Date</span>
-        <br />
-        <a class="btn btn-sm btn-info" href="/Product/Show/@Model.ProductId">Afisare articol</a>
-    </div>
+                                <div class="panel-collapse collapse show" id="MyAds">
+                                    <ul class="acc-list">
+                                        <li>
+                                            <a href="account-myads.html">
+                                                <i class="icon-docs"></i> Anunturile mele <span class="badge">@ViewBag.NrAds</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href='@Url.Action("Index", "Interests")'>
+                                                <i class="icon-heart"></i>
+                                                Anunturi favorite <span class="badge badge-secondary">@ViewBag.NrInterests</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href=''>
+                                                <i class="icon-star"></i>
+                                                Calificativele Mele <span class="badge badge-secondary">@ViewBag.NrRatings</span>
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a class="active" href='@Url.Action("Index", "Conversation")'>
+                                                <i class="icon-mail"></i> Messaje <span class="badge">@ViewBag.UnreadMessages</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- /.collapse-box  -->
 
-    <div class="panel-body">
-        <ul>
-            @foreach (Message message in Model.Messages)
-            {
-                if (message.ReceiverId == ViewBag.CurrentUser)
-                {
-                    <li>
-                        <div style="float:left; background-color:lightgray;">
-                            <strong>@Html.ActionLink((String)message.Sender.UserName, "UserProfile", "Account", new { id = message.SenderId }, null)</strong>
-                            <br />
-                            <p>@message.Date</p>
-                            <br />
-                            <p>@message.Content</p>
+                            <div class="collapse-box">
+                                <h5 class="collapse-title">
+                                    Inchidere Cont <a href="#TerminateAccount"
+                                                      aria-expanded="true" data-toggle="collapse"
+                                                      class="pull-right">
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
+                                </h5>
+
+                                <div class="panel-collapse collapse show" id="TerminateAccount">
+                                    <ul class="acc-list">
+                                        <li>
+                                            <a href='@Url.Action("Delete", "Manage")'>
+                                                <i class="icon-cancel-circled "></i> Sterge-ti Contul
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- /.collapse-box  -->
                         </div>
-                    </li>
-                }
-                else
-                if (message.SenderId == ViewBag.CurrentUser)
-                {
-                    <li>
-                        <div style="float:right; background-color:lightgreen;">
-                            <strong>Raspunsul tau</strong>
-                            <br />
-                            <p>@message.Date</p>
-                            <br />
-                            <p>@message.Content</p>
-                            @if (message.Read == true)
-                            {
-                                <i class="glyphicon glyphicon-ok"></i> <p>Citit</p>
-                            }
-                            <br />
+                    </div>
+                    <!-- /.inner-box  -->
+
+                </aside>
+            </div>
+            <!--/.page-sidebar-->
+            <div class="col-md-9 page-content">
+                <div class="inner-box">
+                    <h2 class="title-2"><i class="icon-mail"></i> Conversatii </h2>
+                    <div class="inbox-wrapper">
+                        <div class="row">
+                            <div class="col-md-3 col-lg-2">
+                                @*<div class="btn-group hidden-sm">
+                                    <a href="account-message-compose.html" class="btn btn-primary text-uppercase">
+                                        <i class="fas fa-plus"></i> Compose
+                                    </a>
+                                </div>*@
+                            </div>
+
+                            <div class="col-md-9 col-lg-10 ">
+                                <div class="user-bar-top">
+                                    <div class="user-top">
+                                        <p>
+                                            @if (Model.SenderId == User.Identity.GetUserId())
+                                            {
+                                                <a href="@Url.Action("UserProfile", "Account", new { id = Model.Product.UserId })"> <strong> @Model.Product.User.UserName  </strong> </a>
+                                                <strong>Conversatie initiata privind</strong>
+                                                <a href="@Url.Action("Show", "Product", new { id = Model.ProductId})">
+                                                    @Model.Product.Title
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("UserProfile", "Account", new { id = Model.SenderId })"> <strong> @Model.Sender.UserName  </strong> </a>
+                                                <strong> Conversatie primita privind </strong>
+                                                <a href="@Url.Action("Show", "Product", new { id = Model.ProductId})">
+                                                    @Model.Product.Title
+                                                </a>
+                                            }
+                                           
+                                        </p>
+                                    </div>
+
+                                    <div class="message-tool-bar-right pull-right">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </li>
-                }
-                <br />
-            }
-        </ul>
-    </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-3 col-lg-2">
+                                <ul class="nav nav-pills  inbox-nav">
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Index","Conversation",new { sortType = "Unread"})" class="nav-link">
+                                            Mesaje necitite
+                                            <span class="badge badge-gray count">@ViewBag.UnreadMessages</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Index","Conversation",new { sortType = "Received"})" class="nav-link">
+                                            Mesaje primite
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Index","Conversation",new { sortType = "Sent"})" class="nav-link">
+                                            Mesaje Trimise
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <div class="col-md-9 col-lg-10 chat-row">
+                                <div class="message-chat">
+                                    <div class="message-chat-history">
+                                        @foreach (Message message in Model.Messages)
+                                        {
+                                            if (message.ReceiverId == ViewBag.CurrentUser)
+                                            {
+                                                <div class="chat-item object-user">
+
+                                                    <div class="object-user-img">
+                                                        <img src="@Url.Action("UserPhotos", "Account", new { id = message.SenderId })" alt="User ">
+                                                    </div>
+
+                                                    <div class="chat-item-content">
+                                                        <div class="chat-item-content-inner">
+                                                            <div class="msg">
+                                                                <p>@message.Content </p>
+                                                            </div>
+                                                            <span class="time-and-date">  @message.Date </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            if (message.SenderId == ViewBag.CurrentUser)
+                                            {
+                                                <div class="chat-item object-me">
+                                                    <div class="chat-item-content">
+                                                        <div class="msg">
+                                                            <p>@message.Content</p>
+                                                        </div>
+                                                        @if (message.Read == true)
+                                                        {
+                                                            <span class="time-and-date"> <i class="icon icon-check"></i>Citit    |    @message.Date</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="time-and-date">  @message.Date</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                            <br />
+                                        }
+
+                                    </div>
+
+                                    <div class="type-message">
+                                        <form class="type-form" method="post" action="/Message/New">
+                                            <input type="hidden" name="ConversationId" value="@Model.ConversationId" />
+                                            <input type="hidden" name="ConversationId" value="@Model.ConversationId" />
+                                            <input type="text" name="Content" class="input-write form-control" placeholder="Scrie un mesaj...">
+
+                                            <div class="button-wrap">
+                                                <button class="btn btn-secondary" type="submit"><i class="fas fa-paper-plane" aria-hidden="true"></i></button>
+                                            </div>
+                                        </form>
+                                       
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/. inbox-wrapper-->
+                </div>
+            </div>
+            <!--/.page-content-->
+        </div>
+    <!--/.row-->
 </div>
-
-<br />
-<hr />
-<form method="post" action="/Message/New">
-    <input type="hidden" name="ConversationId" value="@Model.ConversationId" />
-    <input type="hidden" name="ConversationId" value="@Model.ConversationId" />
-    <label>Trimite mesaj:</label>
-    <br />
-    <input type="text" name="Content" />
-    <button class="btn btn-sm btn-success" type="submit">Trimite mesaj</button>
-</form>
-
+<!--/.container-->
