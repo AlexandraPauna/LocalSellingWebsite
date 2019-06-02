@@ -23,7 +23,7 @@ namespace Licenta.Controllers
             var model = new ProductViewModel { Products = null };
             ViewBag.Search = search;
 
-            if (!String.IsNullOrEmpty(search))
+            if (!String.IsNullOrEmpty(search) || fromCity!=null)
             {
                 //var products = db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User");
 
@@ -58,6 +58,7 @@ namespace Licenta.Controllers
                                                       s.Description.Contains(search) ||
                                                       s.SubCategoryId == subCatId ||
                                                       s.CityId == cityId ||
+                                                      s.CityId == fromCity ||
                                                       s.ProductStateId == stateId ||
                                                       s.DeliveryCompanyId == deliveryCompId ||
                                                       subCatsIdOfCat.Any(x => x == s.SubCategoryId));

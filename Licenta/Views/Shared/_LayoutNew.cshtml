@@ -9,6 +9,9 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <!-- styles needed for carousel slider -->
+    <link href="../../Content/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
+    <link href="../../Content/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
 
 
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -61,23 +64,23 @@
                                 var role = userManager.GetRoles(User.Identity.GetUserId()).FirstOrDefault();
 
                                 @*if (role == "Editor")
-                                    {
-                                        <li class="dropdown no-arrow nav-item">
-                                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                {
+                                    <li class="dropdown no-arrow nav-item">
+                                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
-                                                <span>Adauga</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li class="dropdown-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
-                                                <li class="dropdown-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
-                                            </ul>
-                                        </li>
-                                    }*@
+                                            <span>Adauga</span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
+                                            <li class="dropdown-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
+                                        </ul>
+                                    </li>
+                                }*@
 
                                 if (role == "Administrator")
                                 {
                                     @*<li class="nav-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
-                                        <li class="nav-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>*@
+                                    <li class="nav-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>*@
                                     <li class="nav-item">@Html.ActionLink("Utilizatori", "Index", "Users")</li>
                                 }
                             }
@@ -93,15 +96,19 @@
             </nav>
         </div>
 
+        @RenderSection("HomeImageSection", required: false)
+
         <div class="main-container">
-            @*<div class="container">*@
             @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-            </footer>
-            @*</div>*@
         </div>
+
+        @RenderSection("HomeFooterSection", required: false)
+
+        <hr />
+
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -147,5 +154,14 @@
 <script>
     $("#fileUpload").fileinput();
 </script>
+
+<!--autocomplete for searchBox-->
+<script type="text/javascript" src="../../Content/plugins/autocomplete/jquery.mockjax.js"></script>
+<script type="text/javascript" src="../../Content/plugins/autocomplete/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="../../Content/plugins/autocomplete/usastates.js"></script>
+
+<script type="text/javascript" src="../../Content/plugins/autocomplete/autocomplete-demo.js"></script>
+
+
 
 

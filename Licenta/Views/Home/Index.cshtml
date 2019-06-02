@@ -4,91 +4,396 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>Bine ati venit pe </h1>
-    <p class="lead">
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-    </p>
+<div class="container">
     @if (TempData.ContainsKey("message"))
     {
         <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
     }
-
-
-    <p><a href='@Url.Action("New", "Product")' class="btn btn-primary btn-lg">Adauga anunt</a></p>
-</div>
-
-<h3>Gaseste in functie de categorie</h3>
-    <div >
-        @foreach (var category in ViewBag.Categories)
-        {
-        <img src="@Url.Action("DisplayCategoryPhoto", "Categories", new { categoryId = category.CategoryId } )" style="width:160px;height:160px; background: #FFFFFF;"/>
-            <div>
-                <a class="navbar-link" href="/Categories/Show/@category.CategoryId">@category.CategoryName</a>
+    <div class="col-xl-12 content-box ">
+        <div class="row row-featured row-featured-category">
+            <div class="col-xl-12  box-title no-border">
+                <div class="inner">
+                    <h2>
+                        <span>Gaseste in functie de</span>
+                        Categorie <a href="@Url.Action("Index","Categories")" class="sell-your-item">
+                            Vezi toate categoriile <i class="  icon-th-list"></i>
+                        </a>
+                    </h2>
+                </div>
             </div>
-           
-        }
+
+            @foreach (var category in ViewBag.Categories)
+            {
+                <div class="col-xl-2 col-md-3 col-sm-3 col-xs-4 f-category">
+                    <div class="inner">
+                        <a href="/Categories/Show/@category.CategoryId">
+                            <span class="imgBox">
+                                <img src="@Url.Action("DisplayCategoryPhoto", "Categories", new { categoryId = category.CategoryId } )" class="img-responsive" alt="img">
+                            </span>
+                            <h6> @category.CategoryName </h6>
+                        </a>
+                    </div>
+                </div>
+
+            }
+        </div>
+
     </div>
 
-<h3>Anunturi recente</h3>
-@foreach (Product products in ViewBag.LatestProducts)
-{
-    <div class="card" style="width: 18rem;">
-        <img src="@Url.Action("MainProductPhoto", "Home", new { prodId = products.ProductId})" class="card-img-top" alt="Imagine indisponibila">
-        <div class="card-body">
-            <h5 class="card-title">@products.Title</h5>
+    <div style="clear: both"></div>
+
+    <div class="col-xl-12 content-box ">
+        <div class="row row-featured">
+            <div class="col-xl-12  box-title ">
+                <div class="inner">
+                    <h2>
+                        <span>Anunturi </span>
+                        Sugerate <a href="category.html" class="sell-your-item">
+                            View more <i class="  icon-th-list"></i>
+                        </a>
+                    </h2>
+
+                </div>
             </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">@products.Price</li>
-            <li class="list-group-item">@products.City.CityName</li>
-            <li class="list-group-item">@products.Date</li>
-        </ul>
-        <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
+
+            <div style="clear: both"></div>
+
+            <div class=" relative  content featured-list-row  w100">
+
+                <nav class="slider-nav has-white-bg nav-narrow-svg">
+                    <a class="prev">
+                        <span class="nav-icon-wrap"></span>
+
+                    </a>
+                    <a class="next">
+                        <span class="nav-icon-wrap"></span>
+                    </a>
+                </nav>
+
+                <div class="no-margin featured-list-slider ">
+                    @foreach (Product products in ViewBag.LatestProducts)
+                    {
+                        <div class="item">
+                            <a href="@Url.Action("Show", "Product", new { id = products.ProductId})">
+                                <span class="item-carousel-thumb">
+                                    <img class="img-responsive" src="@Url.Action("MainProductPhoto", "Home", new { prodId = products.ProductId})" alt="img">
+                                </span>
+                                <span class="item-name"> @products.Title  </span>
+                                <span class="price">  @products.Price </span>
+                            </a>
+                        </div>
+
+                        @*<div class="card" style="width: 18rem;">
+                                <img src="@Url.Action("MainProductPhoto", "Home", new { prodId = products.ProductId})" class="card-img-top" alt="Imagine indisponibila">
+                                <div class="card-body">
+                                    <h5 class="card-title">@products.Title</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">@products.Price</li>
+                                    <li class="list-group-item">@products.City.CityName</li>
+                                    <li class="list-group-item">@products.Date</li>
+                                </ul>
+                                <div class="card-body">
+                                    <a href="#" class="card-link">Card link</a>
+                                    <a href="#" class="card-link">Another link</a>
+                                </div>
+                            </div>*@
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div style="clear: both"></div>
+
+    <div class="col-xl-12 content-box ">
+        <div class="row row-featured">
+            <div class="col-xl-12  box-title ">
+                <div class="inner">
+                    <h2>
+                        <span>Anunturi </span>
+                        Recente <a href="category.html" class="sell-your-item">
+                            View more <i class="  icon-th-list"></i>
+                        </a>
+                    </h2>
+
+                </div>
+            </div>
+
+            <div style="clear: both"></div>
+
+            <div class=" relative  content featured-list-row  w100">
+
+                <nav class="slider-nav has-white-bg nav-narrow-svg">
+                    <a class="prev">
+                        <span class="nav-icon-wrap"></span>
+
+                    </a>
+                    <a class="next">
+                        <span class="nav-icon-wrap"></span>
+                    </a>
+                </nav>
+
+                <div class="no-margin featured-list-slider ">
+                    @foreach (Product products in ViewBag.LatestProducts)
+                    {
+                        <div class="item">
+                            <a href="@Url.Action("Show", "Product", new { id = products.ProductId})">
+                                <span class="item-carousel-thumb">
+                                    <img class="img-responsive" src="@Url.Action("MainProductPhoto", "Home", new { prodId = products.ProductId})" alt="img">
+                                </span>
+                                <span class="item-name"> @products.Title  </span>
+                                <span class="price">  @products.Price </span>
+                            </a>
+                        </div>
+
+                        @*<div class="card" style="width: 18rem;">
+                                <img src="@Url.Action("MainProductPhoto", "Home", new { prodId = products.ProductId})" class="card-img-top" alt="Imagine indisponibila">
+                                <div class="card-body">
+                                    <h5 class="card-title">@products.Title</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">@products.Price</li>
+                                    <li class="list-group-item">@products.City.CityName</li>
+                                    <li class="list-group-item">@products.Date</li>
+                                </ul>
+                                <div class="card-body">
+                                    <a href="#" class="card-link">Card link</a>
+                                    <a href="#" class="card-link">Another link</a>
+                                </div>
+                            </div>*@
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="col-xl-12 content-box ">
+        <div class="row row-featured">
+            <div style="clear: both"></div>
+            <div class="tab-lite relative w100">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs " role="tablist">
+                    <li role="presentation" class="active nav-item">
+                        <a href="#tab1" aria-controls="tab1"
+                           role="tab" data-toggle="tab"
+                           class="nav-link">
+                            <i class="icon-location-2"></i> Top Orase
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tab1">
+                        <div class="col-xl-12 tab-inner">
+                            <div class="row">
+                                @if (ViewBag.LocationsList1 != null)
+                                {
+                                    <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                        @foreach (var location in ViewBag.LocationsList1)
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                }
+                                @if (ViewBag.LocationsList2 != null)
+                                {
+                                    <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                        @foreach (var location in ViewBag.LocationsList1)
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                }
+                                @if (ViewBag.LocationsList3 != null)
+                                {
+                                    <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                        @foreach (var location in ViewBag.LocationsList1)
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                }
+                                @if (ViewBag.LocationsList4 != null)
+                                {
+                                    <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                        @foreach (var location in ViewBag.LocationsList1)
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+@section HomeImageSection{
+    <div class="intro" style="background-image: url(../../Images/bg2.jpg);">
+        <div class="container text-center">
+
+            <h1 class="intro-title animated fadeInDown">
+
+                GASESTE ANUNTUL PE CARE IL CAUTI
+            </h1>
+
+            <p class="sub animateme fittext3 animated fadeIn">
+                Gaseste anunturi locale pe BootClassified rapid si usor
+            </p>
+
+            @using (Html.BeginForm("Index", "Search", FormMethod.Get@*,FormMethod.Post, new { @class = "form-group", @style = "max-width: 100%; width: 100%;" }*@))
+            {
+             <div class="row search-row animated fadeInUp">
+                 <div class="col-xl-4 col-sm-4 search-col relative locationicon">
+                     <i class="icon-location-2 icon-append"></i>
+                     @Html.DropDownList("FromCity", new SelectList(ViewBag.Cities, "Value", "Text"), "Selectati locatia", new { id = "FromCity", name = "fromCity", placeholder = "Oras...", @class = "form-control locinput input-rel searchtag-input has-icon" });
+                     @*<input type="text" name="fromCity" id="autocomplete-ajax"
+                            class="form-control locinput input-rel searchtag-input has-icon"
+                            placeholder="Oras..." value="">*@
+                 </div>
+
+                 <div class="col-xl-4 col-sm-4 search-col relative">
+                        <i class="icon-docs icon-append"></i>
+                        <input type="text" name="Search" class="form-control has-icon"
+                            placeholder="Cauta..." value="">
+                 </div>
+
+                <div class="col-xl-4 col-sm-4 search-col">
+                    <button type="submit" class="btn btn-primary btn-search btn-block  btn-gradient">
+                    <i class="icon-search"></i><strong>Cauta</strong>
+                    </button>
+                </div>
+              </div>
+             }
+
+
+        </div>
+    </div>
+    <!-- /.intro -->
+}
+
+@section HomeFooterSection{
+    <div class="page-info hasOverly" style="background: url(../../Images/bg.jpg); background-size:cover">
+        <div class="bg-overly">
+            <div class="container text-center section-promo">
+                <div class="row">
+                    <div class="col-sm-3 col-xs-6 col-xxs-12">
+                        <div class="iconbox-wrap">
+                            <div class="iconbox">
+                                <div class="iconbox-wrap-icon">
+                                    <i class="icon  icon-group"></i>
+                                </div>
+                                <div class="iconbox-wrap-content">
+                                    <h5><span>@ViewBag.NrUsers</span></h5>
+
+                                    <div class="iconbox-wrap-text">Utilizatori</div>
+                                </div>
+                            </div>
+                            <!-- /..iconbox -->
+                        </div>
+                        <!--/.iconbox-wrap-->
+                    </div>
+
+                    <div class="col-sm-3 col-xs-6 col-xxs-12">
+                        <div class="iconbox-wrap">
+                            <div class="iconbox">
+                                <div class="iconbox-wrap-icon">
+                                    <i class="icon  icon-th-large-1"></i>
+                                </div>
+                                <div class="iconbox-wrap-content">
+                                    <h5><span>@ViewBag.NrCategories</span></h5>
+
+                                    <div class="iconbox-wrap-text">Categorii</div>
+                                </div>
+                            </div>
+                            <!-- /..iconbox -->
+                        </div>
+                        <!--/.iconbox-wrap-->
+                    </div>
+
+                    <div class="col-sm-3 col-xs-6 col-xxs-12">
+                        <div class="iconbox-wrap">
+                            <div class="iconbox">
+                                <div class="iconbox-wrap-icon">
+                                    <i class="icon  icon-th-large"></i>
+                                </div>
+                                <div class="iconbox-wrap-content">
+                                    <h5><span>@ViewBag.NrSubCategories</span></h5>
+
+                                    <div class="iconbox-wrap-text"> Subcategorii</div>
+                                </div>
+                            </div>
+                            <!-- /..iconbox -->
+                        </div>
+                        <!--/.iconbox-wrap-->
+                    </div>
+
+
+                    <div class="col-sm-3 col-xs-6  col-xxs-12">
+                        <div class="iconbox-wrap">
+                            <div class="iconbox">
+                                <div class="iconbox-wrap-icon">
+                                    <i class="icon  icon-map"></i>
+                                </div>
+                                <div class="iconbox-wrap-content">
+                                    <h5><span>@ViewBag.NrCities</span></h5>
+
+                                    <div class="iconbox-wrap-text">Locatii</div>
+                                </div>
+                            </div>
+                            <!-- /..iconbox -->
+                        </div>
+                        <!--/.iconbox-wrap-->
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /.page-info -->
+
+    <div class="page-bottom-info">
+        <div class="page-bottom-info-inner">
+            <div class="page-bottom-info-content text-center">
+
+
+                <h1>
+                    Daca aveti intrebari, comentarii sau daca intampinati o problema, va rugam sa ne contctati la numarul de telefon:
+                   
+                </h1>
+                <a class="btn  btn-lg btn-primary-dark" href="tel:+000000000">
+                    <i class="icon-mobile"></i> <span class="hide-xs color50"></span> 07 2611 9734
+                </a>
+            </div>
+
         </div>
     </div>
 }
-
-@*@foreach (Licenta.Models.Product products in ViewBag.LatestProducts)
-    {
-        <p>Produs</p> <br/>
-    }*@
-
-@*@foreach (Licenta.Models.Product products in ViewBag.LatestProducts)
-    {
-        <div class="col-sm-5 col-md-3">
-
-            <div class="thumbnail">
-                <img src=""
-            </div>
-        </div>
-    }*@
-
-@*@foreach (Licenta.Models.Product products in ViewBag.LatestProducts)
-    {
-        @Html.Partial("ProductThumbnail", products);
-
-    }*@
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
