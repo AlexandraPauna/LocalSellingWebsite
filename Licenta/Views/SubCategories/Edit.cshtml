@@ -3,25 +3,6 @@
     ViewBag.Title = "Editare subcategorie";
 }
 
-@*<h2>@ViewBag.Title</h2>
-<form method="post" action="/SubCategories/Edit/@Model.SubCategoryId">
-    @Html.HttpMethodOverride(HttpVerbs.Put)
-    <br />
-    <div class="form-group">
-        @Html.Label("CategoryId", "Selectati categoria", new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
-        </div>
-    </div>
-    <br />
-    @Html.Label("SubCategoryName", "Denumire subcategorie")
-    <br />
-    @Html.EditorFor(m => m.SubCategoryName)
-    @Html.ValidationMessageFor(model => model.SubCategoryName, null, new { @class = "text-danger " })
-    <br />
-    <button class="btn btn-sm btn-success" type="submit">Modifica aceasta subcategorie</button>
-</form>*@
-
 <div class="container">
     <div class="row">
         <div class="col-md-9 page-content">

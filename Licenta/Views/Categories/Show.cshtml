@@ -6,92 +6,205 @@
     ViewBag.Title = "Afisare categorie";
 }
 
-<h2>@ViewBag.Title</h2>
-<h1>@Model.CategoryName</h1>
-<br />
 
-@if (ViewBag.Allow == true)
+<div class="container">
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    }
+
+    <div class="col-xl-12 content-box ">
+        <div class="row row-featured">
+            <div style="clear: both"></div>
+            <div class="tab-lite relative w100">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs " role="tablist">
+                    <li role="presentation" class="active nav-item">
+                        <a href="#tab1" aria-controls="tab1"
+                           role="tab" data-toggle="tab"
+                           class="nav-link">
+                            <i class="icon-th-list"></i> @Model.CategoryName
+                        </a>
+                    </li>
+                    @if (ViewBag.Allow == true)
+                    {
+                        <li>
+                            <a class="nav-link" href="/SubCategories/New">Adauga subcategorie</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="/Categories/Edit/@Model.CategoryId">Modifica categoria</a>
+                        </li>
+                        <li>
+                            <form class="nav-link" method="post" action="/Categories/Delete/@Model.CategoryId">
+                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                <button style="border:none; background:none; text-transform:uppercase; padding:inherit; cursor:pointer" type="submit">Sterge categoria</button>
+                            </form>
+                        </li>
+                    }
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tab1">
+                        <div class="col-xl-12 tab-inner">
+                            <div class="row">
+
+                                @*@foreach (var subCategory in Model.SubCategories)
+                                    {
+                                        count = count + 1;
+
+                                        <li class="nav-item">
+                                            <a class="navbar-link" href="/Subcategories/Show/@subCategory.SubCategoryId">@subCategory.SubCategoryName</a>
+                                        </li>
+
+                                    }*@
+                                @if (Model.SubCategoriesL1 != null)
+                                {
+                                    <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                        @foreach (var subCategory in Model.SubCategoriesL1)
+                                        {
+                                            <li>
+                                                <a href="/Subcategories/Show/@subCategory.SubCategoryId">@subCategory.SubCategoryName</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                }
+
+                                @if (Model.SubCategoriesL2 != null)
+                                {
+                                    <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                        @foreach (var subCategory in Model.SubCategoriesL2)
+                                        {
+                                            <li>
+                                                <a href="/Subcategories/Show/@subCategory.SubCategoryId">@subCategory.SubCategoryName</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+
+                                }
+
+                                @if (Model.SubCategoriesL3 != null)
+                                {
+                                    <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                        @foreach (var subCategory in Model.SubCategoriesL3)
+                                        {
+                                            <li>
+                                                <a href="/Subcategories/Show/@subCategory.SubCategoryId">@subCategory.SubCategoryName</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                }
+
+                                @if (Model.SubCategoriesL4 != null)
+                                {
+                                    <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                        @foreach (var subCategory in Model.SubCategoriesL4)
+                                        {
+                                            <li>
+                                                <a href="/Subcategories/Show/@subCategory.SubCategoryId">@subCategory.SubCategoryName</a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                }
+
+
+                                @*@if (ViewBag.LocationsList1 != null)
+                                    {
+                                        <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                            @foreach (var location in ViewBag.LocationsList1)
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    }
+                                    @if (ViewBag.LocationsList2 != null)
+                                    {
+                                        <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                            @foreach (var location in ViewBag.LocationsList1)
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    }
+                                    @if (ViewBag.LocationsList3 != null)
+                                    {
+                                        <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                            @foreach (var location in ViewBag.LocationsList1)
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    }
+                                    @if (ViewBag.LocationsList4 != null)
+                                    {
+                                        <ul class="cat-list col-md-3  col-6 col-xxs-12">
+                                            @foreach (var location in ViewBag.LocationsList1)
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    }*@
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+@section SearchHeader{
+    <div class="search-row-wrapper" style="background-image: url(../../Images/bg.jpg)">
+        <div class="inner">
+            <div class="container ">
+                @using (Html.BeginForm("Index", "Search", FormMethod.Get@*,FormMethod.Post, new { @class = "form-group", @style = "max-width: 100%; width: 100%;" }*@))
 {
-    <a class="btn btn-sm btn-info" href="/Categories/Edit/@Model.CategoryId">Modifica categoria</a>
-    <br /><br />
-    <form method="post" action="/Categories/Delete/@Model.CategoryId">
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
-        <button class="btn btn-sm btn-danger" type="submit">Sterge categoria</button>
-    </form>
+<div class="row">
+
+    <div class="col-md-3">
+        <input type="text" name="Search" class="form-control keyword"
+               placeholder="Cauta...">
+    </div>
+    <div class="col-md-3">
+        @Html.DropDownList("categoryId", new SelectList(ViewBag.CategoriesList, "Value", "Text"), "Selectati categoria", new { id = "categoryId", name = "categoryId", @class = "form-control selecter" })
+
+    </div>
+    <div class="col-md-3">
+        @Html.DropDownList("FromCity", new SelectList(ViewBag.Cities, "Value", "Text"), "Selectati locatia", new { id = "FromCity", name = "fromCity", placeholder = "Oras...", @class = "form-control selecter" })
+
+    </div>
+
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-block btn-primary btn-gradient">
+            Cauta <i class="fa fa-search"></i>
+        </button>
+    </div>
+</div>
 }
-<br />
-<br />
-
-<ul class="nav flex-column">
-    @foreach (var subCategory in Model.SubCategories)
-    {
-        <li class="nav-item">
-            <a class="navbar-link" href="/Subcategories/Show/@subCategory.SubCategoryId">@subCategory.SubCategoryName</a>
-        </li>
-
-    }
-</ul>
-
-<br />
-<br />
-@if (ViewBag.Allow == true)
-{
-    <a class="btn btn-sm btn-info" href="/SubCategories/New">Adauga subcategorie</a>
-    <br /><br />
+            </div>
+        </div>
+    </div>
+    <!-- /.search-row -->
 }
-
-<hr />
-<a class="btn btn-sm btn-success" href="/Categories/Index">Inapoi la toate categoriile</a>
-<br />
-<br />
-
-@*Using ViewBag*@
-@*
-    @model Licenta.Common.Entities.SubCategory
-
-    @using Microsoft.AspNet.Identity
-
-
-    @{
-        ViewBag.Title = "Afisare categorie";
-    }
-
-    <h2>@ViewBag.Title</h2>
-    <h1>@ViewBag.CategoryName</h1>
-    <br />
-
-    @if (ViewBag.Allow == true)
-    {
-        <a class="btn btn-sm btn-info" href="/Categories/Edit/@ViewBag.CategoryId">Modifica categoria</a>
-        <br /><br />
-        <form method="post" action="/Categories/Delete/@ViewBag.CategoryId">
-            @Html.HttpMethodOverride(HttpVerbs.Delete)
-            <button class="btn btn-sm btn-danger" type="submit">Sterge categoria</button>
-        </form>
-    }
-    <br />
-    <br />
-
-    <ul class="nav flex-column">
-        @foreach (var subCategory in ViewBag.SubCategories)
-        {
-            <li class="nav-item">
-                <a class="navbar-link" href="/Subcategories/Show/@subCategory.SubCategoryId">@subCategory.SubCategoryName</a>
-            </li>
-
-        }
-    </ul>
-
-    <br />
-    <br />
-    @if (ViewBag.Allow == true)
-    {
-        <a class="btn btn-sm btn-info" href="/SubCategories/New">Adauga subcategorie</a>
-        <br /><br />
-    }
-
-    <hr />
-    <a class="btn btn-sm btn-success" href="/Categories/Index">Inapoi la toate categoriile</a>
-    <br />
-    <br />
-*@

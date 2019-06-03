@@ -22,5 +22,12 @@ namespace Licenta.Common.Models
         public byte[] CategoryPhoto { get; set; }
 
         public IList<SubCategory> SubCategories { get; set; }
+
+        public IList<SubCategory> SubCategoriesL1 { get; set; }
+
+        public IList<SubCategory> SubCategoriesL2 { get; set; }
+        public IList<SubCategory> SubCategoriesL3 { get; set; }
+        public IList<SubCategory> SubCategoriesL4 { get; set; }
+
     }
 }

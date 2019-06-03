@@ -7,6 +7,7 @@ using Licenta.Common.Entities;
 using Licenta.Common.Models;
 using Licenta.DataAccess;
 using System.Web;
+using System.Collections.Generic;
 
 namespace Licenta.Controllers
 {
@@ -16,6 +17,9 @@ namespace Licenta.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.Cities = GetAllCities();
+            ViewBag.CategoriesList = GetAllCategories();
+
             var categories = from category in _db.Categories
                              orderby category.CategoryName
                              select category;
@@ -70,6 +74,9 @@ namespace Licenta.Controllers
         //vizibil pt toata lumea
         public ActionResult Show(int id)
         {
+            ViewBag.Cities = GetAllCities();
+            ViewBag.CategoriesList = GetAllCategories();
+
             Category category = _db.Categories.Find(id);
             //ViewBag.CategoryId = category.CategoryId;
             //ViewBag.CategoryName = category.CategoryName;
@@ -77,18 +84,90 @@ namespace Licenta.Controllers
             var userId = User.Identity.GetUserId();
             ViewBag.Allow = _db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
 
-            var subCatgs = _db.SubCategories.Where(a => a.CategoryId == id);
+            var subCatgs = _db.SubCategories.Where(a => a.CategoryId == id).OrderBy(x => x.SubCategoryName);
+
+            var nrPerColumn = subCatgs.Count() / 4;
+            var surplus = subCatgs.Count() - (nrPerColumn * 4);
+            //bool isInt = nrPerColumn == ((int)nrPerColumn);
+
+            var s = 0;
+            var counter = 0;
+            
+            IList<SubCategory> list1 = null; IList<SubCategory> list2 = null; IList<SubCategory> list3 = null; IList<SubCategory> list4 = null;
+            if (subCatgs.Count() > 0)
+            {
+                if (surplus > 0)
+                {
+                    s = 1;
+                    surplus = surplus - 1;
+                }
+                list1 = subCatgs.Take(nrPerColumn + s).ToList();
+                counter = nrPerColumn + s;
+                if (subCatgs.Count() > counter)
+                {
+                    s = 0;
+                    if (surplus > 0)
+                    {
+                        s = 1;
+                        surplus = surplus - 1;
+                    }
+                    list2 = subCatgs.Skip(counter).Take(nrPerColumn + s).ToList();
+                    counter = counter + nrPerColumn + s;
+                    if (subCatgs.Count() > counter)
+                    {
+                        s = 0;
+                        if (surplus > 0)
+                        {
+                            s = 1;
+                            surplus = surplus - 1;
+                        }
+                        list3 = subCatgs.Skip(counter).Take(nrPerColumn + s).ToList();
+                        counter = counter + nrPerColumn + s;
+                         if (subCatgs.Count() > counter)
+                         {
+                            s = 0;
+                            if (surplus > 0)
+                            {
+                                s = 1;
+                                surplus = surplus - 1;
+                            }
+                            list4 = subCatgs.Skip(counter).Take(nrPerColumn + s).ToList();
+                         }
+
+                    }
+                }
+                /*if (surplus == 1)
+                {
+                    list1 = subCatgs.Take(nrPerColumn + 1).ToList();
+                    if (subCatgs.ToList().Count > nrPerColumn + 1)
+                    {
+                        list2 = subCatgs.Skip(nrPerColumn + 1).Take(nrPerColumn).ToList();
+                        if (subCatgs.Count() > 2 * nrPerColumn + 1)
+                        {
+                            list3 = subCatgs.Skip(2 * nrPerColumn + 1).Take(nrPerColumn).ToList();
+                            if (subCatgs.Count() > 3 * nrPerColumn + 1)
+                            {
+                                list3 = subCatgs.Skip(3 * nrPerColumn + 1).Take(nrPerColumn).ToList();
+                            }
+
+                        }
+                    }*/
+                }
+               
 
             var model = new CategoryViewModel { CategoryId = category.CategoryId,
                                                 CategoryName = category.CategoryName,
                                                 CategoryPhoto = category.CategoryPhoto,
-                                                SubCategories = subCatgs.ToList() };
+                                                SubCategories = subCatgs.ToList(),
+                                                SubCategoriesL1 = list1,
+                                                SubCategoriesL2 = list2,
+                                                SubCategoriesL3 = list3,
+                                                SubCategoriesL4 = list4};
 
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            //ViewBag.SubCategories = subCatgs;
 
             return View(model);
         }
@@ -229,6 +308,47 @@ namespace Licenta.Controllers
             }
 
             return new FileContentResult(catImage, "image/jpeg");
+        }
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllCategories()
+        {
+            // generam o lista goala
+            var selectList = new List<SelectListItem>();
+            // Extragem toate categoriile din baza de date
+            var categories = from cat in _db.Categories select cat;
+            // iteram prin categorii
+            foreach (var category in categories)
+            {
+                // Adaugam in lista elementele necesare pentru dropdown
+                selectList.Add(new SelectListItem
+                {
+                    Value = category.CategoryId.ToString(),
+                    Text = category.CategoryName.ToString()
+                });
+            }
+            // returnam lista de categorii
+            return selectList;
+        }
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllCities()
+        {
+
+            //generate empty list
+            var selectList = new List<SelectListItem>();
+
+            var cities = from cit in _db.Cities select cit;
+            foreach (var city in cities)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = city.CityId.ToString(),
+                    Text = city.CityName.ToString()
+                });
+            }
+
+            return selectList;
         }
 
     }

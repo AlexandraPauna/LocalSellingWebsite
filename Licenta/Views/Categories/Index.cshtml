@@ -3,27 +3,83 @@
     ViewBag.Titlu = "Afisare categorii";
 }
 
-<h2>@ViewBag.Titlu</h2>
-<hr />
-<br />
+<div class="container">
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    }
+    <div class="col-xl-12 content-box ">
+        <div class="row row-featured row-featured-category">
+            <div class="col-xl-12  box-title no-border">
+                <div class="inner">
+                    <h2>
+                        <span>Gaseste in functie de</span>
+                        Categorie
+                        @if (ViewBag.Allow == true)
+                        {
+                            <a class="sell-your-item" href="/Categories/New">Adauga categorie</a>
+                        }
 
-@if (TempData.ContainsKey("message"))
+                    </h2>
+                </div>
+            </div>
+
+            @foreach (var category in ViewBag.Categories)
+            {
+                <div class="col-xl-2 col-md-3 col-sm-3 col-xs-4 f-category">
+                    <div class="inner">
+                        <a href="/Categories/Show/@category.CategoryId">
+                            <span class="imgBox">
+                                <img src="@Url.Action("DisplayCategoryPhoto", "Categories", new { categoryId = category.CategoryId } )" class="img-responsive" alt="img">
+                            </span>
+                            <h6> @category.CategoryName </h6>
+                        </a>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+    </div>
+
+    <div style="clear: both"></div>
+
+
+
+</div>
+
+@section SearchHeader{
+    <div class="search-row-wrapper" style="background-image: url(../../Images/bg.jpg)">
+        <div class="inner">
+            <div class="container ">
+                @using (Html.BeginForm("Index", "Search", FormMethod.Get@*,FormMethod.Post, new { @class = "form-group", @style = "max-width: 100%; width: 100%;" }*@))
 {
-    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
-}
+<div class="row">
 
-@foreach (var category in ViewBag.Categories)
-{
-    <p>@category.CategoryName</p>
-    <a class="btn btn-sm btn-success" href="/Categories/Show/@category.CategoryId">Afisare categorie</a>
-    <br />
-    <hr />
-    <br />
-}
+    <div class="col-md-3">
+        <input type="text" name="Search" class="form-control keyword"
+               placeholder="Cauta...">
+    </div>
+    <div class="col-md-3">
+        @Html.DropDownList("categoryId", new SelectList(ViewBag.CategoriesList, "Value", "Text"), "Selectati categoria", new { id = "categoryId", name = "categoryId", @class = "form-control selecter" })
+        @*<select class="form-control selecter" name="category" id="search-category">
+            </select>*@
+    </div>
+    <div class="col-md-3">
+        @Html.DropDownList("FromCity", new SelectList(ViewBag.Cities, "Value", "Text"), "Selectati locatia", new { id = "FromCity", name = "fromCity", placeholder = "Oras...", @class = "form-control selecter" })
+        @*<select class="form-control selecter" name="location" id="id-location">
+            </select>*@
+    </div>
 
-@if (ViewBag.Allow == true)
-{
-    <a class="btn btn-sm btn-success" href="/Categories/New">Adauga categorie</a>
-    <br />
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-block btn-primary btn-gradient">
+            Cauta <i class="fa fa-search"></i>
+        </button>
+    </div>
+</div>
 }
-
+            </div>
+        </div>
+    </div>
+    <!-- /.search-row -->
+}

@@ -60,10 +60,10 @@ namespace Licenta.Controllers
                     ViewBag.LocationsList2 = locationsList.Skip(8).Take(8).ToList();
                     if (locationsList.Count > 16)
                     {
-                        ViewBag.LocationsList2 = locationsList.Skip(16).Take(8).ToList();
+                        ViewBag.LocationsList3 = locationsList.Skip(16).Take(8).ToList();
                         if (locationsList.Count > 24)
                         {
-                            ViewBag.LocationsList3 = locationsList.Skip(8).Take(8).ToList();
+                            ViewBag.LocationsList4 = locationsList.Skip(24).Take(8).ToList();
                         }
 
                     }
