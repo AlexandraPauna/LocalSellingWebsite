@@ -1031,6 +1031,7 @@
     <Content Include="Views\Rating\Index.cshtml" />
     <Content Include="Views\Rating\Edit.cshtml" />
     <Content Include="Views\Manage\Delete.cshtml" />
+    <Content Include="Views\Product\Personal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

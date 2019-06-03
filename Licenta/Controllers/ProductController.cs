@@ -54,8 +54,15 @@ namespace Licenta.Controllers
             return View(model);
         }
 
-        public ActionResult Personal(string id, string sortType)
+        public ActionResult Personal(string sortType)
         {
+            var id = User.Identity.GetUserId();
+
+            if (id == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var user = (from usr in _db.Users
                         where usr.Id == id
                         select usr).Single();
@@ -85,6 +92,19 @@ namespace Licenta.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
+            var unreadMessages = (from mess in _db.Messages
+                                  where mess.ReceiverId == id && mess.Read == false
+                                  select mess).Count();
+            ViewBag.UnreadMessages = unreadMessages;
+
+            var nrAds = _db.Products.Where(x => x.UserId == id).Count();
+            ViewBag.NrAds = nrAds;
+
+            var nrRatings = _db.Ratings.Where(x => x.RatedUserId == id).Count();
+            ViewBag.NrRatings = nrRatings;
+
+            var nrInterests = _db.Interests.Where(x => x.UserId == id).Count();
+            ViewBag.NrInterests = nrInterests;
 
             return View(model);
         }

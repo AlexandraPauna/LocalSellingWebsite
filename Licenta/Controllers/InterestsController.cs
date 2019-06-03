@@ -34,17 +34,6 @@ namespace Licenta.Controllers
                                       select mess).Count();
                 ViewBag.UnreadMessages = unreadMessages;
 
-                var adViews = _db.Products.GroupBy(a => a.UserId).Select(x => new
-                {
-                    UserId = x.Key,
-                    Value = x.Sum((c => c.Views)),
-
-                }).Where(x => x.UserId == currentUser).FirstOrDefault();
-                if (adViews != null)
-                    ViewBag.AdViews = (int)adViews.Value;
-                else
-                    ViewBag.AdViews = 0;
-
                 var nrAds = _db.Products.Where(x => x.UserId == currentUser).Count();
                 ViewBag.NrAds = nrAds;
 

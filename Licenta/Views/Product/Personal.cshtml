@@ -1,10 +1,17 @@
-﻿@using Licenta.Common.Entities
+﻿
+@using Licenta.Common.Entities
 @using Microsoft.AspNet.Identity
+
 @{
-    ViewBag.Title = "Anunturile marcate ca favorite";
+    ViewBag.Title = "Personal";
 }
 
+
 <div class="container">
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    }
     <div class="row">
         <div class="col-md-3 page-sidebar">
             <aside>
@@ -54,12 +61,12 @@
                             <div class="panel-collapse collapse show" id="MyAds">
                                 <ul class="acc-list">
                                     <li>
-                                        <a href="@Url.Action("Personal","Product")">
+                                        <a class="active" href="@Url.Action("Personal","Product")">
                                             <i class="icon-docs"></i> Anunturile mele <span class="badge">@ViewBag.NrAds</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="active" href='@Url.Action("Index", "Interests")'>
+                                        <a href='@Url.Action("Index", "Interests")'>
                                             <i class="icon-heart"></i>
                                             Anunturi favorite <span class="badge badge-secondary">@ViewBag.NrInterests</span>
                                         </a>
@@ -110,19 +117,31 @@
 
         <div class="col-md-9 page-content">
             <div class="inner-box">
-                <h2 class="title-2"><i class="icon-heart-1"></i> Anunturi Favorite </h2>
+                <h2 class="title-2"><i class="icon-heart-1"></i> Anunturile mele </h2>
 
                 <div class="table-responsive">
                     <div class="table-action">
                         <label for="checkAll">
                             <input type="checkbox" id="checkAll">
                             Selecteaza: Toate | <button id="delete" href="#" class="btn btn-primary btn-sm">
-                             <i class="fa fa-trash"></i> Sterge din favorite 
+                                <i class="fa fa-trash"></i> Sterge
                             </button>
                         </label>
 
                         <div class="table-search pull-right col-sm-7">
-                            <div class="form-group">
+                            @using (Html.BeginForm("Personal", "Product", FormMethod.Get, new { id ="form1"}))
+                            {
+                            <div class="row">
+                               
+                                @Html.DropDownList("sortType", new SelectList(
+                                                                    new List<Object>{
+                                                                    new { value = "Active" , text = "Anunturi active"  },
+                                                                    new { value = "Deactivated" , text = "Anunturi dezactivate" }
+                                                                   }, "value", "text", 1), new { id = "sortType", @class = "form-control", @onchange = "submitform();" })
+
+                            </div>
+                            }
+                            @*<div class="form-group">
                                 <div class="row">
                                     <label class="col-sm-5 control-label text-right">
                                         Cauta <br>
@@ -133,12 +152,12 @@
                                         <input type="text" class="form-control" id="filter">
                                     </div>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
-                    @if (Model.Interests.Count == 0)
+                    @if (Model.Products.Count == 0)
                     {
-                        <p>Nu ai anunturi marcate ca favorite! </p>
+                        <p>Nu ai postat anunturi! </p>
                     }
                     else
                     {
@@ -155,21 +174,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (Interest interest in Model.Interests)
+                                @foreach (Product product in Model.Products)
                                 {
                                     @*@Html.Partial("ProductInfo", interest.Product);*@
                                     <tr>
                                         <td style="width:2%" class="add-img-selector">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" id="@interest.ProductId">
-                                                    </label>
-                                                </div>
-                                            </td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" id="@product.ProductId">
+                                                </label>
+                                            </div>
+                                        </td>
                                         <td style="width:14%" class="add-img-td">
-                                            <a href="/Product/Show/@interest.ProductId">
+                                            <a href="/Product/Show/@product.ProductId">
                                                 <img class="thumbnail  img-responsive"
-                                                     src="@Url.Action("MainProductPhoto", "Product", new { prodId = interest.ProductId})"
+                                                     src="@Url.Action("MainProductPhoto", "Product", new { prodId = product.ProductId})"
                                                      alt="img">
                                             </a>
                                         </td>
@@ -177,53 +196,41 @@
                                             <div>
                                                 <p>
                                                     <strong>
-                                                        <a href="/Product/Show/@interest.ProductId" title="@interest.Product.Title">
-                                                            @interest.Product.Title
+                                                        <a href="/Product/Show/@product.ProductId" title="@product.Title">
+                                                            @product.Title
                                                         </a>
                                                     </strong>
                                                 </p>
 
                                                 <p>
                                                     <strong> Postat La </strong>:
-                                                    @interest.Date
+                                                    @product.Date
                                                 </p>
 
                                                 <p>
-                                                    <strong>Vizualizari </strong>: @interest.Product.Views <strong>Locate:</strong> @interest.Product.City.CityName
+                                                    <strong>Vizualizari </strong>: @product.Views <strong>Locate:</strong> @product.City.CityName
                                                 </p>
                                             </div>
                                         </td>
                                         <td style="width:16%" class="price-td">
-                                            <div><strong> @interest.Product.Price RON</strong></div>
+                                            <div><strong> @product.Price RON</strong></div>
                                         </td>
                                         <td style="width:10%" class="action-td">
                                             <div>
-                                                @*<p>
-                                                        <a class="btn btn-info btn-sm">
-                                                            <i class="fa fa-mail-forward"></i> Sterge din favorite
-                                                        </a>
-                                                    </p>*@
 
-                                                <form method="post" action="/Product/Save/@interest.ProductId">
+                                                @if ((product.UserId == User.Identity.GetUserId()) || User.IsInRole("Administrator") || User.IsInRole("Editor"))
+                                                {
                                                     <p>
-                                                        <button class="btn btn-primary btn-sm" type="submit"><i class=" fa fa-heart"></i> Sterge din favorite</button>
+                                                        <a class="btn btn-success btn-sm" href="/Product/Edit/@product.ProductId">
+                                                            <i class=" fa fa-pen"></i> Editeaza anunt
+                                                        </a>
                                                     </p>
 
-                                                </form>
 
-                                                @if ((interest.Product.UserId == User.Identity.GetUserId()) || User.IsInRole("Administrator") || User.IsInRole("Editor"))
-                                                {
-                                                    @*<p>
-                                                            <a class="btn btn-success btn-sm" href="/Product/Edit/@interest.ProductId">
-                                                                <i class=" fa fa-pen"></i> Editeaza anunt
-                                                            </a>
-                                                        </p>*@
-
-
-                                                    if (interest.Product.Active == true)
+                                                    if (product.Active == true)
                                                     {
                                                         <p>
-                                                            <a class="btn btn-danger btn-sm" href="/Product/Deactivate/@interest.ProductId">
+                                                            <a class="btn btn-danger btn-sm" href="/Product/Deactivate/@product.ProductId">
                                                                 <i class=" fa fa-power-off"></i>  Dezactivare anunt
                                                             </a>
                                                         </p>
@@ -232,7 +239,7 @@
                                                     else
                                                     {
                                                         <p>
-                                                            <a class="btn btn-success btn-sm" href="/Product/Activate/@interest.ProductId">
+                                                            <a class="btn btn-success btn-sm" href="/Product/Activate/@product.ProductId">
                                                                 <i class=" fa fa-power-off"></i> Activare anunt
                                                             </a>
                                                         </p>
@@ -240,7 +247,7 @@
                                                     }
 
 
-                                                    <form method="post" action="/Product/Delete/@interest.ProductId">
+                                                    <form method="post" action="/Product/Delete/@product.ProductId">
                                                         <p>
                                                             @Html.HttpMethodOverride(HttpVerbs.Delete)
                                                             <button class="btn btn-danger btn-sm" type="submit" padding-right:11px" onclick="return confirm('Esti sigur?');"><i class=" fa fa-trash"></i> Stergere anunt</button>
@@ -270,7 +277,7 @@
 <!--/.container-->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script> 
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -301,30 +308,11 @@
     });
 </script>
 
-@*<script>
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>*@
+<script type="text/javascript">
+    function submitform() {
+        $('#form1').submit();
+    }
+</script>
 
-        $(function () {
-
-            $('#getProducts').click(function () {
-                var features = [];
-                $('.feature input[type="checkbox"]:checked').each(function () {
-                    features.push($(this).val());
-                });
-                $.ajax({
-                    url: "/Home/GetAttendeeJson",
-                    type: "post",
-                    dataType: "json",
-                    data: JSON.stringify({ checkBoxValues: vals }),
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (result) {
-                        if (result.success) {
-                        }
-                        else {
-                        }
-                    }
-                });
-                @Html.ActionLink("RemoveMultipleFromSaved","Product", new { productsId = features})
-            });
-        });
-
-    </script>*@
