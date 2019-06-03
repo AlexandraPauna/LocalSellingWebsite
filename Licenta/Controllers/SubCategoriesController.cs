@@ -122,55 +122,7 @@ namespace Licenta.Controllers
             return View(model);
         }
 
-        //using ViewBag instead of model
-        /*public ActionResult Show(int id, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType)
-        {
-            ViewBag.Cities = GetAllCities();
-            ViewBag.ProductStates = GetAllProductStates();
-
-            SubCategory subCategory = _db.SubCategories.Find(id);
-            ViewBag.SubCategoryId = subCategory.SubCategoryId;
-            ViewBag.SubCategoryName = subCategory.SubCategoryName;
-            var userId = User.Identity.GetUserId();
-
-            ViewBag.Allow = _db.Roles.Any(x => x.Users.Any(y => y.UserId == userId) && x.Name == "Administrator");
-
-            var products = _db.Products.Include("SubCategory").Include("City").Include("DeliveryCompany").Include("ProductState").Where(a => a.SubCategoryId == id);
-            if (TempData.ContainsKey("message"))
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
-            
-            //Filtrarea
-            if (priceMin != null)
-                products = products.Where(s => s.Price >= priceMin);
-            if (priceMax != null)
-                products = products.Where(s => s.Price <= priceMax);
-            if (fromCity != null)
-                products = products.Where(s => s.CityId == fromCity);
-            if(state != null)
-                products = products.Where(s => s.ProductStateId == state);
-            if (dateMin != null)
-                products = products.Where(s => s.Date >= dateMin);
-
-            //Sortarea
-            if (sortType == "Title")
-                products = products.OrderBy(x => x.Title);
-            else
-            if (sortType == "Date")
-                products = products.OrderByDescending(x => x.Date);
-            else
-            if (sortType == "PriceAsc")
-                products = products.OrderBy(x => x.Price);
-            else
-            if (sortType == "PriceDesc")
-                products = products.OrderByDescending(x => x.Price);
-
-            ViewBag.Products = products;
-
-            return View();
-        }*/
-
+        
 
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult Edit(int id)
@@ -197,7 +149,7 @@ namespace Licenta.Controllers
                         _db.SaveChanges();
                         TempData["message"] = "Subcategoria a fost modificata!";
                     }
-                    return RedirectToAction("Show", "Category", new { id = subCategory.CategoryId });
+                    return RedirectToAction("Show", "Categories", new { id = subCategory.CategoryId });
                 }
                 else
                 {

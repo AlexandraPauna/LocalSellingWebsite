@@ -4,18 +4,78 @@
     ViewBag.Title = "Adaugare subcategorie";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 page-content">
+            <div class="inner-box category-content">
+                <h2 class="title-2 uppercase">
+                    <strong>
+                        <i class="icon-docs"></i> Posteaza-ti anuntul
+                    </strong>
+                </h2>
 
-<form method="post" action="/SubCategories/New">
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="/SubCategories/New" enctype="multipart/form-data" class="form-horizontal">
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-    <label>Selectati Categoria</label>
-    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Value", "Text"), "Selectati categoria", new { id = "catList", @class = "form-control" })
-    <br /><br />
-    @Html.Label("SubCategoryName", "Denumire subcategorie")
-    <br />
-    @Html.TextBox("SubCategoryName", null, new { @class = "form-control" })
-    @Html.ValidationMessageFor(model => model.SubCategoryName, null, new { @class = "text-danger " })
-    <br /><br />
-    <button class="btn btn-sm btn-success" type="submit">Adauga subcategorie</button>
-</form>
+
+                            <div class="content-subheading">
+                                <i class="icon-tag"></i>
+                                <strong>
+                                    Titlu si Categorie
+                                </strong>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.Label("SubCategoryName", "Denumire subcategorie", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBox("SubCategoryName", null, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.SubCategoryName, null, new { @class = "text-danger " })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Selectati Categoria</label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Value", "Text"), "Selectati categoria", new { id = "catList", @class = "form-control" })
+                                </div>
+                            </div>
+
+                           
+
+                            <br />
+                            <!-- Button  -->
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-8">
+                                    <div style="clear:both"></div>
+                                    <button class="btn btn-primary" type="submit">Adauga subcategorie</button>
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 reg-sidebar">
+            <div class="reg-sidebar-inner text-center">
+                <div class="promo-text-box">
+                    <i class=" icon-inbox fa fa-4x icon-color-1"></i>
+
+                    <h3><strong>Adauga un numar nelimitat de subcategorii</strong></h3>
+
+                    <p>
+                        Acest site iti ofera posibilitatea de a adauga subcategorii dinamic
+                        Incearca sa creezi subcategorii potrivite pentru categoria din care fac parte
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        <!--/.reg-sidebar-->
+    </div>
+</div>

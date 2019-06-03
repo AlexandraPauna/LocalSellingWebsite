@@ -4,25 +4,88 @@
     ViewBag.Title = "Adaugare categorie";
 }
 
-<h2>@ViewBag.Title</h2>
 
-<form method="post" action="/Categories/New" enctype="multipart/form-data">
-    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 page-content">
+            <div class="inner-box category-content">
+                <h2 class="title-2 uppercase">
+                    <strong>
+                        <i class="icon-docs"></i> Adauga o noua categorie
+                    </strong>
+                </h2>
 
-    @Html.Label("CategoryName", "Denumire categorie")
-    <br />
-    @Html.TextBox("CategoryName", null, new { @class = "form-control" })
-    @Html.ValidationMessageFor(model => model.CategoryName, null, new { @class = "text-danger " })
-    <br />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="/Categories/New" enctype="multipart/form-data" class="form-horizontal">
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.CategoryPhoto, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            <input type="file" name="CategoryPhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                            <div class="content-subheading">
+                                <i class="icon-tag"></i>
+                                <strong>
+                                    Denumire Categorie
+                                </strong>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.Label("CategoryName", "Denumire", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBox("CategoryName", null, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CategoryName, null, new { @class = "text-danger " })
+                                </div>
+                            </div>
+
+
+                            <div class="content-subheading">
+                                <i class="icon-camera"></i>
+                                <strong>
+                                    Adauga Fotografie
+                                </strong>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.LabelFor(m => m.CategoryPhoto, new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-lg-8">
+                                    <div class="mb10">
+                                        <input type="file" class="file" name="CategoryPhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" data-preview-file-type="text" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+                            <!-- Button  -->
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-8">
+                                    <div style="clear:both"></div>
+                                    <button class="btn btn-primary" type="submit">Adauga categorie</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    </br>
 
-    <br /><br />
-    <button class="btn btn-sm btn-success" type="submit">Adauga categorie</button>
-</form>
+        <div class="col-md-3 reg-sidebar">
+            <div class="reg-sidebar-inner text-center">
+                <div class="promo-text-box">
+                    <i class=" icon-inbox fa fa-4x icon-color-1"></i>
+
+                    <h3><strong>Adauga un numar nelimitat de categorii</strong></h3>
+
+                    <p>
+                        Acest site iti ofera posibilitatea de a adauga categorii dinamic
+                        Incearca sa creezi categorii cat mai generale, care sa conduca la o buna structurare a anunturilor postate de utilizatori
+                    </p>
+                </div>
+
+               
+
+            </div>
+        </div>
+        <!--/.reg-sidebar-->
+    </div>
+</div>

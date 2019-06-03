@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Licenta.Common.Entities;
 using Licenta.Common.Models;
 using Licenta.DataAccess;
+using System.Web;
 
 namespace Licenta.Controllers
 {
@@ -123,23 +124,41 @@ namespace Licenta.Controllers
 
         [HttpPut]
         [Authorize(Roles = "Editor, Administrator")]
-        public ActionResult Edit(int id, Category requestCategory)
+        public ActionResult Edit(int id, [Bind(Exclude = "CategoryPhoto")] Category requestCategory)
         {
+            Category category = _db.Categories.Find(id);
+
+            byte[] imageData = null;
+            if (Request.Files.Count > 0 && Request.Files[0].ContentLength > 0)
+            {
+                HttpPostedFileBase poImgFile = Request.Files["CategoryPhoto"];
+
+                using (var binary = new BinaryReader(poImgFile.InputStream))
+                {
+                    imageData = binary.ReadBytes(poImgFile.ContentLength);
+                }
+
+                //UserPhoto is not updated if no file is chosen
+                if (imageData.Length > 0)
+                {
+                    category.CategoryPhoto = imageData;
+                }
+
+            }
             try
             {
-                if (ModelState.IsValid)
-                {
-                    Category category = _db.Categories.Find(id);
-                    if (TryUpdateModel(category))
-                    {
+                //if (ModelState.IsValid)
+                //{
+                   // if (TryUpdateModel(category))
+                    //{
                         category.CategoryName = requestCategory.CategoryName;
                         _db.SaveChanges();
                         TempData["message"] = "Categoria a fost modificata!";
-                    }
+                    //}
                     return RedirectToAction("Index");
-                }
+                //}
 
-                return View(requestCategory);
+                //return View(requestCategory);
 
             }
             catch (Exception e)
