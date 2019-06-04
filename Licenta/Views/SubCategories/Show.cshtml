@@ -5,12 +5,13 @@
     ViewBag.Title = "Afisare Subcategorie";
 }
 
-@if (TempData.ContainsKey("message"))
-{
-    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
-}
 
 <div class="container">
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    }
+
     <div class="row">
         <!-- this (.mobile-filter-sidebar) part will be position fixed in mobile version -->
         <div class="col-md-3 page-sidebar mobile-filter-sidebar">
@@ -50,7 +51,7 @@
                     </div>  <!--/.categories-list-->
 
                     <div class="block-title has-arrow">
-                        <h5><a @*href="#*@ ">Adauga filtre:</a></h5>
+                        <h5><a @*href="#*@>Adauga filtre:</a></h5>
                     </div>
                     <div class="block-content categories-list  list-filter ">
                         @using (Html.BeginForm("Show", "SubCategories", new { id = Model.SubCategoryId }, FormMethod.Get))
@@ -106,7 +107,7 @@
 
                     </ul>
                     <div class="tab-filter">
-                        @using (Html.BeginForm("Show", "SubCategories", new { id = Model.SubCategoryId }, FormMethod.Get))
+                        @using (Html.BeginForm("Show", "SubCategories", new { id = Model.SubCategoryId }, FormMethod.Get, new { id = "form1" }))
                         {
 
                             if (ViewBag.PriceMin != null)
@@ -141,7 +142,7 @@
                                                                     }, "value", "text", 2), new { id = "sortType", @class = "selectpicker select-sort-by", @onchange = "submitform();" });
 
                         }
-                       
+
                     </div>
 
                 </div>
@@ -154,7 +155,7 @@
                         <div class="pull-left col-xs-6">
                             <div class="breadcrumb-list">
                                 <a class="btn btn-sm btn-info" href="/SubCategories/Edit/@Model.SubCategoryId">Modifica</a>
-                                
+
                             </div>
 
                         </div>
@@ -192,7 +193,7 @@
                                     Sorteaza dupa
                                 </a>
                                 <ul class="dropdown-menu">
-                                    @using (Html.BeginForm("Show", "SubCategories", new { id = Model.SubCategoryId }, FormMethod.Get))
+                                    @using (Html.BeginForm("Show", "SubCategories", new { id = Model.SubCategoryId }, FormMethod.Get, new { id = "form1" }))
                                     {
 
                                         if (ViewBag.PriceMin != null)
@@ -216,21 +217,22 @@
                                         {
                                             @Html.Hidden("State", (int?)ViewBag.State)
                                         }
+                                        @Html.DropDownList("SortType", new SelectList(
+                                                     new List<Object>{
+                                                    new { value = "Select" , text = "Selecteaza" },
+                                                    new { value = "Title" , text = "Titlu"},
+                                                    new { value = "Date" , text = "Cele mai recente", rel = "nofollow" },
+                                                    new { value = "PriceAsc" , text = "Pret crescator", rel = "nofollow" },
+                                                    new { value = "PriceDesc" , text = "Pret descrescator", rel = "nofollow" }
+                                                    }, "value", "text", 2), new { id = "SortType", @class = "selectpicker select-sort-by", @onchange = "submitform();" });
 
-                                        @Html.DropDownList("sortType", new SelectList(
-                                                                                 new List<Object>{
-                                                                                new { value = "Select" , text = "Selecteaza" , rel = "nofollow" },
-                                                                                new { value = "Title" , text = "Titlu", rel = "nofollow"  },
-                                                                                new { value = "Date" , text = "Cele mai recente", rel = "nofollow" },
-                                                                                new { value = "PriceAsc" , text = "Pret crescator", rel = "nofollow" },
-                                                                                new { value = "PriceDesc" , text = "Pret descrescator", rel = "nofollow" }
-                                                                                }, "value", "text", 2), new { id = "sortType", @class = "selectpicker select-sort-by", @onchange = "submitform();" });
+                                      }
 
-                                    }
-                                    @*<li><a href="" rel="nofollow">Relevance</a></li>
-                                    <li><a href="" rel="nofollow">Date</a></li>
-                                    <li><a href="" rel="nofollow">Company</a></li>*@
-                                </ul>
+
+                                        @*<li><a href="" rel="nofollow">Relevance</a></li>
+            <li><a href="" rel="nofollow">Date</a></li>
+            <li><a href="" rel="nofollow">Company</a></li>*@
+                                    </ul>
                             </div>
 
                         </li>
@@ -421,7 +423,7 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script type="text/javascript">
     function submitform() {
-        $('form').submit();
+        $('#form1').submit();
     }
 </script>
 

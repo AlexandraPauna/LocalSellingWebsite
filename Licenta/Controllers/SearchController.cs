@@ -14,6 +14,11 @@ namespace Licenta.Controllers
         // GET: Search
         public ActionResult Index(string search, int? categoryId, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType)
         {
+            var categories = from cat in _db.Categories
+                             select cat;
+            ViewBag.Categories = categories;
+
+            ViewBag.CategoriesList = GetAllCategories();
             ViewBag.Cities = GetAllCities(); //used to load cities in dropdown
             ViewBag.ProductStates = GetAllProductStates(); 
 
@@ -79,6 +84,13 @@ namespace Licenta.Controllers
                     products = products.Where(s => s.ProductStateId == state);
                 if (dateMin != null)
                     products = products.Where(s => s.Date >= dateMin);
+                ViewBag.PriceMin = priceMin;
+                ViewBag.PriceMax = priceMax;
+                ViewBag.FromCity = fromCity;
+                ViewBag.State = state;
+                ViewBag.DateMin = dateMin;
+                ViewBag.Search = search;
+                ViewBag.CatId = catId;
 
                 //Sortarea
                 if (sortType == "Title")
@@ -146,7 +158,26 @@ namespace Licenta.Controllers
 
             return selectList;
         }
-
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllCategories()
+        {
+            // generam o lista goala
+            var selectList = new List<SelectListItem>();
+            // Extragem toate categoriile din baza de date
+            var categories = from cat in _db.Categories select cat;
+            // iteram prin categorii
+            foreach (var category in categories)
+            {
+                // Adaugam in lista elementele necesare pentru dropdown
+                selectList.Add(new SelectListItem
+                {
+                    Value = category.CategoryId.ToString(),
+                    Text = category.CategoryName.ToString()
+                });
+            }
+            // returnam lista de categorii
+            return selectList;
+        }
 
     }
 }

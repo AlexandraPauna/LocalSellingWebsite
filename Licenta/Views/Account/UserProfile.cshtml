@@ -1,154 +1,545 @@
-﻿@model Licenta.Common.Entities.ApplicationUser
+﻿@*@model Licenta.Common.Entities.ApplicationUser
+
+    @{
+        ViewBag.Title = "Profilul lui " + Model.UserName;
+    }
+
+    <h2>@ViewBag.Title</h2>
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-danger" role="alert">@ViewBag.message</h3>
+    }
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+        <div>
+            <img src="@Url.Action("UserPhotos", "Account", new { id = Model.Id } )" style="width:160px;height:160px; background: #FFFFFF;
+        margin: auto;
+        -moz-border-radius: 60px;
+        border-radius: 100px;
+        padding: 6px;
+        box-shadow: 0px 0px 20px #888;" />
+
+            <hr />
+            <br />
+            <h4>Informatii Profil</h4>
+            <hr />
+            <dl class="dl-horizontal">
+
+
+                <dt>Prenume</dt>
+                <dd>
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
+
+                <dt>Nume</dt>
+                <dd>
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
+
+                <dt>Oras</dt>
+                <dd>
+                    @Html.DisplayFor(model => model.City.CityName)
+
+                </dd>
+
+
+                <dt>Email</dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.EmailConfirmed)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.EmailConfirmed)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.SecurityStamp)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.SecurityStamp)
+                </dd>
+
+                <dt>Numar Telefon</dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PhoneNumber)
+                </dd>
+
+            </dl>
+
+            <hr />
+            <br /><br />
+
+            <h4>Anunturile utilizatorului</h4>
+            <hr />
+            <br />
+
+            <div>@Html.ActionLink("Vezi toate anunturile utilizatorului", "Index", "Product", new { id = Model.Id }, null)</div>
+            <br />
+            @foreach (Licenta.Common.Entities.Product product in ViewBag.recentProducts)
+            {
+                @Html.Partial("ProductInfo", product);
+            }
+            <hr />
+            <br /><br />
+
+            <h4>Calificativele utilizatorului</h4>
+            <hr />
+            <br />
+
+            @if (Model.RatingScore == null)
+            {
+                <p>Nu exista calificative pentru utilizator! </p>
+            }
+            else
+            {
+                <strong>Calificativ general: </strong> @Model.RatingScore
+                <br /><br/>
+                <strong>Rating detaliat utilizator: </strong>
+                <br />
+                <span>Comunicarea vanzatorului: </span>@Model.CommunicationScore
+                <br />
+                <span>Acuratetea descrierii anunturilor: </span>@Model.AccuracyScore
+                <br />
+                <span>Timpul de onorare al comenzilor: </span>@Model.TimeScore
+                <br />
+                <br />
+
+                <div>@Html.ActionLink("Vezi toate calificativele utilizatorului", "Index", "Rating", new { id = Model.Id }, null)</div>
+                <br />
+            }
+
+            <form method="post" action="/Rating/New">
+                @Html.Hidden("Date", DateTime.Now)
+                @Html.Hidden("RatedUserId", Model.Id)
+                <label>Acorda calificativ:</label>
+                <hr />
+
+                @Html.Label("Communication", "Comunicare")
+                <br />
+                @Html.TextBox("Communication", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+                <br />
+
+                @Html.Label("Accuracy", "Acuratetea anunturilor")
+                <br />
+                @Html.TextBox("Accuracy", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+                <br />
+
+                @Html.Label("Time", "Timpul de onorare a comenzii")
+                <br />
+                @Html.TextBox("Time", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+                <br />
+
+                @Html.Label("Text", "Descrieti-va experienta (optional)")
+                <br />
+                @Html.TextArea("Text", null, new { minLength = 10, maxlength = 100, @class = "form-control" })
+                <br />
+
+                <button class="btn btn-sm btn-success" type="submit">Trimite</button>
+            </form>
+            <hr />
+            <br /><br />
+
+        </div>*@
+@using Licenta.Common.Entities
+@using Microsoft.AspNet.Identity
+@model Licenta.Common.Models.UserProfileViewModel
 
 @{
-    ViewBag.Title = "Profilul lui " + Model.UserName;
+    ViewBag.Title = "Profilul lui " + Model.User.UserName;
 }
 
-<h2>@ViewBag.Title</h2>
-@if (TempData.ContainsKey("message"))
-{
-    <h3 class="alert alert-danger" role="alert">@ViewBag.message</h3>
-}
-
-@Html.ValidationSummary(false, "", new { @class = "text-danger" })
-
-    <div>
-        <img src="@Url.Action("UserPhotos", "Account", new { id = Model.Id } )" style="width:160px;height:160px; background: #FFFFFF;
-    margin: auto;
-    -moz-border-radius: 60px;
-    border-radius: 100px;
-    padding: 6px;
-    box-shadow: 0px 0px 20px #888;" />
-
-        <hr />
-        <br />
-        <h4>Informatii Profil</h4>
-        <hr />
-        <dl class="dl-horizontal">
-
-            @*<dt>Nume Utilizator</dt>
-            <dd>
-                @Html.DisplayFor(model => model.UserName)
-            </dd>*@
-
-            <dt>Prenume</dt>
-            <dd>
-                @Html.DisplayFor(model => model.FirstName)
-            </dd>
-
-            <dt>Nume</dt>
-            <dd>
-                @Html.DisplayFor(model => model.LastName)
-            </dd>
-
-            <dt>Oras</dt>
-            <dd>
-                @Html.DisplayFor(model => model.City.CityName)
-
-            </dd>
+<div class="container">
+    <div class="section-content">
+        <div class="inner-box ">
+            <div class="row">
 
 
-            <dt>Email</dt>
-            <dd>
-                @Html.DisplayFor(model => model.Email)
-            </dd>
+                <div class="col-sm-6">
+                    <div class="seller-info seller-profile">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="seller-profile-img">
+                                    <a><img src="@Url.Action("UserPhotos","Account", new { id = Model.UserId })" class="img-responsive thumbnail" alt="img"> </a>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
 
-            <dt>
-                @Html.DisplayNameFor(model => model.EmailConfirmed)
-            </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.EmailConfirmed)
-            </dd>
+                                <h3 class="no-margin no-padding link-color uppercase "> @Model.User.UserName</h3>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.SecurityStamp)
-            </dt>
+                                <div class="text-muted">
+                                    Rating: @Model.User.RatingScore
+                                </div>
 
-            <dd>
-                @Html.DisplayFor(model => model.SecurityStamp)
-            </dd>
+                                <div class="text-muted">
+                                    @Model.User.FirstName @Model.User.LastName
+                                </div>
 
-            <dt>Numar Telefon</dt>
+                            </div>
+                        </div>
 
-            <dd>
-                @Html.DisplayFor(model => model.PhoneNumber)
-            </dd>
+                    </div>
 
-        </dl>
 
-        <hr />
-        <br /><br />
+                </div>
 
-        <h4>Anunturile utilizatorului</h4>
-        <hr />
-        <br />
 
-        <div>@Html.ActionLink("Vezi toate anunturile utilizatorului", "Index", "Product", new { id = Model.Id }, null)</div>
-        <br />
-        @foreach (Licenta.Common.Entities.Product product in ViewBag.recentProducts)
+                <div class="col-sm-6">
+
+                    <div class="seller-contact-info">
+
+                        <h3 class="no-margin uppercase color-danger"> Informatii de contact </h3>
+
+                        <dl class="dl-horizontal">
+                            <dt>Oras</dt>
+                            <dd class="contact-sensitive">
+                                @Model.User.City.CityName
+                            </dd>
+
+                            <dt>Email</dt>
+                            <dd class="contact-sensitive">
+                                @Model.User.Email
+                            </dd>
+
+                            <dt>Numar Telefon</dt>
+                            <dd class="contact-sensitive">
+                                @Model.User.PhoneNumber
+                            </dd>
+                        </dl>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        @if (TempData.ContainsKey("message"))
         {
-            @Html.Partial("ProductInfo", product);
-        }
-        <hr />
-        <br /><br />
-
-        <h4>Calificativele utilizatorului</h4>
-        <hr />
-        <br />
-
-        @if (Model.RatingScore == null)
-        {
-            <p>Nu exista calificative pentru utilizator! </p>
-        }
-        else
-        {
-            <strong>Calificativ general: </strong> @Model.RatingScore
-            <br /><br/>
-            <strong>Rating detaliat utilizator: </strong>
-            <br />
-            <span>Comunicarea vanzatorului: </span>@Model.CommunicationScore
-            <br />
-            <span>Acuratetea descrierii anunturilor: </span>@Model.AccuracyScore
-            <br />
-            <span>Timpul de onorare al comenzilor: </span>@Model.TimeScore
-            <br />
-            <br />
-
-            <div>@Html.ActionLink("Vezi toate calificativele utilizatorului", "Index", "Rating", new { id = Model.Id }, null)</div>
-            <br />
+            <h3 class="alert alert-danger" role="alert">@ViewBag.message</h3>
         }
 
-        <form method="post" action="/Rating/New">
-            @*<input type="hidden" name="Date" value="@DateTime.Now" />*@
-            @Html.Hidden("Date", DateTime.Now)
-            @Html.Hidden("RatedUserId", Model.Id)
-            <label>Acorda calificativ:</label>
-            <hr />
 
-            @Html.Label("Communication", "Comunicare")
-            <br />
-            @Html.TextBox("Communication", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
-            <br />
+        <div class="section-block">
+            <div class="row">
+                <div class="col-sm-9 col-thin-left page-content ">
 
-            @Html.Label("Accuracy", "Acuratetea anunturilor")
-            <br />
-            @Html.TextBox("Accuracy", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
-            <br />
+                    <div class="category-list">
+                        <div class="tab-box ">
 
-            @Html.Label("Time", "Timpul de onorare a comenzii")
-            <br />
-            @Html.TextBox("Time", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
-            <br />
 
-            @Html.Label("Text", "Descrieti-va experienta (optional)")
-            <br />
-            @Html.TextArea("Text", null, new { minLength = 10, maxlength = 100, @class = "form-control" })
-            <br />
+                            <!-- Nav tabs (Ads + Rating) -->
+                            <ul class="nav nav-tabs add-tabs tablist" role="tablist">
+                                <li class="active nav-item">
+                                    <a href="#alladslist" role="tab" data-toggle="tab" class="nav-link">Ratinguri
+                                        <span class="badge badge-pill badge-secondary">@Model.Ratings.Count</span></a>
+                                </li>
+                                <li class=" nav-item">
+                                    <a href="#businessads" role="tab" data-toggle="tab" class="nav-link"> Anunturi 
+                                        <span class="badge badge-pill badge-secondary">@Model.Products.Count</span></a>
+                                </li>
 
-            <button class="btn btn-sm btn-success" type="submit">Trimite</button>
-        </form>
-        <hr />
-        <br /><br />
+                            </ul>
+
+                            @*sortare*@
+                            @*<div class="tab-filter">
+                                <select title="sort by" class="selectpicker select-sort-by" data-style="btn-select"
+                                        data-width="auto">
+                                    <option>Sort by</option>
+                                    <option>Price: Low to High</option>
+                                    <option>Price: High to Low</option>
+                                </select>
+                            </div>*@
+
+
+                        </div>
+                        <!--/.tab-box-->
+
+                        <div class="listing-filter">
+                            <div class="pull-left col-xs-6">
+                                @*<div class="breadcrumb-list">
+                                    <a href="#" class="current">
+                                        <span>All ads</span>
+                                    </a> in New York <a href="#selectRegion"
+                                                        id="dropdownMenu1"
+                                                        data-toggle="modal">
+                                        <span class="caret"></span>
+                                    </a>
+                                </div>*@
+                            </div>
+                            <div class="pull-right col-xs-6 text-right listing-view-action">
+                                <span class="list-view active"><i class="  icon-th"></i></span> <span class="compact-view"><i class=" icon-th-list  "></i></span> <span class="grid-view "><i class=" icon-th-large "></i></span>
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <!--/.listing-filter-->
+
+
+                        <div class="tab-content">
+                            <div class="tab-content">
+                                <div class="tab-pane  active " id="alladslist">
+                                    <div class="adds-wrapper row no-margin">
+                                        @foreach (Rating rating in Model.Ratings)
+                                        {
+                                            <div class="item-list">
+                                                @if (rating.User.RatingScore > 4)
+                                                {
+                                                    <div class="cornerRibbons featuredAds">
+                                                        <a href=""> Top user</a>
+                                                    </div>
+                                                }
+
+                                                <div class="row">
+                                                    <div class="col-md-2 no-padding photobox">
+                                                        <div class="add-image">
+                                                            <span class="photo-count"></span> <a href="@Url.Action("UserProfile", "Account", new { id = rating.UserId})">
+                                                                <img class="thumbnail no-margin"
+                                                                     src="@Url.Action("UserPhotos", "Account", new { id = rating.UserId})"
+                                                                     alt="img">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <!--/.photobox-->
+                                                    <div class="col-sm-7 add-desc-box">
+                                                        <div class="ads-details">
+                                                            <h4 class="add-title">
+                                                                Calificativ general: @rating.Average
+                                                            </h4>
+                                                            @*<span class="info-row">*@
+                                                            <p class="info-row"><span style="font-weight:bold">Comunicarea vanzatorului:</span> @rating.Communication</p>
+                                                            <p class="info-row"><span style="font-weight:bold">Acuratetea descrierii anunturilor:</span> @rating.Accuracy</p>
+                                                            <p class="info-row"><span style="font-weight:bold">Timpul de onorare al comenzilor:</span> @rating.Time</p>
+                                                            @if (!String.IsNullOrEmpty(rating.Text))
+                                                            {
+                                                                <p class="info-row"><span style="font-weight:bold">Descriere experienta: </span></p>
+                                                                <p class="info-row">@rating.Text</p>
+                                                            }
+                                                            @*</span>*@
+                                                        </div>
+                                                    </div>
+                                                    <!--/.add-desc-box-->
+                                                    <div class="col-md-3 text-right  price-box">
+                                                        @if (User.Identity.GetUserId() == rating.UserId)
+                                                        {
+                                                            <a class="btn btn-sm btn-info" href="/Rating/Edit/@rating.RatingId">Editeaza</a>
+                                                        }
+
+                                                    </div>
+                                                    <!--/.add-desc-box-->
+                                                </div>
+                                            </div>
+                                            <!--/.item-list-->
+                                         }
+                                       
+                                        
+                                    </div>
+                                </div>
+                                <div class="tab-pane   " id="businessads">
+                                    <div class="adds-wrapper row no-margin">
+                                        @foreach (Product product in Model.Products)
+                                        {
+                                            <div class="item-list">
+                                                <div class="row">
+                                                    <div class="col-md-2 no-padding photobox">
+                                                        <div class="add-image">
+                                                            <span class="photo-count"><i class="fa fa-camera"></i></span>
+                                                            <a href="@Url.Action("Show","Product",new { id = product.ProductId})">
+                                                                <img class="thumbnail no-margin" src="@Url.Action("MainProductPhoto", "Product", new { prodId = product.ProductId})" alt="img">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <!--/.photobox-->
+                                                    <div class="col-md-7 add-desc-box">
+                                                        <div class="ads-details">
+                                                            <h5 class="add-title">
+                                                                <a href="@Url.Action("Show","Product",new { id = product.ProductId})">
+                                                                    @product.Title
+                                                                </a>
+                                                            </h5>
+                                                            <span class="info-row">
+                                                                @*<span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="Business Ads">B </span>*@
+                                                                <span class="date"><i class=" icon-clock"> </i>@product.Date</span>- <span class="category">@product.SubCategory.SubCategoryName </span>-
+                                                                <span class="item-location"><i class="fa fa-map-marker-alt"></i>@product.City.CityName</span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <!--/.add-desc-box-->
+                                                    <div class="col-md-3 text-right  price-box">
+                                                        <h2 class="item-price"> @product.Price RON</h2>
+                                                        @*<a class="btn btn-secondary  btn-sm make-favorite">*@
+                                                        @if (ViewBag.Interests != null)
+                                                        {
+                                                            var saved = ((IEnumerable<Interest>)ViewBag.Interests).Any(i => i.ProductId == product.ProductId);
+                                                            if (saved == true)
+                                                            {
+                                                                <form method="post" action="/Product/Save/@product.ProductId">
+                                                                    <button type="submit" class=" btn btn-secondary btn-sm make-favorit"> <i class="fa fa-heart"></i>  <span>Sterge din favorite</span></button>
+                                                                </form>
+                                                            }
+                                                            else
+                                                            {
+                                                                <form method="post" action="/Product/Save/@product.ProductId">
+                                                                    <button type="submit" class=" btn btn-secondary btn-sm make-favorit"> <i class="fa fa-heart"></i>  <span>Salveaza in favorite</span></button>
+                                                                </form>
+                                                            }
+
+                                                        }
+                                                        @*<i class="fa fa-heart"></i>  <span>Save</span>*@
+                                                        @*</a>*@
+                                                    </div>
+                                                    <!--/.add-desc-box-->
+                                                </div>
+
+                                            </div>
+                                            <!--/.item-list-->
+                                        }
+
+                                        <div class="item-list">
+                                            <div class="row">
+                                                <div class="col-md-2 no-padding photobox">
+                                                    <div class="add-image">
+                                                        <span class="photo-count"><i class="fa fa-camera"></i> 2 </span>  <a href="ads-details.html"><img class="thumbnail no-margin" src="images/item/tp/Image00015.jpg" alt="img"></a>
+                                                    </div>
+                                                </div>
+                                                <!--/.photobox-->
+                                                <div class="col-md-7 add-desc-box">
+                                                    <div class="ads-details">
+                                                        <h5 class="add-title">
+                                                            <a href="ads-details.html">
+
+                                                                Brand New Samsung Phones
+                                                            </a>
+                                                        </h5>
+                                                        <span class="info-row">
+                                                            <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="Business Ads">B </span>
+                                                            <span class="date"><i class=" icon-clock"> </i>Today 1:21 pm</span>- <span class="category">Electronics </span>-
+                                                            <span class="item-location"><i class="fa fa-map-marker-alt"></i>New York</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <!--/.add-desc-box-->
+                                                <div class="col-md-3 text-right  price-box">
+                                                    <h2 class="item-price"> $ 320 </h2>
+                                                    <a class="btn btn-danger  btn-sm make-favorite">
+                                                        <i class="fa fa-certificate"></i>
+
+                                                        <span>Top Ads</span>
+                                                    </a>
+                                                    <a class="btn btn-secondary  btn-sm make-favorite">
+                                                        <i class="fa fa-heart"></i>  <span>Save</span>
+                                                    </a>
+                                                </div>
+                                                <!--/.add-desc-box-->
+                                            </div>
+
+                                        </div>
+                                        <!--/.item-list-->
+                                        
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="pagination-bar text-center">
+                            <nav aria-label="Page navigation " class="d-inline-b">
+                                <ul class="pagination">
+
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">...</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <!--/.pagination-bar -->
+
+                        <div class="post-promo text-center">
+                            <h2> Ai ceva de vanzare ? </h2>
+                            <h5>Vinde-ti produsele online GRATIS. E mai usor decat crezi!</h5>
+                            <a href="@Url.Action("New", "Product")" class="btn btn-lg btn-border btn-post btn-danger">Adauga Anunt </a>
+                        </div>
+                        <!--/.post-promo-->
+
+                    </div>
+                </div>
+
+                <div class="col-md-3  page-sidebar-right">
+                    <aside>
+                        @if (User.Identity.GetUserId() == null || User.Identity.GetUserId() != Model.UserId)
+                        {
+                            <div class="card sidebar-card card-contact-seller">
+                                <div class="card-header">
+                                    Adauga Rating
+                                </div>
+                                <div class="card-content user-info">
+                                    <div class="card-body text-center">
+                                        <form method="post" action="/Rating/New">
+                                            @Html.Hidden("Date", DateTime.Now)
+                                            @Html.Hidden("RatedUserId", Model.UserId)
+
+                                            @Html.Label("Communication", "Comunicare")
+                                            <br />
+                                            @Html.TextBox("Communication", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+                                            <br />
+
+                                            @Html.Label("Accuracy", "Acuratetea anunturilor")
+                                            <br />
+                                            @Html.TextBox("Accuracy", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+                                            <br />
+
+                                            @Html.Label("Time", "Timpul de onorare a comenzii")
+                                            <br />
+                                            @Html.TextBox("Time", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+                                            <br />
+
+                                            @Html.Label("Text", "Descrieti-va experienta (optional)")
+                                            <br />
+                                            @Html.TextArea("Text", null, new { minLength = 10, maxlength = 100, @class = "form-control" })
+                                            <br />
+
+                                            <button class="btn btn-sm btn-success" style="width:100%" type="submit">Trimite</button>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="card sidebar-card">
+                            <div class="card-header">Sfaturi de siguranță pentru cumpărători</div>
+                            <div class="card-content">
+                                <div class="card-body text-left">
+                                    <ul class="list-check">
+                                        <li> Intalneste-te cu cumparatorul intr-un loc public</li>
+                                        <li> Verifica produsul inainte de a-l cumpara</li>
+                                        <li> Plateste de-abia dupa ce ai facut rost de produs</li>
+                                    </ul>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.categories-list-->
+                    </aside>
+                </div>
+                <!--/.page-side-bar-->
+            </div>
+        </div>
+
 
     </div>
+
+</div>

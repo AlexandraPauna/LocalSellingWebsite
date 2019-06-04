@@ -183,7 +183,8 @@ namespace Licenta.Controllers
                 await _emailService.SendEmailAsync(rating.RatedUser.Email, "site_anunturi@yahoo.com", "Site anunturi", "Calificativ modificat", content);
 
 
-                return RedirectToAction("Index", new { id = rating.RatedUserId});
+                //return RedirectToAction("Index", new { id = rating.RatedUserId});
+                return RedirectToAction("UserProfile", "Account", new { id = rating.RatedUserId });
             }
             catch (Exception e)
             {

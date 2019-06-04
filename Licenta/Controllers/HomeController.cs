@@ -52,18 +52,50 @@ namespace Licenta.Controllers
             ViewBag.LocationsList2 = null;
             ViewBag.LocationsList3 = null;
             ViewBag.LocationsList4 = null;
+           
+            var nrPerColumn = locationsList.Count() / 4;
+            var surplus = locationsList.Count() - (nrPerColumn * 4);
+
+            var s = 0;
+            var counter = 0;
             if (locationsList.Count() > 0)
             {
-                ViewBag.LocationsList1 = locationsList.Take(8);
-                if (locationsList.Count > 8)
+                if (surplus > 0)
                 {
-                    ViewBag.LocationsList2 = locationsList.Skip(8).Take(8).ToList();
-                    if (locationsList.Count > 16)
+                    s = 1;
+                    surplus = surplus - 1;
+                }
+                ViewBag.LocationsList1 = locationsList.Take(nrPerColumn + s).ToList();
+                counter = nrPerColumn + s;
+                if (locationsList.Count() > counter)
+                {
+                    s = 0;
+                    if (surplus > 0)
                     {
-                        ViewBag.LocationsList3 = locationsList.Skip(16).Take(8).ToList();
-                        if (locationsList.Count > 24)
+                        s = 1;
+                        surplus = surplus - 1;
+                    }
+                    ViewBag.LocationsList2 = locationsList.Skip(counter).Take(nrPerColumn + s).ToList();
+                    counter = counter + nrPerColumn + s;
+                    if (locationsList.Count() > counter)
+                    {
+                        s = 0;
+                        if (surplus > 0)
                         {
-                            ViewBag.LocationsList4 = locationsList.Skip(24).Take(8).ToList();
+                            s = 1;
+                            surplus = surplus - 1;
+                        }
+                        ViewBag.LocationsList3 = locationsList.Skip(counter).Take(nrPerColumn + s).ToList();
+                        counter = counter + nrPerColumn + s;
+                        if (locationsList.Count() > counter)
+                        {
+                            s = 0;
+                            if (surplus > 0)
+                            {
+                                s = 1;
+                                surplus = surplus - 1;
+                            }
+                            ViewBag.LocationsList4 = locationsList.Skip(counter).Take(nrPerColumn + s).ToList();
                         }
 
                     }

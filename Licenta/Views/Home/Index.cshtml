@@ -206,7 +206,7 @@
                                 @if (ViewBag.LocationsList2 != null)
                                 {
                                     <ul class="cat-list col-md-3  col-6 col-xxs-12">
-                                        @foreach (var location in ViewBag.LocationsList1)
+                                        @foreach (var location in ViewBag.LocationsList2)
                                         {
                                             <li>
                                                 <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>
@@ -218,7 +218,7 @@
                                 @if (ViewBag.LocationsList3 != null)
                                 {
                                     <ul class="cat-list col-md-3  col-6 col-xxs-12">
-                                        @foreach (var location in ViewBag.LocationsList1)
+                                        @foreach (var location in ViewBag.LocationsList3)
                                         {
                                             <li>
                                                 <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>
@@ -230,7 +230,7 @@
                                 @if (ViewBag.LocationsList4 != null)
                                 {
                                     <ul class="cat-list col-md-3  col-6 col-xxs-12">
-                                        @foreach (var location in ViewBag.LocationsList1)
+                                        @foreach (var location in ViewBag.LocationsList4)
                                         {
                                             <li>
                                                 <a href="@Url.Action("Index","Search",new { fromCity = location.CityId })">@location.CityName</a>

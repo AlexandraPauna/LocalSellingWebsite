@@ -95,6 +95,7 @@
     <Compile Include="Models\ProductViewModel.cs" />
     <Compile Include="Models\RatingViewModel.cs" />
     <Compile Include="Models\SubCategoryViewModel.cs" />
+    <Compile Include="Models\UserProfileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,65 +5,386 @@
     ViewBag.Title = "Rezultatele Cautarii";
 }
 
-<h2>@ViewBag.Title</h2>
-<br />
-
-
-@using (Html.BeginForm("Index", "Search", new { search = ViewBag.Search }, FormMethod.Get))
-{
-    @Html.Label("Cautare:");
-    @Html.TextBox("Search", null, new { @id = "search", @value = ViewBag.Search });
-    <br /><br />
-
-    <b> Adauga filtre:</b>
-    <br />
-    @Html.Label("Locatie:");
-    @Html.DropDownList("FromCity", new SelectList(ViewBag.Cities, "Value", "Text"), "Selectati locatia", new { id = "FromCity", @class = "form-control" });
-    <br />
-
-    @Html.Label("Postate dupa data de:");
-    @Html.TextBox("DateMin", null, new { @id = "dateMin", @type = "datetime", @class = "date-picker" });
-    <br />
-
-    @Html.Label("Pret minim:");
-    @Html.TextBox("PriceMin", null, new { id = "priceMin", type = "number", min = "0", step = "0.01", @class = "form-control" });
-    <br />
-    @Html.Label("Pret maxim:");
-    @Html.TextBox("PriceMax", null, new { id = "priceMax", type = "number", min = "0", step = "0.01", @class = "form-control" });
-    <br />
-
-    @Html.Label("Starea:");
-    @Html.DropDownList("State", new SelectList(ViewBag.ProductStates, "Value", "Text"), "Selectati starea produsului", new { id = "state", @class = "form-control" });
-    <br /><br />
-
-    @Html.Label("Sorteaza dupa:");
-    @Html.DropDownList("sortType", new SelectList(
-                                    new List<Object>{
-                                        new { value = "Select" , text = "Selecteaza"  },
-                                        new { value = "Title" , text = "Titlu" },
-                                        new { value = "Date" , text = "Cele mai recente"},
-                                        new { value = "PriceAsc" , text = "Pret crescator"},
-                                        new { value = "PriceDesc" , text = "Pret descrescator"}
-                                   }, "value","text",2), new { id = "sortType", @class = "form-control" });
-
-    <br />
-    <input class="btn btn-default" type="submit" value="Aplica" />
-}
-<br />
-
-
-
-@if (ViewBag.NoResult == false)
-{
-    foreach(Product product in Model.Products)
+<div class="container">
+    @if (TempData.ContainsKey("message"))
     {
-        @Html.Partial("ProductInfo", product);
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
     }
-}
-else
+
+    <div class="row">
+        <!-- this (.mobile-filter-sidebar) part will be position fixed in mobile version -->
+        <div class="col-md-3 page-sidebar mobile-filter-sidebar">
+            <aside>
+                <div class="sidebar-modern-inner">
+                    <div class="block-title has-arrow sidebar-header">
+                        <h5>
+                            <a href="@Url.Action("Index","Categories")">
+                                <i class="fa fa-angle-left"></i>
+                                Vezi Categoriile
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div class="block-content categories-list  list-filter ">
+                        <ul class=" list-unstyled">
+                            <li>
+                                
+                                @if (ViewBag.Categories != null)
+                                {
+                                    <ul class=" list-unstyled long-list">
+                                        @foreach (var cat in ViewBag.Categories)
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Show","Categories", new { id = cat.CategoryId})">
+                                                    @cat.CategoryName
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+
+                            </li>
+                        </ul>
+                    </div>  <!--/.categories-list-->
+
+                    <div class="block-title has-arrow">
+                        <h5><a @*href="#*@>Adauga filtre:</a></h5>
+                    </div>
+                    <div class="block-content categories-list  list-filter ">
+                        @using (Html.BeginForm("Index", "Search", new { search = ViewBag.Search }, FormMethod.Get))
+                        {
+                            @Html.Label("Cautare:");
+                            @Html.TextBox("Search", null, new { @id = "search", @value = ViewBag.Search, @class = "form-control" });
+                            <br /><br />
+
+                            @Html.Label("Locatie");
+                            @Html.DropDownList("FromCity", new SelectList(ViewBag.Cities, "Value", "Text"), "Selectati locatia", new { id = "FromCity", @class = "form-control" });
+                            <br />
+                            @Html.Label("Postate dupa data de");
+                            @Html.TextBox("DateMin", null, "{0:dd/mm/yyyy}", new { id = "dateMin", @class = "date-picker" });
+                            <br />
+                            @Html.Label("Pret minim");
+                            @Html.TextBox("PriceMin", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" });
+                            <br />
+                            @Html.Label("Pret maxim");
+                            @Html.TextBox("PriceMax", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" });
+                            <br />
+                            @Html.Label("Starea");
+                            @Html.DropDownList("State", new SelectList(ViewBag.ProductStates, "Value", "Text"), "Selectati starea produsului", new { id = "State", @class = "form-control" });
+                            <br />
+
+                            <br />
+                            <input style="width:100%" class="btn btn-primary" type="submit" value="Aplica" />
+                        }
+
+                        <div style="clear:both"></div>
+                    </div>
+
+                    <div style="clear:both"></div>
+                </div>
+
+
+
+                <!--/.categories-list-->
+            </aside>
+        </div>
+        <!--/.page-side-bar-->
+        <div class="col-md-9 page-content col-thin-left">
+            <div class="category-list">
+                <div class="tab-box ">
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs add-tabs tablist" role="tablist">
+                        <li class="active nav-item">
+                            <a href="#alladslist" role="tab" data-toggle="tab" class="nav-link">Rezultatele cautarii @*<span class="badge badge-pill badge-secondary">@Model.Products.Count</span>*@</a>
+                        </li>
+
+                    </ul>
+                    <div class="tab-filter">
+                        @using (Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "form1" }))
+                        {
+
+                            if (ViewBag.PriceMin != null)
+                            {
+                                @Html.Hidden("PriceMin", (float?)ViewBag.PriceMin)
+                            }
+                            if (ViewBag.PriceMax != null)
+                            {
+                                @Html.Hidden("PriceMax", (float?)ViewBag.PriceMax)
+                            }
+                            if (ViewBag.DateMin != null)
+                            {
+                                @Html.Hidden("DateMin", (DateTime?)ViewBag.DateMin)
+
+                            }
+                            if (ViewBag.FromCity != null)
+                            {
+                                @Html.Hidden("FromCity", (int?)ViewBag.FromCity)
+                            }
+                            if (ViewBag.State != null)
+                            {
+                                @Html.Hidden("State", (int?)ViewBag.State)
+                            }
+                            if (ViewBag.Search != null)
+                            {
+                                @Html.Hidden("Search", (string)ViewBag.Search)
+                            }
+                            if (ViewBag.CatId != null)
+                            {
+                                @Html.Hidden("CatId", (int?)ViewBag.CatId)
+                            }
+
+                            @Html.DropDownList("sortType", new SelectList(
+                                                                     new List<Object>{
+                                                                    new { value = "Select" , text = "Selecteaza"  },
+                                                                    new { value = "Title" , text = "Titlu" },
+                                                                    new { value = "Date" , text = "Cele mai recente"},
+                                                                    new { value = "PriceAsc" , text = "Pret crescator"},
+                                                                    new { value = "PriceDesc" , text = "Pret descrescator"}
+                                                                    }, "value", "text", 2), new { id = "sortType", @class = "selectpicker select-sort-by", @onchange = "submitform();" });
+
+                        }
+
+                    </div>
+
+                </div>
+                <!--/.tab-box-->
+                <!--/.tab-box-->
+
+                <div class="listing-filter">
+                   
+                    <div class="pull-right col-xs-6 text-right listing-view-action">
+                        <span class="list-view active"><i class="  icon-th"></i></span> <span class="compact-view"><i class=" icon-th-list  "></i></span> <span class="grid-view "><i class=" icon-th-large "></i></span>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                <!--/.listing-filter-->
+                <!-- Mobile Filter bar-->
+                <div class="mobile-filter-bar col-xl-12  ">
+                    <ul class="list-unstyled list-inline no-margin no-padding">
+                        <li class="filter-toggle">
+                            <a class="">
+                                <i class="  icon-th-list"></i>
+                                FILTRE
+                            </a>
+                        </li>
+                        <li>
+
+
+                            <div class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle">
+                                    Sorteaza dupa
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @using (Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "form1" }))
+                                    {
+
+                                        if (ViewBag.PriceMin != null)
+                                        {
+                                            @Html.Hidden("PriceMin", (float?)ViewBag.PriceMin)
+                                        }
+                                        if (ViewBag.PriceMax != null)
+                                        {
+                                            @Html.Hidden("PriceMax", (float?)ViewBag.PriceMax)
+                                        }
+                                        if (ViewBag.DateMin != null)
+                                        {
+                                            @Html.Hidden("DateMin", (DateTime?)ViewBag.DateMin)
+
+                                        }
+                                        if (ViewBag.FromCity != null)
+                                        {
+                                            @Html.Hidden("FromCity", (int?)ViewBag.FromCity)
+                                        }
+                                        if (ViewBag.State != null)
+                                        {
+                                            @Html.Hidden("State", (int?)ViewBag.State)
+                                        }
+
+                                        @Html.DropDownList("sortType", new SelectList(
+                                                                                 new List<Object>{
+                                                                                new { value = "Select" , text = "Selecteaza" , rel = "nofollow" },
+                                                                                new { value = "Title" , text = "Titlu", rel = "nofollow"  },
+                                                                                new { value = "Date" , text = "Cele mai recente", rel = "nofollow" },
+                                                                                new { value = "PriceAsc" , text = "Pret crescator", rel = "nofollow" },
+                                                                                new { value = "PriceDesc" , text = "Pret descrescator", rel = "nofollow" }
+                                                                                }, "value", "text", 2), new { id = "sortType", @class = "selectpicker select-sort-by", @onchange = "submitform();" });
+
+                                    }
+                                    @*<li><a href="" rel="nofollow">Relevance</a></li>
+                                        <li><a href="" rel="nofollow">Date</a></li>
+                                        <li><a href="" rel="nofollow">Company</a></li>*@
+                                </ul>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+                <div class="menu-overly-mask"></div>
+                <!-- Mobile Filter bar End-->
+
+
+
+                <div class="tab-content">
+                    <div class="tab-pane  active " id="alladslist">
+                        <div class="adds-wrapper row no-margin">
+
+                            @if (ViewBag.NoResult == false)
+                            {
+                                foreach (Product product in Model.Products)
+                                {
+                                    <div class="item-list">
+                                        <div class="row">
+                                            <div class="col-md-2 no-padding photobox">
+                                                <div class="add-image">
+                                                    <span class="photo-count"><i class="fa fa-camera"></i></span>
+                                                    <a href="@Url.Action("Show","Product",new { id = product.ProductId})">
+                                                        <img class="thumbnail no-margin" src="@Url.Action("MainProductPhoto", "Product", new { prodId = product.ProductId})" alt="img">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!--/.photobox-->
+                                            <div class="col-md-7 add-desc-box">
+                                                <div class="ads-details">
+                                                    <h5 class="add-title">
+                                                        <a href="@Url.Action("Show","Product",new { id = product.ProductId})">
+                                                            @product.Title
+                                                        </a>
+                                                    </h5>
+                                                    <span class="info-row">
+                                                        @*<span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="Business Ads">B </span>*@
+                                                        <span class="date"><i class=" icon-clock"> </i>@product.Date</span>- <span class="category">@product.SubCategory.SubCategoryName </span>-
+                                                        <span class="item-location"><i class="fa fa-map-marker-alt"></i>@product.City.CityName</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <!--/.add-desc-box-->
+                                            <div class="col-md-3 text-right  price-box">
+                                                <h2 class="item-price"> @product.Price RON</h2>
+                                                @if (Context.User.Identity.Name == product.User.UserName)
+                                                {
+                                                    <a class="btn btn-danger  btn-sm make-favorite" href="/Product/Edit/@product.ProductId">
+
+                                                        <i class="fa fa-certificate"></i>
+
+                                                        <span>Editeaza</span>
+                                                    </a>
+                                                }
+                                                @*<a class="btn btn-secondary  btn-sm make-favorite">*@
+                                                @if (ViewBag.Interests != null)
+                                                {
+                                                    var saved = ((IEnumerable<Interest>)Model.Interests).Any(i => i.ProductId == product.ProductId);
+                                                    if (saved == true)
+                                                    {
+                                                        <form method="post" action="/Product/Save/@product.ProductId">
+                                                            <button type="submit" class=" btn btn-secondary btn-sm make-favorit"> <i class="fa fa-heart"></i>  <span>Sterge din favorite</span></button>
+                                                        </form>
+                                                    }
+                                                    else
+                                                    {
+                                                        <form method="post" action="/Product/Save/@product.ProductId">
+                                                            <button type="submit" class=" btn btn-secondary btn-sm make-favorit"> <i class="fa fa-heart"></i>  <span>Salveaza in favorite</span></button>
+                                                        </form>
+                                                    }
+
+                                                }
+                                                @*<i class="fa fa-heart"></i>  <span>Save</span>*@
+                                                @*</a>*@
+                                            </div>
+                                            <!--/.add-desc-box-->
+                                        </div>
+
+                                    </div>
+                                    <!--/.item-list-->
+                                }
+                            }
+                            else
+                            {
+                               <div class="item-list">
+                                <p>Nu am gasit anunturi care sa se potriveasca acestei cautari!</p>
+                                <p>Asigura-te ca ai scris corect (se poate intampla oricui) sau incearca o cautare mai generala.</p>
+                               </div>
+                            }
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--/.adds-wrapper-->
+
+                <div class="tab-box  save-search-bar text-center">
+                    @*<a href="">
+                            <i class=" icon-star-empty"></i>
+                            Save Search
+                        </a>*@
+                </div>
+            </div>
+            <div class="pagination-bar text-center">
+                <nav aria-label="Page navigation " class="d-inline-b">
+                    <ul class="pagination">
+
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link" href="#">...</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!--/.pagination-bar -->
+
+            <div class="post-promo text-center">
+                <h2> Ai ceva de vanzare ? </h2>
+                <h5>Vinde-ti produsele online GRATIS. E mai usor decat crezi!</h5>
+                <a href="@Url.Action("New", "Product")" class="btn btn-lg btn-border btn-post btn-danger">Adauga Anunt </a>
+            </div>
+            <!--/.post-promo-->
+
+        </div>
+        <!--/.page-content-->
+
+    </div>
+</div>
+
+@section SearchHeader{
+    <div class="search-row-wrapper" style="background-image: url(../../Images/bg.jpg)">
+        <div class="inner">
+            <div class="container ">
+                @using (Html.BeginForm("Index", "Search", FormMethod.Get@*,FormMethod.Post, new { @class = "form-group", @style = "max-width: 100%; width: 100%;" }*@))
 {
-    <p>Nu am gasit anunturi care sa se potriveasca acestei cautari!</p>
-    <p>Asigura-te ca ai scris corect (se poate intampla oricui) sau incearca o cautare mai generala.</p>
+<div class="row">
+
+    <div class="col-md-3">
+        <input type="text" name="Search" class="form-control keyword"
+               placeholder="Cauta...">
+    </div>
+    <div class="col-md-3">
+        @Html.DropDownList("categoryId", new SelectList(ViewBag.CategoriesList, "Value", "Text"), "Selectati categoria", new { id = "categoryId", name = "categoryId", @class = "form-control selecter" })
+        @*<select class="form-control selecter" name="category" id="search-category">
+            </select>*@
+    </div>
+    <div class="col-md-3">
+        @Html.DropDownList("FromCity", new SelectList(ViewBag.Cities, "Value", "Text"), "Selectati locatia", new { id = "FromCity", name = "fromCity", placeholder = "Oras...", @class = "form-control selecter" })
+        @*<select class="form-control selecter" name="location" id="id-location">
+            </select>*@
+    </div>
+
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-block btn-primary btn-gradient">
+            Cauta <i class="fa fa-search"></i>
+        </button>
+    </div>
+</div>
+}
+            </div>
+        </div>
+    </div>
+    <!-- /.search-row -->
 }
 
 <!-- Bootstrap -->
@@ -71,7 +392,7 @@ else
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js" type="text/javascript"></script>
 <script type="text/javascript">
-    $.noConflict();
+    //$.noConflict();
     jQuery(document).ready(function ($) {
         $(function () {
             // This will make every element with the class "date-picker" into a DatePicker element
@@ -89,3 +410,12 @@ else
 
 
 </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<script type="text/javascript">
+    function submitform() {
+        $('#form1').submit();
+    }
+</script>
+

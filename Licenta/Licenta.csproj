@@ -1002,7 +1002,6 @@
     <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\New.cshtml" />
-    <Content Include="Views\Product\Show.cshtml" />
     <Content Include="Views\Shared\ProductInfo.cshtml" />
     <Content Include="Views\Shared\ProductShowPartial.cshtml" />
     <Content Include="Views\Categories\Edit.cshtml" />
@@ -1032,6 +1031,7 @@
     <Content Include="Views\Rating\Edit.cshtml" />
     <Content Include="Views\Manage\Delete.cshtml" />
     <Content Include="Views\Product\Personal.cshtml" />
+    <Content Include="Views\Product\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

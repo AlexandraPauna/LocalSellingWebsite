@@ -603,12 +603,32 @@ namespace Licenta.Controllers
             ApplicationUser user = _db.Users.Find(id);
 
             var recentProducts = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
-                                 where prod.UserId.Equals(id)
+                                 where prod.UserId == id
                                  orderby prod.Date
                                  select prod;
-            ViewBag.RecentProducts = recentProducts.Take(3);
+            //ViewBag.RecentProducts = recentProducts.Take(3);
 
-            return View(user);
+            var ratings = from rat in _db.Ratings.Include("User")
+                          where rat.RatedUserId == id
+                          orderby rat.Date
+                          select rat;
+
+            var model = new UserProfileViewModel
+            {
+                UserId = id,
+                User = user,
+                Products = recentProducts.ToList(),
+                Ratings = ratings.ToList()
+            };
+
+            var currentUser = User.Identity.GetUserId();
+            var interests = from intr in _db.Interests
+                            where intr.UserId == currentUser
+                            select intr;
+            ViewBag.Interests = interests;
+
+            //return View(user);
+            return View(model);
         }
 
         public FileContentResult UserPhotos(string id)

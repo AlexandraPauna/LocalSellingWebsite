@@ -3,34 +3,101 @@
 @{
     ViewBag.Titlu = "Editare Calificativ";
 }
-<h2>Editare Calificativ</h2>
 
-<form method="post" action="/Rating/Edit/@Model.RatingId">
-    @Html.HttpMethodOverride(HttpVerbs.Put)
-    @Html.Hidden("Date", DateTime.Now)
-    @Html.Hidden("RatedUserId", Model.RatedUserId)
-    <label>Acorda calificativ:</label>
-    <hr />
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 page-content">
+            <div class="inner-box category-content">
+                <h2 class="title-2 uppercase">
+                    <strong>
+                        <i class="icon-pencil"></i> Editeaza Calificativul
+                    </strong>
+                </h2>
 
-    @Html.Label("Communication", "Comunicare")
-    <br />
-    @Html.TextBox("Communication", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
-    <br />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="/Rating/Edit/@Model.RatingId" class="form-horizontal">
+                            @Html.HttpMethodOverride(HttpVerbs.Put)
 
-    @Html.Label("Accuracy", "Acuratetea anunturilor")
-    <br />
-    @Html.TextBox("Accuracy", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
-    <br />
+                            @Html.Hidden("Date", DateTime.Now)
+                            @Html.Hidden("RatedUserId", Model.RatedUserId)
 
-    @Html.Label("Time", "Timpul de onorare a comenzii")
-    <br />
-    @Html.TextBox("Time", null, new { type = "number", min = "1", required = "required", max = "5", step = "1", @class = "form-control" })
-    <br />
+                            <div class="content-subheading">
+                                <i class="icon-tag"></i>
+                                <strong>
+                                    Calificative in functie de criteriu
+                                </strong>
+                            </div>
 
-    @Html.Label("Text", "Descrieti-va experienta (optional)")
-    <br />
-    @Html.TextArea("Text", null, new { minLength = 10, maxlength = 100, @class = "form-control" })
-    <br />
+                            <div class="form-group row">
+                                @Html.Label("Communication", "Comunicare", new { @class = "col-md-2 control-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBox("Communication", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+                                </div>
+                            </div>
 
-    <button class="btn btn-sm btn-success" type="submit">Editeaza</button>
-</form>
+
+                            <div class="form-group row">
+                                @Html.Label("Accuracy", "Acuratetea anunturilor", new { @class = "col-md-2 control-label" })
+
+                                <div class="col-lg-8">
+                                    <div class="mb10">
+                                        @Html.TextBox("Accuracy", null, new { type = "number", required = "required", min = "1", max = "5", step = "1", @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.Label("Time", "Timpul de onorare a comenzii", new { @class = "col-md-2 control-label" })
+                                <div class="col-lg-8">
+                                    <div class="mb10">
+                                        @Html.TextBox("Time", null, new { type = "number", min = "1", required = "required", max = "5", step = "1", @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.Label("Text", "Descrieti-va experienta (optional)", new { @class = "col-md-2 control-label" })
+                                <div class="col-lg-8">
+                                    <div class="mb10">
+                                        @Html.TextArea("Text", null, new { minLength = 10, maxlength = 100, @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+                            <!-- Button  -->
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-8">
+                                    <div style="clear:both"></div>
+                                    <button class="btn btn-primary" type="submit">Modifica</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 reg-sidebar">
+            <div class="reg-sidebar-inner text-center">
+                <div class="promo-text-box">
+                    <i class=" icon-pencil fa fa-4x icon-color-1"></i>
+
+                    <h3><strong>Editeaza calificativul</strong></h3>
+
+                    <p>
+                        Acest site iti ofera posibilitatea de a modifica un calificativ pentru un utilizator
+                        Modifica un calificativ rapid si usor.
+                    </p>
+                </div>
+
+
+
+            </div>
+        </div>
+        <!--/.reg-sidebar-->
+    </div>
+</div>
