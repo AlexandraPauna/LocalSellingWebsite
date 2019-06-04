@@ -1,4 +1,4 @@
-﻿@model Licenta.Common.Entities.Product
+﻿@*@model Licenta.Common.Entities.Product
 
 @{
     ViewBag.Title = "ManageGallery";
@@ -52,6 +52,114 @@ else
 
 <br /><br />
 
-<a class="btn btn-sm btn-success" href="/Product/Edit/@Model.ProductId">Inapoi</a> 
+<a class="btn btn-sm btn-success" href="/Product/Edit/@Model.ProductId">Inapoi</a>*@
 
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 page-content">
+            <div class="inner-box category-content">
+                <h2 class="title-2 uppercase">
+                    <strong>
+                        <i class="icon-photo"></i> Editare Galerie Anunt
+                    </strong>
+                </h2>
+                <a class="btn btn-success" href="/Product/Edit/@Model.ProductId">Inapoi</a>
+
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        @if (ViewBag.ProductImages != null)
+                        {
+                            <div id="ProductPhotosGallery">
+                                @foreach (var item in ViewBag.ProductImages)
+                                {
+                                    <div>
+                                        <img class="img-thumbnail " src="@item.StringData" alt="Imagine produs">
+                                    </div>
+                                    <form method="post" action="/Product/DeletePhoto/@item.IntegerData">
+                                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                        <button class="btn btn-sm btn-danger" type="submit">Sterge</button>
+                                    </form>
+
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <h2>Momentan nu exista fotografii pentru anunt!</h2>
+                        }
+
+                        <form method="post" action="/Product/AddPhotos/@Model.ProductId" class="form-horizontal" enctype="multipart/form-data">
+
+
+                            <div class="content-subheading">
+                                <i class="icon-plus"></i>
+                                <strong>
+                                    Adauga Fotografii Noi
+                                </strong>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.Label("ProductPhotos", "Poze Noi Anunt", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    <input type="file" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+                                </div>
+                            </div>
+
+                            <br />
+                            <!-- Button  -->
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-8">
+                                    <div style="clear:both"></div>
+                                    <button class="btn btn-primary" type="submit">Adauga</button>
+                                </div>
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 reg-sidebar">
+            <div class="reg-sidebar-inner text-center">
+                <div class="promo-text-box">
+                    <i class=" icon-picture fa fa-4x icon-color-1"></i>
+
+                    <h3><strong>Poti adauga anunturi nelimitate gratis</strong></h3>
+
+                    <p>
+                        Acest site iti ofera posibilitatea de a publica anunturi gratuite pentru orasul tau si imprejurimile sale.
+                        Vei gasi usor anunturi gratuite interesante din Bucuresti, Ilfov si alte orase din tara si vei putea intra usor in legatura cu cei care le-au publicat.
+                        Te asteapta o varietate de produse la preturi mici.
+                    </p>
+                </div>
+
+                <div class="card sidebar-card">
+                    <div class="card-header uppercase">
+                        <small><strong>Cum poti vinde mai rapid?</strong></small>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body text-left">
+                            <ul class="list-check">
+                                <li> Utilizati un titlu si o descriere a anuntului scurta si la obiect</li>
+                                <li> Asigura-te ca inacdrezi anuntul in categoria si subcategoria potrivita</li>
+                                <li> Adauga fotografii clare</li>
+                                <li> Adauga un pret rezonanil</li>
+                                <li> Verificati ce ati completat inainte de a publica anuntul</li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!--/.reg-sidebar-->
+    </div>
+</div>

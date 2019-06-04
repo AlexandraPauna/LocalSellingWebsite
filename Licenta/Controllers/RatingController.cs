@@ -17,7 +17,7 @@ namespace Licenta.Controllers
         private readonly EmailService _emailService = new EmailService();
 
         // GET: Rating
-        public ActionResult Index(string id)
+        /*public ActionResult Index(string id)
         {
             if (TempData.ContainsKey("message"))
             {
@@ -34,6 +34,50 @@ namespace Licenta.Controllers
             RatingViewModel model = new RatingViewModel { RatedUser = user, Ratings = ratings.ToList() };
 
             return View(model);
+        }*/
+
+        public ActionResult Index(string sortType)
+        {
+            var id = User.Identity.GetUserId();
+            
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                var user = (from usr in _db.Users
+                            where usr.Id == id
+                            select usr).Single();
+                var ratingsReceived = (from rtg in _db.Ratings.Include("User").Include("RatedUser")
+                                       where rtg.RatedUserId == id
+                                       select rtg).OrderByDescending(r => r.Date);
+                var ratingsGiven = (from rtg in _db.Ratings.Include("User").Include("RatedUser")
+                                    where rtg.UserId == id
+                                    select rtg).OrderByDescending(r => r.Date);
+
+                RatingViewModel model = new RatingViewModel{ };
+                if (sortType == null || sortType == "Received")
+                {
+                    model.Ratings = ratingsReceived.ToList();
+                }
+                if (sortType == "Given")
+                {
+                    model.Ratings = ratingsGiven.ToList();
+                }
+                else
+                {
+                    //pagina eroare
+                }
+                
+                return View(model);
+            }
+           
         }
 
         [HttpPost]

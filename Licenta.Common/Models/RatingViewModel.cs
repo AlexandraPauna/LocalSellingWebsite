@@ -9,7 +9,7 @@ namespace Licenta.Common.Models
 {
     public class RatingViewModel
     {
-        public ApplicationUser RatedUser { get; set; }
+        //public ApplicationUser RatedUser { get; set; }
         public IList<Rating> Ratings { get; set; }
     }
 }

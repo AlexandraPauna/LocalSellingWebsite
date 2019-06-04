@@ -85,74 +85,111 @@
     var role = userManager.GetRoles(User.Identity.GetUserId()).FirstOrDefault();
 
 
-    <ul class="nav navbar-nav ml-auto navbar-right">
+<ul class="nav navbar-nav ml-auto navbar-right">
+
+    <li class="dropdown no-arrow nav-item">
+        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+            <span>@User.Identity.GetUserName()</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i>
+        </a>
+
+        <ul class="dropdown-menu user-menu dropdown-menu-right">
+            <li class="active dropdown-item">
+                <a href='@Url.Action("Index", "Manage")'>
+                    <i class="icon-home"></i> Profilul meu
+                </a>
+            </li>
+
+            @if (Request.IsAuthenticated)
+            {
+                if (role == "User")
+                {
+                    <li class="dropdown-item">
+                        <a href='@Url.Action("ChangeProfile", "Manage")'><i class="icon-pencil"></i> Editeaza Profilul </a>
+                    </li>
+
+                    <li class="dropdown-item">
+                        <a href='@Url.Action("ChangePassword", "Manage")'><i class="icon-lock"></i> Schimba Parola </a>
+                    </li>
+
+                    <li class="dropdown-item">
+                        <a href='@Url.Action("Personal", "Product")'><i class="icon-th-thumb"></i> Anunturile mele </a>
+                    </li>
+
+                    <li class="dropdown-item">
+                        <a href='@Url.Action("Index", "Interests")'><i class="icon-heart"></i> Anunturi favorite </a>
+                    </li>
+
+                    <li class="dropdown-item">
+                        <a href='@Url.Action("Index", "Conversation")'>
+                            <i class="icon-mail"></i> Mesaje
+                        </a>
+                    </li>
+                }
+
+                <li class="dropdown-item">
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <a href="javascript:document.getElementById('logoutForm').submit()"><i class=" icon-logout "></i> Deconectare</a>
+                    }
+                </li>
+            }
+
+        </ul>
+
+    </li>
+
+    @if (role == "User")
+    {
+        <li class="postadd nav-item">
+            <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "Product")'>Adauga Anunt</a>
+        </li>
+    }
+    @if (role == "Administrator" || role == "Editor")
+    {
+        @*<li class="postadd nav-item">
+            <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "Categories")'>Categorie Noua</a>
+        </li>
+
+        <li class="postadd nav-item">
+            <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "SubCategories")'>Subcategorie Noua</a>
+        </li>*@
 
         <li class="dropdown no-arrow nav-item">
             <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                <span>@User.Identity.GetUserName()</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i>
+                <span>Adauga</span> <i class="icon-plus"></i> <i class=" icon-down-open-big fa"></i>
             </a>
-            
+
             <ul class="dropdown-menu user-menu dropdown-menu-right">
-                <li class="active dropdown-item">
-                    <a href='@Url.Action("Index", "Manage")'>
-                        <i class="icon-home"></i> Profilul meu
+                <li class="dropdown-item">
+                    <a href='Url.Action("New", "Categories")'>
+                        <i class="icon-th-thumb"></i> Categorie
                     </a>
                 </li>
 
-                @if (Request.IsAuthenticated)
-                {
-                    if (role == "User")
-                    {
-                        <li class="dropdown-item">
-                            <a href='@Url.Action("Personal", "Product")'><i class="icon-th-thumb"></i> Anunturile mele </a>
-                        </li>
+                <li class="dropdown-item">
+                    <a href='Url.Action("New", "SubCategories")'>
+                        <i class="icon-th-thumb-empty"></i> Subcategorie
+                    </a>
+                </li>
 
-                        <li class="dropdown-item">
-                            <a href='@Url.Action("Index", "Interests")'><i class="icon-heart"></i> Anunturi favorite </a>
-                        </li>
+                <li class="dropdown-item">
+                    <a href='Url.Action("New", "DeliveryCompanies")'>
+                        <i class="icon-truck"></i> Companie livrare
+                    </a>
+                </li>
 
-                        <li class="dropdown-item">
-                            <a href='@Url.Action("Index", "Conversation")'>
-                                <i class="icon-mail"></i> Mesaje
-                            </a>
-                        </li>
-                    }
-                    @*if (role == "Administrator")
-                    {
-                        <li class="dropdown-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
-                        <li class="dropdown-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
-                    }*@
-
-                    <li class="dropdown-item">
-                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            <a href="javascript:document.getElementById('logoutForm').submit()"><i class=" icon-logout "></i> Deconectare</a>
-                        }
-                    </li>
-                }
+                <li class="dropdown-item">
+                    <a href='Url.Action("New", "Cities")'>
+                        <i class="icon-location"></i> Oras
+                    </a>
+                </li>
 
             </ul>
 
         </li>
-
-        @if (role == "User")
-        {
-            <li class="postadd nav-item">
-                <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "Product")'>Adauga Anunt</a>
-            </li>
-        }
-        @if (role == "Administrator" || role == "Editor")
-        {
-            <li class="postadd nav-item">
-                <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "Categories")'>Categorie Noua</a>
-            </li>
-
-            <li class="postadd nav-item">
-                <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "SubCategories")'>Subcategorie Noua</a>
-            </li>
-        }
-    </ul>
+    }
+</ul>
     
  }
 else

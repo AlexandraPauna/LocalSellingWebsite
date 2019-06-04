@@ -69,7 +69,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href=''>
+                                        <a href='@Url.Action("Index", "Rating")'>
                                             <i class="icon-star"></i>
                                             Calificativele Mele <span class="badge badge-secondary">@ViewBag.NrRatings</span>
                                         </a>
@@ -133,7 +133,7 @@
                             </div>
                             <div class="btn-group hidden-sm">
 
-                                @using (Html.BeginForm("Index", "Conversation", FormMethod.Get))
+                                @using (Html.BeginForm("Index", "Conversation", FormMethod.Get,new { id = "form1"}))
                                 {
                                     @Html.DropDownList("sortType", new SelectList(
                                                                         new List<Object>{
@@ -296,6 +296,6 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script type="text/javascript">
     function submitform() {
-        $('form').submit();
+        $('#form1').submit();
     }
 </script>
