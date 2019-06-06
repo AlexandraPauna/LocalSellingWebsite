@@ -60,7 +60,7 @@
                             @Html.DropDownList("FromCity", new SelectList(ViewBag.Cities, "Value", "Text"), "Selectati locatia", new { id = "FromCity", @class = "form-control" });
                             <br />
                             @Html.Label("Postate dupa data de");
-                            @Html.TextBox("DateMin", null, "{0:dd/mm/yyyy}", new { id = "dateMin", @class = "date-picker" });
+                            @Html.TextBox("DateMin", null, "{0:dd/mm/yyyy}", new { id = "dateMin", @class = "date-picker form-control" });
                             <br />
                             @Html.Label("Pret minim");
                             @Html.TextBox("PriceMin", null, new { type = "number", min = "0", step = "0.01", @class = "form-control" });
@@ -154,7 +154,7 @@
                     {
                         <div class="pull-left col-xs-6">
                             <div class="breadcrumb-list">
-                                <a class="btn btn-sm btn-info" href="/SubCategories/Edit/@Model.SubCategoryId">Modifica</a>
+                                <a class="btn btn-sm btn-info" style="margin-right:5px;" href="/SubCategories/Edit/@Model.SubCategoryId">Modifica</a>
 
                             </div>
 
@@ -226,13 +226,13 @@
                                                     new { value = "PriceDesc" , text = "Pret descrescator", rel = "nofollow" }
                                                     }, "value", "text", 2), new { id = "SortType", @class = "selectpicker select-sort-by", @onchange = "submitform();" });
 
-                                      }
+                                    }
 
 
-                                        @*<li><a href="" rel="nofollow">Relevance</a></li>
-            <li><a href="" rel="nofollow">Date</a></li>
-            <li><a href="" rel="nofollow">Company</a></li>*@
-                                    </ul>
+                                    @*<li><a href="" rel="nofollow">Relevance</a></li>
+                                        <li><a href="" rel="nofollow">Date</a></li>
+                                        <li><a href="" rel="nofollow">Company</a></li>*@
+                                </ul>
                             </div>
 
                         </li>
@@ -278,7 +278,7 @@
                                             <h2 class="item-price"> @product.Price RON</h2>
                                             @if (Context.User.Identity.Name == product.User.UserName)
                                             {
-                                                <a class="btn btn-danger  btn-sm make-favorite" href="/Product/Edit/@product.ProductId">
+                                                <a class="btn btn-danger  btn-sm make-favorite" href="/Product/Edit/@product.ProductId" style="margin-bottom:3px;">
 
                                                     <i class="fa fa-certificate"></i>
 
@@ -292,13 +292,15 @@
                                                 if (saved == true)
                                                 {
                                                     <form method="post" action="/Product/Save/@product.ProductId">
-                                                        <button type="submit" class=" btn btn-secondary btn-sm make-favorit"> <i class="fa fa-heart"></i>  <span>Sterge din favorite</span></button>
+                                                        <a href="javascript:;" onclick="parentNode.submit();" class=" btn btn-secondary btn-sm make-favorite" style="min-width:25px;"> 
+                                                        <i class="fa fa-heart"></i>  <span>Sterge din favorite</span></a>
                                                     </form>
                                                 }
                                                 else
                                                 {
                                                     <form method="post" action="/Product/Save/@product.ProductId">
-                                                        <button type="submit" class=" btn btn-secondary btn-sm make-favorit"> <i class="fa fa-heart"></i>  <span>Salveaza in favorite</span></button>
+                                                        <a href="javascript:;" onclick="parentNode.submit();" class=" btn btn-secondary btn-sm make-favorite" style="min-width:25px;"> 
+                                                        <i class="fa fa-heart"></i>  <span>Salveaza in favorite</span></a>
                                                     </form>
                                                 }
 
@@ -397,6 +399,8 @@
 
 <!-- Bootstrap -->
 <!-- Bootstrap DatePicker -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -416,12 +420,6 @@
         });
     });
 
-
-</script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-<script type="text/javascript">
     function submitform() {
         $('#form1').submit();
     }

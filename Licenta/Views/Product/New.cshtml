@@ -25,7 +25,7 @@
 
                             @Html.Hidden("Active", true, new { @class = "form-control" })
 
-                            <div class="content-subheading">
+                            <div class="content-subheading first">
                                 <i class="icon-tag"></i>
                                 <strong>
                                     Titlu si Categorie
@@ -42,14 +42,16 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Selectati Categoria</label>
                                 <div class="col-sm-8">
-                                    @Html.DropDownList("catList", new SelectList(ViewBag.Categories, "Value", "Text"), "Selectati categoria", new { id = "catList", @class = "form-control" })
+                                    @Html.DropDownList("catList", new SelectList(ViewBag.Categories, "Value", "Text"), 
+                                                        "Selectati categoria", new { id = "catList", @class = "form-control" })
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Selectati Subcategoria</label>
                                 <div class="col-sm-8">
-                                    @Html.DropDownListFor(m => m.SubCategoryId, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Selectati subcategoria", new { id = "subcatList", @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.SubCategoryId, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"),
+                                                            "Selectati subcategoria", new { id = "subcatList", @class = "form-control" })
                                 </div>
                             </div>
 
@@ -61,18 +63,12 @@
                                 </strong>
                             </div>
 
-                            @*<div class="form-group row">
-                                    @Html.Label("ProductPhotos", "Poze Anunt", new { @class = "col-sm-3 col-form-label" })
-                                    <div class="col-sm-8">
-                                        <input type="file" class="form-control" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
-                                    </div>
-                                </div>*@
-
                             <div class="form-group row">
                                 @Html.Label("ProductPhotos", "Poze Anunt", new { @class = "col-sm-3 col-form-label" })
                                 <div class="col-lg-8">
                                     <div class="mb10">
-                                        <input type="file" class="file" multiple="multiple" name="ProductPhotos" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" data-preview-file-type="text" />
+                                        <input type="file" class="file" multiple="multiple" name="ProductPhotos" id="fileUpload" 
+                                               accept=".png,.jpg,.jpeg,.gif,.tif" data-preview-file-type="text" />
                                     </div>
                                 </div>
                             </div>
@@ -88,7 +84,8 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Selectati Starea Produsului</label>
                                 <div class="col-sm-8">
-                                    @Html.DropDownListFor(m => m.ProductStateId, new SelectList(Model.ProductStateTypes, "Value", "Text"), "Selectati starea", new { @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.ProductStateId, new SelectList(Model.ProductStateTypes, "Value", "Text"), 
+                                                            "Selectati starea", new { @class = "form-control" })
                                 </div>
                             </div>
 
@@ -151,14 +148,15 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Selectati Orasul</label>
                                 <div class="col-sm-8">
-                                    @Html.DropDownListFor(m => m.CityId, new SelectList(Model.Cities, "Value", "Text"), "Selectati orasul", new { @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.CityId, new SelectList(Model.Cities, "Value", "Text"), "Selectati orasul", 
+                                                          new { @class = "form-control" })
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 @Html.Label("PersonalDelivery", "Predare personala", new { @class = "col-sm-3 col-form-label" })
                                 <div class="col-sm-8">
-                                    @Html.CheckBox("PersonalDelivery", false, new { @class = "checkbox" })
+                                    @Html.CheckBox("PersonalDelivery", false, new { @class = "checkbox", @style = "margin-top:10px;" })
                                 </div>
                             </div>
 
@@ -173,7 +171,8 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Selectati firma de curierat</label>
                                 <div class="col-sm-8">
-                                    @Html.DropDownListFor(m => m.DeliveryCompanyId, new SelectList(Model.DeliveryCompanies, "Value", "Text"), "Selectati compania de curierat", new { @class = "form-control" })
+                                    @Html.DropDownListFor(m => m.DeliveryCompanyId, new SelectList(Model.DeliveryCompanies, "Value", "Text"), 
+                                                          "Selectati compania de curierat", new { @class = "form-control" })
                                     <small id="" class="form-text text-muted">
                                         Camp optional
                                     </small>
@@ -228,7 +227,8 @@
 
                     <p>
                         Acest site iti ofera posibilitatea de a publica anunturi gratuite pentru orasul tau si imprejurimile sale.
-                        Vei gasi usor anunturi gratuite interesante din Bucuresti, Ilfov si alte orase din tara si vei putea intra usor in legatura cu cei care le-au publicat.
+                        Vei gasi usor anunturi gratuite interesante din Bucuresti, Ilfov si alte orase din tara si vei putea intra usor in legatura 
+                        cu cei care le-au publicat.
                         Te asteapta o varietate de produse la preturi mici.
                     </p>
                 </div>

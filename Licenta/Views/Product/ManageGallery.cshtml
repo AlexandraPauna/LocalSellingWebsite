@@ -63,8 +63,8 @@ else
                     <strong>
                         <i class="icon-photo"></i> Editare Galerie Anunt
                     </strong>
+                    <a class="btn btn-sm btn-success pull-right" href="/Product/Edit/@Model.ProductId">Inapoi</a>
                 </h2>
-                <a class="btn btn-success" href="/Product/Edit/@Model.ProductId">Inapoi</a>
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -74,14 +74,14 @@ else
                             <div id="ProductPhotosGallery">
                                 @foreach (var item in ViewBag.ProductImages)
                                 {
-                                    <div>
-                                        <img class="img-thumbnail " src="@item.StringData" alt="Imagine produs">
+                                    <div class="text-center">
+                                        <img class="img-thumbnail" src="@item.StringData" alt="Imagine produs">
                                     </div>
                                     <form method="post" action="/Product/DeletePhoto/@item.IntegerData">
                                         @Html.HttpMethodOverride(HttpVerbs.Delete)
-                                        <button class="btn btn-sm btn-danger" type="submit">Sterge</button>
+                                        <button class="btn btn-sm btn-danger pull-right" type="submit">Sterge</button>
                                     </form>
-
+                                    <div class="clearfix"></div>
                                 }
                             </div>
                         }

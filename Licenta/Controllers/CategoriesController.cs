@@ -246,7 +246,6 @@ namespace Licenta.Controllers
             }
         }
 
-        [HttpDelete]
         [Authorize(Roles = "Editor,Administrator")]
         public ActionResult Delete(int id)
         {

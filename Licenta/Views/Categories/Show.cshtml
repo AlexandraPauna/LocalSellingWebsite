@@ -35,11 +35,14 @@
                             <a class="nav-link" href="/Categories/Edit/@Model.CategoryId">Modifica categoria</a>
                         </li>
                         <li>
-                            <form class="nav-link" method="post" action="/Categories/Delete/@Model.CategoryId">
-                                @Html.HttpMethodOverride(HttpVerbs.Delete)
-                                <button style="border:none; background:none; text-transform:uppercase; padding:inherit; cursor:pointer" type="submit">Sterge categoria</button>
-                            </form>
+                            <a class="nav-link" href="/Categories/Delete/@Model.CategoryId">Sterge categoria</a>
                         </li>
+                        @*<li>
+                            <form method="post" action="/Categories/Delete/@Model.CategoryId">
+                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                <a class="nav-link">Sterge categoria</a>
+                            </form>
+                        </li>*@
                     }
                 </ul>
 

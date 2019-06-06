@@ -174,7 +174,7 @@ namespace Licenta.Controllers
         public IEnumerable<SelectListItem> GetAllRoles()
         {
             var selectList = new List<SelectListItem>();
-            var roles = from role in _db.Roles select role;
+            var roles = from role in _db.Roles where role.Name != "Editor" select role;
             foreach (var role in roles)
             {
                 selectList.Add(new SelectListItem

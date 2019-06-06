@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Editare rol utilizator"; }
 
-<ol class="breadcrumb">
+@*<ol class="breadcrumb">
     <li><h3>@ViewBag.Title</h3></li>
 </ol>
 
@@ -30,9 +30,105 @@
 
 @if (ViewBag.NotVisible == false)
 {
-<form method="post" action="/Users/Delete/@Model.Id">
-    @Html.HttpMethodOverride(HttpVerbs.Delete)
-    <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Esti sigur?');">Sterge cont</button>
-</form>
-}
+    <form method="post" action="/Users/Delete/@Model.Id">
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Esti sigur?');">Sterge cont</button>
+    </form>
+}*@
 
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 page-content">
+            <div class="inner-box category-content">
+                <h2 class="title-2 uppercase">
+                    <strong>
+                        <i class="icon-pencil"></i> Editeaza Utilizatorul
+                    </strong>
+
+                </h2>
+
+               
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="/Users/Edit/@Model.Id" class="form-horizontal">
+                            @Html.HttpMethodOverride(HttpVerbs.Put)
+                            @Html.HiddenFor(m => m.Id)
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                            <div class="content-subheading first">
+                                <i class="icon-user"></i>
+                                <strong>
+                                    Schimbare rol asociat
+                                </strong>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Selectati rolul</label>
+                                <div class="col-sm-8">
+                                    @Html.DropDownList("newRole", new SelectList(Model.AllRoles, "Value", "Text", (string)ViewBag.userRole), null, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="content-subheading">
+                                <i class="icon-book"></i>
+                                <strong>
+                                    Editare informatii cont
+                                </strong>
+                            </div>
+
+                            <div class="form-group row">
+                                <i class="glyphicon glyphicon-user"></i> @Html.Label("UserName", "Nume utilizator", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(m => m.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <i class="glyphicon glyphicon-envelope"></i> @Html.Label("Email", "Email utilizator", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <i class="glyphicon glyphicon-phone"></i> @Html.Label("PhoneNumber", "Numar telefon", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(m => m.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+
+                            <br />
+                            <!-- Button  -->
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-8">
+                                    <div style="clear:both"></div>
+                                    <button class="btn btn-primary" type="submit">Modifica</button>
+                                </div>
+                            </div>
+
+                        </form>
+                        @if (ViewBag.NotVisible == false)
+                        {
+                            <form method="post" action="/Users/Delete/@Model.Id">
+                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                <button class="btn btn-danger pull-right" type="submit" onclick="return confirm('Esti sigur?');">Sterge cont</button>
+                            </form>
+                        }
+                        <div class="clearfix"></div>
+                        <br/>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 reg-sidebar">
+
+           
+        </div>
+        <!--/.reg-sidebar-->
+    </div>
+</div>

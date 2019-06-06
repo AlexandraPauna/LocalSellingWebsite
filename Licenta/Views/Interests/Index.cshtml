@@ -206,7 +206,7 @@
 
                                                 <form method="post" action="/Product/Save/@interest.ProductId">
                                                     <p>
-                                                        <button class="btn btn-primary btn-sm" type="submit"><i class=" fa fa-heart"></i> Sterge din favorite</button>
+                                                        <button class="btn btn-primary btn-sm full-width" type="submit"><i class=" fa fa-heart"></i> Sterge din favorite</button>
                                                     </p>
 
                                                 </form>
@@ -223,7 +223,7 @@
                                                     if (interest.Product.Active == true)
                                                     {
                                                         <p>
-                                                            <a class="btn btn-danger btn-sm" href="/Product/Deactivate/@interest.ProductId">
+                                                            <a class="btn btn-danger btn-sm full-width" href="/Product/Deactivate/@interest.ProductId">
                                                                 <i class=" fa fa-power-off"></i>  Dezactivare anunt
                                                             </a>
                                                         </p>
@@ -232,7 +232,7 @@
                                                     else
                                                     {
                                                         <p>
-                                                            <a class="btn btn-success btn-sm" href="/Product/Activate/@interest.ProductId">
+                                                            <a class="btn btn-success btn-sm full-width" href="/Product/Activate/@interest.ProductId">
                                                                 <i class=" fa fa-power-off"></i> Activare anunt
                                                             </a>
                                                         </p>
@@ -243,7 +243,7 @@
                                                     <form method="post" action="/Product/Delete/@interest.ProductId">
                                                         <p>
                                                             @Html.HttpMethodOverride(HttpVerbs.Delete)
-                                                            <button class="btn btn-danger btn-sm" type="submit" padding-right:11px" onclick="return confirm('Esti sigur?');"><i class=" fa fa-trash"></i> Stergere anunt</button>
+                                                            <button class="btn btn-danger btn-sm full-width" type="submit" padding-right:11px" onclick="return confirm('Esti sigur?');"><i class=" fa fa-trash"></i> Stergere anunt</button>
                                                         </p>
                                                     </form>
 

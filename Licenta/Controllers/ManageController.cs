@@ -620,19 +620,21 @@ namespace Licenta.Controllers
         [NonAction]
         public IEnumerable<SelectListItem> GetAllCities()
         {
-            //generate empty list
+            // se genereaza o lista goala
             var selectList = new List<SelectListItem>();
-
+            //se extrag orasele din baza de date
             var cities = from cit in _db.Cities select cit;
+            //se itereaza prin orase
             foreach (var city in cities)
             {
+                //se adauga in lista elementele necesare pentru dropdown
                 selectList.Add(new SelectListItem
                 {
                     Value = city.CityId.ToString(),
                     Text = city.CityName.ToString()
                 });
             }
-
+            //se returneaza lista de orase
             return selectList;
         }
 
