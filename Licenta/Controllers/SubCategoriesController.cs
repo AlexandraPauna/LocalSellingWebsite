@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Licenta.Common.Entities;
 using Licenta.Common.Models;
 using Licenta.DataAccess;
+using PagedList;
 
 namespace Licenta.Controllers
 {
@@ -55,8 +56,13 @@ namespace Licenta.Controllers
         }
 
         //vizibil pt toata lumea
-        public ActionResult Show(int id, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType)
+        public ActionResult Show(int id, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType, int? page)
         {
+            /*if(dateMin != null || fromCity != null || priceMin != null || priceMax!= null || state != null || sortType != null)
+            {
+                page = 1;
+            }*/
+
             ViewBag.Cities = GetAllCities();
             ViewBag.ProductStates = GetAllProductStates();
             ViewBag.Categories = GetAllCategories();
@@ -91,6 +97,7 @@ namespace Licenta.Controllers
             ViewBag.FromCity = fromCity;
             ViewBag.State = state;
             ViewBag.DateMin = dateMin;
+            ViewBag.SortType = sortType;
 
             //Sortarea
             if (sortType == "Title")
@@ -109,12 +116,15 @@ namespace Licenta.Controllers
                                 where subc.CategoryId == subCategory.CategoryId && subc.SubCategoryId != subCategory.SubCategoryId
                                 select subc;
 
+            int pageIndex = page ?? 1;
+            int dataCount = 2;
+
             //ViewBag.Products = products;
             var model = new SubCategoryViewModel { SubCategoryId = subCategory.SubCategoryId,
                                                    SubCategoryName = subCategory.SubCategoryName,
                                                    CategoryId = subCategory.CategoryId,
                                                    Category = subCategory.Category,
-                                                   Products = products.ToList(),
+                                                   Products = products.ToList().ToPagedList(pageIndex, dataCount),
                                                    NrProducts = products.ToList().Count(),
                                                    SubCategories = subcategories.ToList(),
                                                    Interests = interests.ToList()};

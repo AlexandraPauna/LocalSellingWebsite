@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using PagedList;
 
 namespace Licenta.Common.Models
 {
@@ -24,7 +25,8 @@ namespace Licenta.Common.Models
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
 
-        public IList<Product> Products { get; set; }
+        //public IList<Product> Products { get; set; }
+        public IPagedList<Product> Products { get; set; }
 
         public int NrProducts { get; set; }
 

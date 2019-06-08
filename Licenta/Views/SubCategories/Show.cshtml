@@ -1,5 +1,8 @@
 ﻿@using Licenta.Common.Entities
 @using Microsoft.AspNet.Identity
+@using PagedList
+@using PagedList.Mvc
+
 
 @{
     ViewBag.Title = "Afisare Subcategorie";
@@ -292,15 +295,17 @@
                                                 if (saved == true)
                                                 {
                                                     <form method="post" action="/Product/Save/@product.ProductId">
-                                                        <a href="javascript:;" onclick="parentNode.submit();" class=" btn btn-secondary btn-sm make-favorite" style="min-width:25px;"> 
-                                                        <i class="fa fa-heart"></i>  <span>Sterge din favorite</span></a>
+                                                        <a href="javascript:;" onclick="parentNode.submit();" class=" btn btn-secondary btn-sm make-favorite" style="min-width:25px;">
+                                                            <i class="fa fa-heart"></i>  <span>Sterge din favorite</span>
+                                                        </a>
                                                     </form>
                                                 }
                                                 else
                                                 {
                                                     <form method="post" action="/Product/Save/@product.ProductId">
-                                                        <a href="javascript:;" onclick="parentNode.submit();" class=" btn btn-secondary btn-sm make-favorite" style="min-width:25px;"> 
-                                                        <i class="fa fa-heart"></i>  <span>Salveaza in favorite</span></a>
+                                                        <a href="javascript:;" onclick="parentNode.submit();" class=" btn btn-secondary btn-sm make-favorite" style="min-width:25px;">
+                                                            <i class="fa fa-heart"></i>  <span>Salveaza in favorite</span>
+                                                        </a>
                                                     </form>
                                                 }
 
@@ -333,17 +338,15 @@
             </div>
             <div class="pagination-bar text-center">
                 <nav aria-label="Page navigation " class="d-inline-b">
-                    <ul class="pagination">
+                    Pagina @(Model.Products.PageCount < Model.Products.PageNumber ? 0 : Model.Products.PageNumber) din @Model.Products.PageCount
 
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">...</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
+                        @Html.PagedListPager((IPagedList)Model.Products, page => Url.Action("Show", new { id = Model.SubCategoryId, dateMin = ViewBag.DateMin,
+                       fromCity = ViewBag.FromCity, priceMin = ViewBag.PriceMin, priceMax = ViewBag.PriceMax, state = ViewBag.State, sortType = ViewBag.SortType, page = page}),
+                                         new PagedListRenderOptions
+                                         {
+                                             FunctionToTransformEachPageLink = (liTag, aTag) => { aTag.Attributes.Add("class", "page-link".ToString()); return aTag; },
+                                             LiElementClasses = new string[] { "page-item" },
+                                         })
                 </nav>
             </div>
             <!--/.pagination-bar -->
