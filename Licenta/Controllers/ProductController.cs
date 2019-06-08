@@ -633,15 +633,15 @@ namespace Licenta.Controllers
         }
 
         [HttpDelete]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             Product product = _db.Products.Find(id);
             var currentUser = User.Identity.GetUserId();
+            var user = _db.Users.Where(x => x.Id == currentUser).SingleOrDefault();
             if (product.UserId == currentUser || User.IsInRole("Administrator") || User.IsInRole("Editor"))
             {
                 var productImages = _db.ProductImages.Where(x => x.ProductId == product.ProductId);
                 _db.ProductImages.RemoveRange(productImages);
-
                 var conversations = _db.Conversations.Where(x => x.ProductId == id);
                 foreach(var conversation in conversations)
                 {
@@ -649,14 +649,17 @@ namespace Licenta.Controllers
                     _db.Messages.RemoveRange(messages);
                 }
                 _db.Conversations.RemoveRange(conversations);
-
                 var interests = _db.Interests.Where(x => x.ProductId == id);
                 _db.Interests.RemoveRange(interests);
 
                 _db.Products.Remove(product);
-
                 _db.SaveChanges();
                 TempData["message"] = "Anuntul a fost sters!";
+
+                //trimitere email
+                string content = "Buna " + user.UserName + ", \r\n" + "Anuntul tau a fost sters cu succes! Anunt:" + product.Title + ".";
+                await _emailService.SendEmailAsync(user.Email, "site_anunturi@yahoo.com", "Site anunturi", "Anunt sters", content);
+
             }
 
             return RedirectToAction("Index", "Product", new { id = currentUser});
@@ -691,7 +694,6 @@ namespace Licenta.Controllers
                 TempData["message"] = "Anuntul a fost dezactivat!";
             }
 
-            //return RedirectToAction("Show", "Product", new { id = product.ProductId });
             return Redirect(Request.UrlReferrer.ToString());
         }
 
