@@ -1,4 +1,5 @@
 ﻿using Licenta.Common.Entities;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Licenta.Common.Models
 {
     public class InterestViewModel
     {
-        public IList<Interest> Interests { get; set; }
+        public IPagedList<Interest> Interests { get; set; }
     }
 }

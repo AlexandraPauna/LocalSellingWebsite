@@ -1,5 +1,8 @@
 ﻿@using Licenta.Common.Entities
 @using Microsoft.AspNet.Identity
+@using PagedList
+@using PagedList.Mvc
+
 @{
     ViewBag.Title = "Anunturile marcate ca favorite";
 }
@@ -117,7 +120,7 @@
                         <label for="checkAll">
                             <input type="checkbox" id="checkAll">
                             Selecteaza: Toate | <button id="delete" href="#" class="btn btn-primary btn-sm">
-                             <i class="fa fa-trash"></i> Sterge din favorite 
+                                <i class="fa fa-trash"></i> Sterge din favorite
                             </button>
                         </label>
 
@@ -160,12 +163,12 @@
                                     @*@Html.Partial("ProductInfo", interest.Product);*@
                                     <tr>
                                         <td style="width:2%" class="add-img-selector">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" id="@interest.ProductId">
-                                                    </label>
-                                                </div>
-                                            </td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" id="@interest.ProductId">
+                                                </label>
+                                            </div>
+                                        </td>
                                         <td style="width:14%" class="add-img-td">
                                             <a href="/Product/Show/@interest.ProductId">
                                                 <img class="thumbnail  img-responsive"
@@ -262,6 +265,22 @@
                 <!--/.row-box End-->
 
             </div>
+            @if (Model.Interests != null)
+            {
+                <div class="pagination-bar text-center">
+                    <nav aria-label="Page navigation " class="d-inline-b">
+                        Pagina @(Model.Interests.PageCount < Model.Interests.PageNumber ? 0 : Model.Interests.PageNumber) din @Model.Interests.PageCount
+
+                        @Html.PagedListPager((IPagedList)Model.Interests, page => Url.Action("Index", new { page = page}),
+                                         new PagedListRenderOptions
+                                         {
+                                             FunctionToTransformEachPageLink = (liTag, aTag) => { aTag.Attributes.Add("class", "page-link".ToString()); return aTag; },
+                                             LiElementClasses = new string[] { "page-item" },
+                                         })
+                    </nav>
+                </div>
+            }
+
         </div>
         <!--/.page-content-->
     </div>
@@ -270,7 +289,7 @@
 <!--/.container-->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script> 
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
 

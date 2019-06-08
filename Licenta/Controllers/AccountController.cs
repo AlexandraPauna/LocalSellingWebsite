@@ -12,6 +12,7 @@ using Licenta.DataAccess;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using PagedList;
 
 namespace Licenta.Controllers
 {
@@ -204,7 +205,8 @@ namespace Licenta.Controllers
                     RatingScore = null,
                     CommunicationScore = null,
                     AccuracyScore = null,
-                    TimeScore = null
+                    TimeScore = null,
+                    Date = (DateTime)DateTime.Now
                 };
                 user.UserPhoto = imageData;
 
@@ -612,6 +614,20 @@ namespace Licenta.Controllers
                           where rat.RatedUserId == id
                           orderby rat.Date
                           select rat;
+
+            /*if(display == null || display == "Ratings")
+            {
+                display = "Ratings";
+            }
+            else
+            {
+                if (display == "Products")
+                {
+                    display = "Products";
+                }
+            }
+            ViewBag.Display = display;*/
+
 
             var model = new UserProfileViewModel
             {

@@ -58,11 +58,7 @@ namespace Licenta.Controllers
         //vizibil pt toata lumea
         public ActionResult Show(int id, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType, int? page)
         {
-            /*if(dateMin != null || fromCity != null || priceMin != null || priceMax!= null || state != null || sortType != null)
-            {
-                page = 1;
-            }*/
-
+           
             ViewBag.Cities = GetAllCities();
             ViewBag.ProductStates = GetAllProductStates();
             ViewBag.Categories = GetAllCategories();
@@ -117,7 +113,7 @@ namespace Licenta.Controllers
                                 select subc;
 
             int pageIndex = page ?? 1;
-            int dataCount = 2;
+            int dataCount = 5;
 
             //ViewBag.Products = products;
             var model = new SubCategoryViewModel { SubCategoryId = subCategory.SubCategoryId,

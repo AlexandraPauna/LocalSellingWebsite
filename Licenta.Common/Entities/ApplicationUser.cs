@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -18,15 +20,23 @@ namespace Licenta.Common.Entities
         }
 
         public string FirstName { get; set; }
+
         public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Orasul este obligatoriu!")]
         public int CityId { get; set; }
         public virtual City City { get; set; }
         public IEnumerable<SelectListItem> Cities { get; set; }
+
         public byte[] UserPhoto { get; set; }
+
         public double? RatingScore { get; set; }
         public double? TimeScore { get; set; }
         public double? CommunicationScore { get; set; }
         public double? AccuracyScore { get; set; }
+
+        [Required]
+        public DateTime Date { get; set; }
 
         public IEnumerable<SelectListItem> AllRoles { get; set; }
     }

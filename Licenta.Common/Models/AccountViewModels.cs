@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
@@ -112,6 +113,9 @@ namespace Licenta.Common.Models
 
         [Display(Name = "Poza Profil")]
         public byte[] UserPhoto { get; set; }
+
+        [Required]
+        public DateTime Date { get; set; }
     }
 
     public class ResetPasswordViewModel

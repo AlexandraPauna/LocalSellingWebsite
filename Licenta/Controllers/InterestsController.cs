@@ -1,6 +1,7 @@
 ﻿using Licenta.Common.Models;
 using Licenta.DataAccess;
 using Microsoft.AspNet.Identity;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Licenta.Controllers
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         // GET: Interests
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
             var currentUser = User.Identity.GetUserId();
             if (currentUser == null)
@@ -27,7 +28,9 @@ namespace Licenta.Controllers
                                  where ints.UserId == currentUser
                                  select ints).Where(x => x.Product.Active == true).OrderByDescending(x => x.Date);
 
-                var model = new InterestViewModel { Interests = interests.ToList() };
+                int pageIndex = page ?? 1;
+                int dataCount = 5;
+                var model = new InterestViewModel { Interests = interests.ToList().ToPagedList(pageIndex, dataCount) };
 
                 var unreadMessages = (from mess in _db.Messages
                                       where mess.ReceiverId == currentUser && mess.Read == false

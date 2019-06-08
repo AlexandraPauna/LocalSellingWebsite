@@ -1,6 +1,8 @@
-﻿
-@using Licenta.Common.Entities
+﻿@using Licenta.Common.Entities
 @using Microsoft.AspNet.Identity
+@using PagedList
+@using PagedList.Mvc
+
 
 @{
     ViewBag.Title = "Personal";
@@ -129,30 +131,30 @@
                         </label>
 
                         <div class="table-search pull-right col-sm-7">
-                            @using (Html.BeginForm("Personal", "Product", FormMethod.Get, new { id ="form1"}))
+                            @using (Html.BeginForm("Personal", "Product", FormMethod.Get, new { id = "form1" }))
                             {
-                            <div class="row">
-                               
-                                @Html.DropDownList("sortType", new SelectList(
-                                                                    new List<Object>{
-                                                                    new { value = "Active" , text = "Anunturi active"  },
-                                                                    new { value = "Deactivated" , text = "Anunturi dezactivate" }
-                                                                   }, "value", "text", 1), new { id = "sortType", @class = "form-control", @onchange = "submitform();" })
+                                <div class="row">
 
-                            </div>
+                                    @Html.DropDownList("sortType", new SelectList(
+                                                                        new List<Object>{
+                                                                        new { value = "Active" , text = "Anunturi active"  },
+                                                                        new { value = "Deactivated" , text = "Anunturi dezactivate" }
+                                                                       }, "value", "text", 1), new { id = "sortType", @class = "form-control", @onchange = "submitform();" })
+
+                                </div>
                             }
                             @*<div class="form-group">
-                                <div class="row">
-                                    <label class="col-sm-5 control-label text-right">
-                                        Cauta <br>
-                                        <a title="clear filter" class="clear-filter" href="#clear">[clear]</a>
-                                    </label>
+                                    <div class="row">
+                                        <label class="col-sm-5 control-label text-right">
+                                            Cauta <br>
+                                            <a title="clear filter" class="clear-filter" href="#clear">[clear]</a>
+                                        </label>
 
-                                    <div class="col-sm-7 searchpan">
-                                        <input type="text" class="form-control" id="filter">
+                                        <div class="col-sm-7 searchpan">
+                                            <input type="text" class="form-control" id="filter">
+                                        </div>
                                     </div>
-                                </div>
-                            </div>*@
+                                </div>*@
                         </div>
                     </div>
                     @if (Model.Products.Count == 0)
@@ -269,6 +271,24 @@
                 <!--/.row-box End-->
 
             </div>
+
+            @if (Model.Products != null)
+            {
+                <div class="pagination-bar text-center">
+                    <nav aria-label="Page navigation " class="d-inline-b">
+                        Pagina @(Model.Products.PageCount < Model.Products.PageNumber ? 0 : Model.Products.PageNumber) din @Model.Products.PageCount
+
+                        @Html.PagedListPager((IPagedList)Model.Products, page => Url.Action("Personal", new {  sortType = ViewBag.SortType, page = page}),
+                                         new PagedListRenderOptions
+                                         {
+                                             FunctionToTransformEachPageLink = (liTag, aTag) => { aTag.Attributes.Add("class", "page-link".ToString()); return aTag; },
+                                             LiElementClasses = new string[] { "page-item" },
+                                         })
+                    </nav>
+                </div>
+            }
+
+
         </div>
         <!--/.page-content-->
     </div>
@@ -309,7 +329,7 @@
 </script>
 
 @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>*@
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>*@
 <script type="text/javascript">
     function submitform() {
         $('#form1').submit();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Licenta.Common.Models;
 using Licenta.DataAccess;
+using PagedList;
 
 namespace Licenta.Controllers
 {
@@ -12,7 +13,7 @@ namespace Licenta.Controllers
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         // GET: Search
-        public ActionResult Index(string search, int? categoryId, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType)
+        public ActionResult Index(string search, int? categoryId, DateTime? dateMin, int? fromCity, float? priceMin, float? priceMax, int? state, string sortType, int? page)
         {
             var categories = from cat in _db.Categories
                              select cat;
@@ -90,7 +91,9 @@ namespace Licenta.Controllers
                 ViewBag.State = state;
                 ViewBag.DateMin = dateMin;
                 ViewBag.Search = search;
-                ViewBag.CatId = catId;
+                ViewBag.SortType = sortType;
+                ViewBag.Search = search;
+                ViewBag.CategoryId = categoryId;
 
                 //Sortarea
                 if (sortType == "Title")
@@ -105,8 +108,11 @@ namespace Licenta.Controllers
                 if (sortType == "PriceDesc")
                     products = products.OrderByDescending(x => x.Price);
 
+                int pageIndex = page ?? 1;
+                int dataCount = 5;
+
                 //var model = new ProductViewModel { Products = products.ToList() };
-                model = new ProductViewModel { Products = products.ToList() };
+                model = new ProductViewModel { Products = products.ToList().ToPagedList(pageIndex, dataCount) };
 
                 //ViewBag.products = products;
                 if (products.Count() > 0)

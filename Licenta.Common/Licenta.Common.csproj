@@ -91,6 +91,7 @@
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Entities\ProductState.cs" />
     <Compile Include="Entities\Rating.cs" />
+    <Compile Include="Entities\Statistic.cs" />
     <Compile Include="Entities\SubCategory.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CategoryViewModel.cs" />

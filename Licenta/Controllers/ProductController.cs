@@ -10,6 +10,7 @@ using Licenta.Common.Entities;
 using Licenta.Common.Models;
 using Licenta.DataAccess;
 using System.Threading.Tasks;
+using PagedList;
 
 namespace Licenta.Controllers
 {
@@ -19,7 +20,7 @@ namespace Licenta.Controllers
         private ApplicationUserManager _userManager;
         private readonly EmailService _emailService = new EmailService();
 
-        public ActionResult Index(string id, string sortType)
+        /*public ActionResult Index(string id, string sortType)
         {
             var user = (from usr in _db.Users
                         where usr.Id == id
@@ -52,9 +53,9 @@ namespace Licenta.Controllers
             }
 
             return View(model);
-        }
+        }*/
 
-        public ActionResult Personal(string sortType)
+        public ActionResult Personal(string sortType, int? page)
         {
             var id = User.Identity.GetUserId();
 
@@ -85,8 +86,11 @@ namespace Licenta.Controllers
                 products = products.Where(p => p.Active == false);
             }
             products = products.OrderByDescending(p => p.Date);
+            ViewBag.SortType = sortType;
 
-            var model = new ProductViewModel { Products = products.ToList() };
+            int pageIndex = page ?? 1;
+            int dataCount = 5;
+            var model = new ProductViewModel { Products = products.ToList().ToPagedList(pageIndex, dataCount) };
 
             if (TempData.ContainsKey("message"))
             {

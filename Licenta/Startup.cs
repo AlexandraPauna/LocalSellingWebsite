@@ -5,6 +5,7 @@ using Owin;
 using System.Linq;
 using Licenta.Common.Entities;
 using Licenta.DataAccess;
+using System;
 
 [assembly: OwinStartupAttribute(typeof(Licenta.Startup))]
 namespace Licenta
@@ -48,7 +49,8 @@ namespace Licenta
                 {
                     UserName = "admin@admin.com",
                     Email = "admin@admin.com",
-                    City = context.Cities.ToList().First()
+                    City = context.Cities.ToList().First(),
+                    Date = (DateTime)DateTime.Now
                 };
 
                 var adminCreated = userManager.Create(user, "Administrator1!");
