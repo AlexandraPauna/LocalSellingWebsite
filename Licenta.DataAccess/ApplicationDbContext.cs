@@ -23,6 +23,7 @@ namespace Licenta.DataAccess
         public DbSet<Message> Messages { get; set; }
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Statistic> Statistics { get; set; }
 
         public static ApplicationDbContext Create()
         {

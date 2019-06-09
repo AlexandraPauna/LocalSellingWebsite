@@ -157,6 +157,31 @@ namespace Licenta.Controllers
             var currentUser = User.Identity.GetUserId();
             if (currentUser != null && currentUser != product.UserId)
             {
+                //contorul din statistica se incrementeaza cand nu isi vizualizeaza un produs propriu
+                //pt ca vrem sa aflam de ce e interesat ca si cumparator
+                var statistic = (from stat in _db.Statistics
+                                where stat.UserId == currentUser && stat.SubCategoryId == product.SubCategoryId
+                                select stat).SingleOrDefault();
+                if(statistic != null)
+                {
+                    statistic.ViewCounter = statistic.ViewCounter + 1;
+                }
+                else
+                {
+                    Statistic newItem = new Statistic();
+                    newItem.UserId = currentUser;
+                    var user = (from usr in _db.Users
+                               where usr.Id == currentUser
+                               select usr).SingleOrDefault();
+                    newItem.User = user;
+                    newItem.SubCategoryId = product.SubCategoryId;
+                    newItem.SubCategory = product.SubCategory;
+                    newItem.ViewCounter = 0;
+                    
+                    _db.Statistics.Add(newItem);
+                }
+
+
                 product.Views = product.Views + 1;
                 _db.SaveChanges();
             }
