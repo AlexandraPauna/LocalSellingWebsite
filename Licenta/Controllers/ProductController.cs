@@ -176,7 +176,7 @@ namespace Licenta.Controllers
                     newItem.User = user;
                     newItem.SubCategoryId = product.SubCategoryId;
                     newItem.SubCategory = product.SubCategory;
-                    newItem.ViewCounter = 0;
+                    newItem.ViewCounter = 1;
                     
                     _db.Statistics.Add(newItem);
                 }
