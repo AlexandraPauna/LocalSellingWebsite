@@ -124,6 +124,102 @@ namespace Licenta.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
+
+            bool statisticPresent = false;
+            // Tuple<NumeCategorie, NrLike-uri, Procent>
+            List<Tuple<string, int, int>> subcategoriesSt = new List<Tuple<string, int, int>>();
+
+            var currentUser = User.Identity.GetUserId();
+            if (currentUser != null)
+            {
+                var statistic = from stat in _db.Statistics
+                                where stat.UserId == currentUser
+                                select stat;
+                var nrSubcategoriesViewed = statistic.Count();
+                var totalNrOfViews = 0;
+                if (nrSubcategoriesViewed != 0)
+                {
+                    statisticPresent = true;
+                    foreach (var st in statistic)
+                    {
+                        totalNrOfViews = totalNrOfViews + st.ViewCounter;
+                    }
+                    foreach (var st in statistic)
+                    {
+                        subcategoriesSt.Add(new Tuple<string, int, int>(st.SubCategoryId.ToString(), st.ViewCounter, (st.ViewCounter * 100 / totalNrOfViews)));
+                    }
+                    var subcategories = (from sub in _db.SubCategories
+                                         select sub).ToList();
+                    var remainingSubcat = subcategories.Where(p => !statistic.ToList().Any(p2 => p2.SubCategoryId == p.SubCategoryId));
+                    foreach (var sub in remainingSubcat)
+                    {
+                        subcategoriesSt.Add(new Tuple<string, int, int>(sub.SubCategoryId.ToString(), 0, 0));
+                    }
+
+                    // Sortam subcategoriile dupa nr de vizualizari
+                    subcategoriesSt.Sort((x, y) => -(x.Item2.CompareTo(y.Item2)));
+                }
+                
+
+            }
+
+            ViewBag.NoStatistic = false;
+            var allproducts = from prd in _db.Products
+                              select prd;
+            List<Product> productsArray = new List<Product>();
+            if (!statisticPresent)
+            {
+                ViewBag.NoStatistic = true;
+                ViewBag.RecommendedProducts = null;
+
+            }
+            else
+            {
+                var auxProd = allproducts;
+                List<Product> auxList = new List<Product>();
+
+                foreach (Product p in auxProd)
+                {
+                    auxList.Add(p);
+                }
+
+                while (auxList.Count() != 0)
+                {
+                    foreach (Tuple<string, int, int> t in subcategoriesSt)
+                    {
+                        int nrOfPrd = t.Item3 / 10;
+                        if (nrOfPrd < 1)
+                        {
+                            nrOfPrd = 1;
+                        }
+                        for (int i = 0; i < nrOfPrd; i++)
+                        {
+                            for (var j = 0; j < auxList.Count(); j++)
+                            {
+                                if (auxList.ElementAt(j).SubCategoryId.ToString().Equals(t.Item1))
+                                {
+                                    productsArray.Add(auxList.ElementAt(j));
+                                    auxList.RemoveAt(j);
+                                    break;
+                                }
+                            }
+                            if (auxList.Count() == 0)
+                            {
+                                break;
+                            }
+                        }
+                        if (auxList.Count() == 0)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                ViewBag.RecommendedProducts = productsArray;
+
+            }
+
+
             return View();
         }
 
