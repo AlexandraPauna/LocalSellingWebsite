@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using Licenta.Common.Entities;
 using Licenta.DataAccess;
 using System.Data.SqlClient;
+using Licenta.Common.Models;
+using PagedList;
 
 namespace Licenta.Controllers
 {
@@ -15,13 +17,24 @@ namespace Licenta.Controllers
         private readonly ApplicationDbContext _db = ApplicationDbContext.Create();
         // GET: Users
         [Authorize(Roles = "Administrator")]
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            var users = from user in _db.Users
+            /*var users = from user in _db.Users
                         orderby user.UserName
                         select user;
             ViewBag.UsersList = users;
-            return View();
+            return View();*/
+
+            var users = from user in _db.Users
+                        orderby user.UserName
+                        select user;
+
+            int pageIndex = page ?? 1;
+            int dataCount = 5;
+
+            var model = new UsersViewModel { Users = users.ToList().ToPagedList(pageIndex, dataCount) };
+
+            return View(model);
         }
 
         [Authorize(Roles = "Administrator")]
