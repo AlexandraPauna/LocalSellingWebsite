@@ -310,14 +310,14 @@
             });
 
             var options = {};
-            options.url = "../Interests/Delete";
+            options.url = "DeleteMultiple";
             options.type = "POST";
             options.data = JSON.stringify(selectedIDs);
             options.contentType = "application/json";
             options.dataType = "json";
             options.success = function (msg) {
                 //alert(msg);
-                window.location.href = "../Interests/Index";
+                window.location.href = "Personal";
             };
             options.error = function () {
                 alert("Error while deleting the records!");

@@ -1,82 +1,84 @@
 ﻿@using Licenta.Common.Entities
 @using Microsoft.AspNet.Identity
+@using PagedList
+@using PagedList.Mvc
 @*@{
-    ViewBag.Title = "Calificativele utilizatorului " + Model.RatedUser.UserName;
-}
+        ViewBag.Title = "Calificativele utilizatorului " + Model.RatedUser.UserName;
+    }
 
-<h2>@ViewBag.Title</h2>
-<hr />
-<br />
-@if (TempData.ContainsKey("message"))
-{
-    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
-    <br />
-}
-
-@if (Model.Ratings.Count == 0)
-{
-    <p>Nu exista calificative pentru utilizator! </p>
-}
-else
-{
-    <strong>Calificativ general: </strong> @Model.RatedUser.RatingScore
-    <br /><br />
-    <strong>Rating detaliat utilizator: </strong>
-    <br />
-    <span>Comunicarea vanzatorului: </span>@Model.RatedUser.CommunicationScore
-    <br />
-    <span>Acuratetea descrierii anunturilor: </span>@Model.RatedUser.AccuracyScore
-    <br />
-    <span>Timpul de onorare al comenzilor: </span>@Model.RatedUser.TimeScore
-    <br />
-    <br />
-
-    <h4>Calificative primite</h4>
+    <h2>@ViewBag.Title</h2>
     <hr />
     <br />
-}
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+        <br />
+    }
 
-@foreach (Rating rating in Model.Ratings)
-{
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            De la:
-            <strong>@Html.ActionLink((String)rating.User.UserName, "UserProfile", "Account", new { id = rating.User.Id }, null)</strong>
-            <br />
-        </div>
-        <div class="panel-body">
-            <strong>Calificativ: </strong>@rating.Average
-            <hr />
+    @if (Model.Ratings.Count == 0)
+    {
+        <p>Nu exista calificative pentru utilizator! </p>
+    }
+    else
+    {
+        <strong>Calificativ general: </strong> @Model.RatedUser.RatingScore
+        <br /><br />
+        <strong>Rating detaliat utilizator: </strong>
+        <br />
+        <span>Comunicarea vanzatorului: </span>@Model.RatedUser.CommunicationScore
+        <br />
+        <span>Acuratetea descrierii anunturilor: </span>@Model.RatedUser.AccuracyScore
+        <br />
+        <span>Timpul de onorare al comenzilor: </span>@Model.RatedUser.TimeScore
+        <br />
+        <br />
 
-            <strong>Data: </strong> @rating.Date.ToString("dd/MM/yyyy")
-            <br />
+        <h4>Calificative primite</h4>
+        <hr />
+        <br />
+    }
 
-            <strong>Detaliere calificativ:</strong>
-            <br />
-            Comunicarea vanzatorului: @rating.Communication
-            <br />
-            Acuratetea descrierii anunturilor: @rating.Accuracy
-            <br />
-            Timpul de onorare al comenzilor: @rating.Time
-            <br />
-
-            @if (!String.IsNullOrEmpty(rating.Text))
-            {
-                <strong>Descriere experienta: </strong> @rating.Text
+    @foreach (Rating rating in Model.Ratings)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                De la:
+                <strong>@Html.ActionLink((String)rating.User.UserName, "UserProfile", "Account", new { id = rating.User.Id }, null)</strong>
                 <br />
+            </div>
+            <div class="panel-body">
+                <strong>Calificativ: </strong>@rating.Average
+                <hr />
+
+                <strong>Data: </strong> @rating.Date.ToString("dd/MM/yyyy")
+                <br />
+
+                <strong>Detaliere calificativ:</strong>
+                <br />
+                Comunicarea vanzatorului: @rating.Communication
+                <br />
+                Acuratetea descrierii anunturilor: @rating.Accuracy
+                <br />
+                Timpul de onorare al comenzilor: @rating.Time
+                <br />
+
+                @if (!String.IsNullOrEmpty(rating.Text))
+                {
+                    <strong>Descriere experienta: </strong> @rating.Text
+                    <br />
+                }
+
+            </div>
+            @if (User.Identity.GetUserId() == rating.UserId)
+            {
+                <div class="panel-footer">
+                    <a class="btn btn-sm btn-info" href="/Rating/Edit/@rating.RatingId">Editeaza</a>
+                </div>
             }
 
         </div>
-        @if (User.Identity.GetUserId() == rating.UserId)
-        {
-            <div class="panel-footer">
-                <a class="btn btn-sm btn-info" href="/Rating/Edit/@rating.RatingId">Editeaza</a>
-            </div>
-        }
-
-    </div>
-    <br />
-}*@
+        <br />
+    }*@
 
 
 <div class="container">
@@ -208,7 +210,7 @@ else
                             </div>
                             <div class="btn-group hidden-sm">
 
-                                @using (Html.BeginForm("Index", "Rating", FormMethod.Get,new { id = "form1"}))
+                                @using (Html.BeginForm("Index", "Rating", FormMethod.Get, new { id = "form1" }))
                                 {
                                     @Html.DropDownList("sortType", new SelectList(
                                                                         new List<Object>{
@@ -244,7 +246,7 @@ else
                                 </div>*@
 
                             <div class="message-tool-bar-right pull-right">
-                                <span class="text-muted count-message"><b>1</b> - <b>20</b> of <b>255</b></span>
+                                @*<span class="text-muted count-message"><b>1</b> - <b>20</b> of <b>255</b></span>
                                 <div class="btn-group btn-group-sm">
                                     <button type="button" class="btn btn-secondary">
                                         <span class="fas fa-arrow-left"></span>
@@ -252,7 +254,7 @@ else
                                     <button type="button" class="btn btn-secondary">
                                         <span class="fas fa-arrow-right"></span>
                                     </button>
-                                </div>
+                                </div>*@
                             </div>
                         </div>
                     </div>
@@ -271,7 +273,7 @@ else
                                         Calificative acordate
                                     </a>
                                 </li>
-                                
+
 
                             </ul>
                         </div>
@@ -289,21 +291,21 @@ else
                                             {
 
                                                 <div class="list-group-item">
-                                                        @if (rating.RatedUserId == User.Identity.GetUserId()) //se af calificativele primite
-                                                        {
-                                                            <a href="@Url.Action("UserProfile", "Account", new { id = rating.UserId })" class="list-box-user">
-                                                                <img src="@Url.Action("UserPhotos", "Account", new { id = rating.UserId })" alt="user">
-                                                                <span class="name"> @rating.User.UserName </span>
-                                                            </a>
+                                                    @if (rating.RatedUserId == User.Identity.GetUserId()) //se af calificativele primite
+                                                    {
+                                                        <a href="@Url.Action("UserProfile", "Account", new { id = rating.UserId })" class="list-box-user">
+                                                            <img src="@Url.Action("UserPhotos", "Account", new { id = rating.UserId })" alt="user">
+                                                            <span class="name"> @rating.User.UserName </span>
+                                                        </a>
 
-                                                        }
-                                                        else //se af calificativele oferite
-                                                        {
-                                                            <a href="@Url.Action("UserProfile", "Account", new { id = rating.RatedUserId })" class="list-box-user">
-                                                                <img src='@Url.Action("UserPhotos", "Account", new { id = rating.RatedUserId })' alt="user">
-                                                                <span class="name">@rating.RatedUser.UserName </span>
-                                                            </a>
-                                                        }
+                                                    }
+                                                    else //se af calificativele oferite
+                                                    {
+                                                        <a href="@Url.Action("UserProfile", "Account", new { id = rating.RatedUserId })" class="list-box-user">
+                                                            <img src='@Url.Action("UserPhotos", "Account", new { id = rating.RatedUserId })' alt="user">
+                                                            <span class="name">@rating.RatedUser.UserName </span>
+                                                        </a>
+                                                    }
                                                     <a class="list-box-content">
                                                         <span class="title">Calificativ general: @rating.Average</span>
                                                         <div class="message-text">
@@ -321,19 +323,33 @@ else
                                                     <div class="list-box-action">
                                                         @if (User.Identity.GetUserId() == rating.UserId)
                                                         {
-                                                        <a class="markAsRead" data-toggle="tooltip" data-placement="top"
-                                                           title="Editeaza"><i class=" fas fa-pencil"></i></a>
+                                                            <a class="markAsRead" data-toggle="tooltip" data-placement="top"
+                                                               title="Editeaza"><i class=" fas fa-pencil"></i></a>
                                                             @*<a class="btn btn-sm btn-info" href="/Rating/Edit/@rating.RatingId">Editeaza</a>*@
                                                         }
-                                                        
+
                                                     </div>
                                                 </div>
                                             }
                                         }
 
 
-                                            </div>
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="pagination-bar text-center">
+                                <nav aria-label="Page navigation " class="d-inline-b">
+                                    Pagina @(Model.Ratings.PageCount < Model.Ratings.PageNumber ? 0 : Model.Ratings.PageNumber) din @Model.Ratings.PageCount
+
+                                    @Html.PagedListPager((IPagedList)Model.Ratings, page => Url.Action("Index", new { 
+                                   sortType = ViewBag.SortType, page = page}),
+                                                           new PagedListRenderOptions
+                                                           {
+                                                               FunctionToTransformEachPageLink = (liTag, aTag) => { aTag.Attributes.Add("class", "page-link".ToString());
+                                                                   return aTag; },
+                                                               LiElementClasses = new string[] { "page-item" },
+                                                           })
+                                </nav>
                             </div>
                         </div>
                     </div>

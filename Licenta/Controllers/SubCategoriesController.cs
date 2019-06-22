@@ -78,16 +78,11 @@ namespace Licenta.Controllers
             var interests = _db.Interests.Where(i => i.UserId == currentUser);
 
             //Filtrarea
-            if (priceMin != null)
-                products = products.Where(s => s.Price >= priceMin);
-            if (priceMax != null)
-                products = products.Where(s => s.Price <= priceMax);
-            if (fromCity != null)
-                products = products.Where(s => s.CityId == fromCity);
-            if (state != null)
-                products = products.Where(s => s.ProductStateId == state);
-            if (dateMin != null)
-                products = products.Where(s => s.Date >= dateMin);
+            if (priceMin != null) products = products.Where(s => s.Price >= priceMin);
+            if (priceMax != null) products = products.Where(s => s.Price <= priceMax);
+            if (fromCity != null) products = products.Where(s => s.CityId == fromCity);
+            if (state != null) products = products.Where(s => s.ProductStateId == state);
+            if (dateMin != null) products = products.Where(s => s.Date >= dateMin);
             ViewBag.PriceMin = priceMin;
             ViewBag.PriceMax = priceMax;
             ViewBag.FromCity = fromCity;
@@ -96,17 +91,13 @@ namespace Licenta.Controllers
             ViewBag.SortType = sortType;
 
             //Sortarea
-            if (sortType == "Title")
-                products = products.OrderBy(x => x.Title);
+            if (sortType == "Title") products = products.OrderBy(x => x.Title);
             else
-            if (sortType == "Date")
-                products = products.OrderByDescending(x => x.Date);
+            if (sortType == "Date") products = products.OrderByDescending(x => x.Date);
             else
-            if (sortType == "PriceAsc")
-                products = products.OrderBy(x => x.Price);
+            if (sortType == "PriceAsc") products = products.OrderBy(x => x.Price);
             else
-            if (sortType == "PriceDesc")
-                products = products.OrderByDescending(x => x.Price);
+            if (sortType == "PriceDesc") products = products.OrderByDescending(x => x.Price);
 
             var subcategories = from subc in _db.SubCategories
                                 where subc.CategoryId == subCategory.CategoryId && subc.SubCategoryId != subCategory.SubCategoryId
@@ -115,7 +106,6 @@ namespace Licenta.Controllers
             int pageIndex = page ?? 1;
             int dataCount = 5;
 
-            //ViewBag.Products = products;
             var model = new SubCategoryViewModel { SubCategoryId = subCategory.SubCategoryId,
                                                    SubCategoryName = subCategory.SubCategoryName,
                                                    CategoryId = subCategory.CategoryId,

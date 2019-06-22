@@ -1,4 +1,5 @@
 ﻿using Licenta.Common.Entities;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Licenta.Common.Models
     public class ConversationViewModel
     {
         //public virtual IList<ConversationMessage> Conversations { get; set; }
-        public virtual IList<ConversationMessage> Conversations { get; set; }
+        public virtual IPagedList<ConversationMessage> Conversations { get; set; }
     }
 
     public class ConversationMessage

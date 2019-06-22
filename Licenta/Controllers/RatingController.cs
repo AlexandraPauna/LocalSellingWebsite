@@ -2,6 +2,7 @@
 using Licenta.Common.Models;
 using Licenta.DataAccess;
 using Microsoft.AspNet.Identity;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace Licenta.Controllers
             return View(model);
         }*/
 
-        public ActionResult Index(string sortType)
+        public ActionResult Index(string sortType, int? page)
         {
             var id = User.Identity.GetUserId();
             
@@ -61,20 +62,24 @@ namespace Licenta.Controllers
                                     where rtg.UserId == id
                                     select rtg).OrderByDescending(r => r.Date);
 
+                int pageIndex = page ?? 1;
+                int dataCount = 5;
+
                 RatingViewModel model = new RatingViewModel{ };
                 if (sortType == null || sortType == "Received")
                 {
-                    model.Ratings = ratingsReceived.ToList();
+                    model.Ratings = ratingsReceived.ToList().ToPagedList(pageIndex, dataCount);
                 }
                 if (sortType == "Given")
                 {
-                    model.Ratings = ratingsGiven.ToList();
+                    model.Ratings = ratingsGiven.ToList().ToPagedList(pageIndex, dataCount);
                 }
                 else
                 {
                     //pagina eroare
                 }
-                
+
+                ViewBag.SortType = sortType;
                 return View(model);
             }
            

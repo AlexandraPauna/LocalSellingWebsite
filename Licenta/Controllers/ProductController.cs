@@ -20,40 +20,6 @@ namespace Licenta.Controllers
         private ApplicationUserManager _userManager;
         private readonly EmailService _emailService = new EmailService();
 
-        /*public ActionResult Index(string id, string sortType)
-        {
-            var user = (from usr in _db.Users
-                        where usr.Id == id
-                        select usr).Single();
-            ViewBag.User = user;
-
-            var products = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
-                           where prod.UserId.Equals(id)
-                           select prod;
-
-            if (sortType == null)
-            {
-                sortType = "Active";
-            }
-            if(sortType == "Active")
-            {
-                products = products.Where(p => p.Active == true);
-            }
-            if(sortType == "Deactivated")
-            {
-                products = products.Where(p => p.Active == false);
-            }
-            products = products.OrderByDescending(p => p.Date);
-
-            var model = new ProductViewModel { Products = products.ToList() };
-
-            if (TempData.ContainsKey("message"))
-            {
-                ViewBag.message = TempData["message"].ToString();
-            }
-
-            return View(model);
-        }*/
 
         public ActionResult Personal(string sortType, int? page)
         {
@@ -121,87 +87,97 @@ namespace Licenta.Controllers
                 ViewBag.message = TempData["message"].ToString();
             }
 
-            Product product = _db.Products.Find(id);
-            ViewBag.Product = product;
-            ViewBag.City = product.City;
-
-            var catId = (from categs in _db.SubCategories
-                         where categs.SubCategoryId.Equals(product.SubCategoryId)
-                         select categs.CategoryId).Single();
-            ViewBag.Category = Convert.ToInt32(catId);
-           
-            var catName = (from categs in _db.Categories
-                           where categs.CategoryId.Equals(catId)
-                           select categs.CategoryName).Single();
-            ViewBag.CategoryName = Convert.ToString(catName);
-
-            ViewBag.SubCategory = product.SubCategory;
-            ViewBag.DeliveryCompany = product.DeliveryCompany;
-
-            var productImages = from prodImages in _db.ProductImages
-                                where prodImages.ProductId.Equals(product.ProductId)
-                                select prodImages.Id;
-
-            
-            var imgList = new List<String>();
-            foreach (var img in productImages)
-            {
-                imgList.Add("/Product/ProductPhoto/?photoId=" + img);
-            }
-            ViewBag.ProductImages = imgList;
-
-            //user profile image
-            var userImage = "/Account/UserPhotos/?id="+product.UserId;
-            ViewBag.UserImage = userImage;
-
             var currentUser = User.Identity.GetUserId();
-            if (currentUser != null && currentUser != product.UserId)
+
+            Product product = _db.Products.Find(id);
+            //ViewBag.Product = product;
+            //ViewBag.City = product.City;
+            if((product.Active == true) || (product.Active == false && product.UserId == currentUser))
             {
-                //contorul din statistica se incrementeaza cand nu isi vizualizeaza un produs propriu
-                //pt ca vrem sa aflam de ce e interesat ca si cumparator
-                var statistic = (from stat in _db.Statistics
-                                where stat.UserId == currentUser && stat.SubCategoryId == product.SubCategoryId
-                                select stat).SingleOrDefault();
-                if(statistic != null)
+                var catId = (from categs in _db.SubCategories
+                             where categs.SubCategoryId.Equals(product.SubCategoryId)
+                             select categs.CategoryId).Single();
+                ViewBag.Category = Convert.ToInt32(catId);
+
+                var catName = (from categs in _db.Categories
+                               where categs.CategoryId.Equals(catId)
+                               select categs.CategoryName).Single();
+                ViewBag.CategoryName = Convert.ToString(catName);
+
+                //ViewBag.SubCategory = product.SubCategory;
+                //ViewBag.DeliveryCompany = product.DeliveryCompany;
+
+                var productImages = from prodImages in _db.ProductImages
+                                    where prodImages.ProductId.Equals(product.ProductId)
+                                    select prodImages.Id;
+
+
+                var imgList = new List<String>();
+                foreach (var img in productImages)
                 {
-                    statistic.ViewCounter = statistic.ViewCounter + 1;
+                    imgList.Add("/Product/ProductPhoto/?photoId=" + img);
                 }
+                ViewBag.ProductImages = imgList;
+
+                //user profile image
+                var userImage = "/Account/UserPhotos/?id=" + product.UserId;
+                ViewBag.UserImage = userImage;
+
+                if (currentUser != null && currentUser != product.UserId)
+                {
+                    //contorul din statistica se incrementeaza cand nu isi vizualizeaza un produs propriu
+                    //pt ca vrem sa aflam de ce e interesat ca si cumparator
+                    var statistic = (from stat in _db.Statistics
+                                     where stat.UserId == currentUser && stat.SubCategoryId == product.SubCategoryId
+                                     select stat).SingleOrDefault();
+                    if (statistic != null)
+                    {
+                        statistic.ViewCounter = statistic.ViewCounter + 1;
+                    }
+                    else
+                    {
+                        Statistic newItem = new Statistic();
+                        newItem.UserId = currentUser;
+                        var user = (from usr in _db.Users
+                                    where usr.Id == currentUser
+                                    select usr).SingleOrDefault();
+                        newItem.User = user;
+                        newItem.SubCategoryId = product.SubCategoryId;
+                        newItem.SubCategory = product.SubCategory;
+                        newItem.ViewCounter = 1;
+
+                        _db.Statistics.Add(newItem);
+                    }
+
+
+                    product.Views = product.Views + 1;
+                    _db.SaveChanges();
+                }
+                if (currentUser == product.UserId || User.IsInRole("Administrator") || User.IsInRole("Editor"))
+                    ViewBag.Allow = true;
                 else
+                    ViewBag.Allow = false;
+
+                ViewBag.currentUser = currentUser;
+                var interest = from interests in _db.Interests
+                               where interests.ProductId == id && interests.UserId == currentUser
+                               select interests;
+
+                if (interest.Count() > 0)
                 {
-                    Statistic newItem = new Statistic();
-                    newItem.UserId = currentUser;
-                    var user = (from usr in _db.Users
-                               where usr.Id == currentUser
-                               select usr).SingleOrDefault();
-                    newItem.User = user;
-                    newItem.SubCategoryId = product.SubCategoryId;
-                    newItem.SubCategory = product.SubCategory;
-                    newItem.ViewCounter = 1;
-                    
-                    _db.Statistics.Add(newItem);
+                    ViewBag.interest = interest.First();
                 }
+                else ViewBag.interest = null;
 
-
-                product.Views = product.Views + 1;
-                _db.SaveChanges();
+                return View(product);
             }
-            if (currentUser == product.UserId || User.IsInRole("Administrator") || User.IsInRole("Editor"))
-                ViewBag.Allow = true;
             else
-                ViewBag.Allow = false;
-
-            ViewBag.currentUser = currentUser;
-            var interest = from interests in _db.Interests
-                       where interests.ProductId == id && interests.UserId == currentUser
-                       select interests;
-
-            if (interest.Count() > 0)
             {
-                ViewBag.interest = interest.First();
+                TempData["message"] = "Anuntul nu mai este activ!";
+                return RedirectToAction("Index", "Home");
             }
-            else ViewBag.interest = null;
 
-            return View(product);
+           
         }
 
         // GET: /Product/New
@@ -483,9 +459,6 @@ namespace Licenta.Controllers
                 });
             }
 
-            
-            
-
             return selectList;
         }
 
@@ -495,12 +468,10 @@ namespace Licenta.Controllers
             ViewBag.Product = product;
             product.Cities = GetAllCities();
             ViewBag.Categories = GetAllCategories();
-            //ViewBag.Categories = GetAllCategoriesForEdit(id);
             var catId = (from categs in _db.SubCategories
                               where categs.SubCategoryId.Equals(product.SubCategoryId)
                               select categs.CategoryId).Single();
             ViewBag.CategoryId = Convert.ToInt32(catId);
-            //product.Categories = GetAllCategories();
             product.ProductStateTypes = GetAllProductStateTypes();
             product.DeliveryCompanies = GetAllDeliveryCompanies();
 
@@ -551,7 +522,7 @@ namespace Licenta.Controllers
 
                 }
 
-                return RedirectToAction("Show", "SubCategories", new { @id = product.SubCategoryId });
+                return RedirectToAction("Show", "Product", new { @id = product.ProductId });
             }
             catch (Exception e)
             {
@@ -691,7 +662,52 @@ namespace Licenta.Controllers
 
             }
 
-            return RedirectToAction("Index", "Product", new { id = currentUser});
+            return RedirectToAction("Personal", "Product");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteMultiple(string[] productIDs)
+        {
+
+            var currentUserId = User.Identity.GetUserId();
+            var user = _db.Users.Where(x => x.Id == currentUserId).SingleOrDefault();
+
+            foreach (string productID in productIDs)
+            {
+
+                int prodID;
+                if (int.TryParse(productID, out prodID))
+                {
+                    Product product = _db.Products.Find(prodID);
+                    if (product.UserId == currentUserId || User.IsInRole("Administrator") || User.IsInRole("Editor"))
+                    {
+                        var productImages = _db.ProductImages.Where(x => x.ProductId == product.ProductId);
+                        _db.ProductImages.RemoveRange(productImages);
+                        var conversations = _db.Conversations.Where(x => x.ProductId == prodID);
+                        foreach (var conversation in conversations)
+                        {
+                            var messages = _db.Messages.Where(x => x.ConversationId == conversation.ConversationId);
+                            _db.Messages.RemoveRange(messages);
+                        }
+                        _db.Conversations.RemoveRange(conversations);
+                        var interests = _db.Interests.Where(x => x.ProductId == prodID);
+                        _db.Interests.RemoveRange(interests);
+
+                        _db.Products.Remove(product);
+                        _db.SaveChanges();
+                        TempData["message"] = "Anuntul a fost sters!";
+
+                        //trimitere email
+                        string content = "Buna " + user.UserName + ", \r\n" + "Anuntul tau a fost sters cu succes! Anunt:" + product.Title + ".";
+                        await _emailService.SendEmailAsync(user.Email, "site_anunturi@yahoo.com", "Site anunturi", "Anunt sters", content);
+
+                    }
+                }
+
+            }
+            _db.SaveChanges();
+
+            return Json(Url.Action("Index", "Interests"));
         }
 
         public ActionResult Activate(int id)
@@ -732,7 +748,7 @@ namespace Licenta.Controllers
             var userId = User.Identity.GetUserId();
             if (userId == null)
             {
-                return RedirectToAction("Login", "AccountControler");
+                return RedirectToAction("Login", "Account");
             }
             else
             {

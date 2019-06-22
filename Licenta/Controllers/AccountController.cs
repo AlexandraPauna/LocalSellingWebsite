@@ -592,6 +592,7 @@ namespace Licenta.Controllers
             }
         }*/
 
+        [AllowAnonymous]
         public ActionResult UserProfile(string id)
         {
             //ApplicationUser user = db.Users.Find(userId);
@@ -647,6 +648,7 @@ namespace Licenta.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         public FileContentResult UserPhotos(string id)
         {
             ApplicationUser user = _db.Users.Find(id);

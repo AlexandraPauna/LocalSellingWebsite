@@ -67,8 +67,8 @@ namespace Licenta.Controllers
                                                       s.Description.Contains(search) ||
                                                       s.SubCategoryId == subCatId ||
                                                       s.CityId == cityId ||
-                                                      s.CityId == fromCity ||
-                                                      subCatsIdOfCatForm.Any(x => x == s.SubCategoryId) ||
+                                                      //s.CityId == fromCity ||
+                                                      //subCatsIdOfCatForm.Any(x => x == s.SubCategoryId) ||
                                                       s.ProductStateId == stateId ||
                                                       s.DeliveryCompanyId == deliveryCompId ||
                                                       subCatsIdOfCat.Any(x => x == s.SubCategoryId));
@@ -85,6 +85,9 @@ namespace Licenta.Controllers
                     products = products.Where(s => s.ProductStateId == state);
                 if (dateMin != null)
                     products = products.Where(s => s.Date >= dateMin);
+                if(categoryId != null)
+                    products = products.Where(s => subCatsIdOfCatForm.Any(x => x == s.SubCategoryId));
+
                 ViewBag.PriceMin = priceMin;
                 ViewBag.PriceMax = priceMax;
                 ViewBag.FromCity = fromCity;

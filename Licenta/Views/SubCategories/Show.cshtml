@@ -271,7 +271,7 @@
                                                 </h5>
                                                 <span class="info-row">
                                                     @*<span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="Business Ads">B </span>*@
-                                                    <span class="date"><i class=" icon-clock"> </i>@product.Date</span>- <span class="category">@product.SubCategory.SubCategoryName </span>-
+                                                    <span class="date"><i class=" icon-clock"> </i>@product.Date.ToString("dd.MM.yyyy hh:mm")</span> - <span class="category">@product.SubCategory.SubCategoryName </span>-
                                                     <span class="item-location"><i class="fa fa-map-marker-alt"></i>@product.City.CityName</span>
                                                 </span>
                                             </div>
@@ -340,13 +340,15 @@
                 <nav aria-label="Page navigation " class="d-inline-b">
                     Pagina @(Model.Products.PageCount < Model.Products.PageNumber ? 0 : Model.Products.PageNumber) din @Model.Products.PageCount
 
-                        @Html.PagedListPager((IPagedList)Model.Products, page => Url.Action("Show", new { id = Model.SubCategoryId, dateMin = ViewBag.DateMin,
-                       fromCity = ViewBag.FromCity, priceMin = ViewBag.PriceMin, priceMax = ViewBag.PriceMax, state = ViewBag.State, sortType = ViewBag.SortType, page = page}),
-                                         new PagedListRenderOptions
-                                         {
-                                             FunctionToTransformEachPageLink = (liTag, aTag) => { aTag.Attributes.Add("class", "page-link".ToString()); return aTag; },
-                                             LiElementClasses = new string[] { "page-item" },
-                                         })
+                     @Html.PagedListPager((IPagedList)Model.Products, page => Url.Action("Show", new { id = Model.SubCategoryId, dateMin = ViewBag.DateMin,
+                    fromCity = ViewBag.FromCity, priceMin = ViewBag.PriceMin, priceMax = ViewBag.PriceMax, state = ViewBag.State,
+                    sortType = ViewBag.SortType, page = page}),
+                                            new PagedListRenderOptions
+                                            {
+                                                FunctionToTransformEachPageLink = (liTag, aTag) => { aTag.Attributes.Add("class", "page-link".ToString());
+                                                    return aTag; },
+                                                LiElementClasses = new string[] { "page-item" },
+                                            })
                 </nav>
             </div>
             <!--/.pagination-bar -->

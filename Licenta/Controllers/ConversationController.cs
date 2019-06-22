@@ -2,6 +2,7 @@
 using Licenta.Common.Models;
 using Licenta.DataAccess;
 using Microsoft.AspNet.Identity;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
@@ -16,7 +17,7 @@ namespace Licenta.Controllers
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         // GET: Conversation
-        public ActionResult Index(string sortType)
+        public ActionResult Index(string sortType, int? page)
         {
             var userId = User.Identity.GetUserId();
             var unreadMessages = (from mess in _db.Messages
@@ -49,7 +50,10 @@ namespace Licenta.Controllers
             }
             else
             {
-                if(sortType == "Received")
+                ViewBag.SortType = sortType;
+                int pageIndex = page ?? 1;
+                int dataCount = 5;
+                if (sortType == "Received")
                 {
                     var conversations = (from c in _db.Conversations.Include("Product").Include("Sender")
                                         join m in _db.Messages.Include("Sender").Include("User")
@@ -72,7 +76,8 @@ namespace Licenta.Controllers
                         convMes.LatestMessage.Content = MessageController.Decrypt(convMes.LatestMessage.Content);
                         conversationsMes.Add(convMes);
                     }
-                    var model = new ConversationViewModel { Conversations = conversationsMes };
+                    
+                    var model = new ConversationViewModel { Conversations = conversationsMes.ToPagedList(pageIndex, dataCount) };
 
                     return View(model);
                 }
@@ -103,7 +108,7 @@ namespace Licenta.Controllers
                         convMes.LatestMessage.Content = MessageController.Decrypt(convMes.LatestMessage.Content);
                         conversationsMes.Add(convMes);
                     }
-                    var model = new ConversationViewModel { Conversations = conversationsMes };
+                    var model = new ConversationViewModel { Conversations = conversationsMes.ToPagedList(pageIndex, dataCount) };
 
                     return View(model);
                 }
@@ -134,7 +139,7 @@ namespace Licenta.Controllers
                         convMes.LatestMessage.Content = MessageController.Decrypt(convMes.LatestMessage.Content);
                         conversationsMes.Add(convMes);
                     }
-                    var model = new ConversationViewModel { Conversations = conversationsMes };
+                    var model = new ConversationViewModel { Conversations = conversationsMes.ToPagedList(pageIndex, dataCount) };
 
                     return View(model);
                 }

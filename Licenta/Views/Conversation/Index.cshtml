@@ -1,5 +1,7 @@
 ﻿@using Licenta.Common.Models
 @using Microsoft.AspNet.Identity
+@using PagedList
+@using PagedList.Mvc
 @{
     ViewBag.Title = "Conversatiile mele";
 }
@@ -133,7 +135,7 @@
                             </div>
                             <div class="btn-group hidden-sm">
 
-                                @using (Html.BeginForm("Index", "Conversation", FormMethod.Get,new { id = "form1"}))
+                                @using (Html.BeginForm("Index", "Conversation", FormMethod.Get, new { id = "form1" }))
                                 {
                                     @Html.DropDownList("sortType", new SelectList(
                                                                         new List<Object>{
@@ -170,16 +172,16 @@
                                 </div>*@
 
                             @*<div class="message-tool-bar-right pull-right">
-                                <span class="text-muted count-message"><b>1</b> - <b>20</b> of <b>255</b></span>
-                                <div class="btn-group btn-group-sm">
-                                    <button type="button" class="btn btn-secondary">
-                                        <span class="fas fa-arrow-left"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-secondary">
-                                        <span class="fas fa-arrow-right"></span>
-                                    </button>
-                                </div>
-                            </div>*@
+                                    <span class="text-muted count-message"><b>1</b> - <b>20</b> of <b>255</b></span>
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-secondary">
+                                            <span class="fas fa-arrow-left"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-secondary">
+                                            <span class="fas fa-arrow-right"></span>
+                                        </button>
+                                    </div>
+                                </div>*@
                         </div>
                     </div>
                     <hr>
@@ -279,6 +281,20 @@
 
                                     </div>
                                 </div>
+                            </div>
+                            <div class="pagination-bar text-center">
+                                <nav aria-label="Page navigation " class="d-inline-b">
+                                    Pagina @(Model.Conversations.PageCount < Model.Conversations.PageNumber ? 0 : Model.Conversations.PageNumber) din @Model.Conversations.PageCount
+
+                                    @Html.PagedListPager((IPagedList)Model.Conversations, page => Url.Action("Index", new {
+                                   sortType = ViewBag.SortType, page = page}),
+                                                           new PagedListRenderOptions
+                                                           {
+                                                               FunctionToTransformEachPageLink = (liTag, aTag) => { aTag.Attributes.Add("class", "page-link".ToString());
+                                                                   return aTag; },
+                                                               LiElementClasses = new string[] { "page-item" },
+                                                           })
+                                </nav>
                             </div>
                         </div>
                     </div>

@@ -21,7 +21,7 @@
 
             <div class="pull-right backtolist">
                 <a href='@Url.Action("Show","SubCategories",new { id = @Model.SubCategory.SubCategoryId })'>
-                    <i class="fa fa-angle-double-left"></i> Inapoi la subcategorie
+                    <i class="fa fa-angle-double-left"></i> Vezi subcategoria
                 </a>
             </div>
 
@@ -43,7 +43,7 @@
                     <span class="item-location">
                         <i class="fa fa-map-marker-alt"></i> @Model.City.CityName
                     </span>
-                    <span class="category pull-right"> <i class="icon-eye"></i> Vizualizari: @Model.Views</span>
+                    <span class="category pull-right"> <i class="icon-eye"></i> Vizualizari: @((Model.Views+1)/2) </span>
                 </span>
 
                 <div class="ads-image ads-img-v2">
@@ -141,7 +141,7 @@
                                     if (Model.DeliveryPrice != null)
                                     {
                                         <li>
-                                            <span>Cost livrare estimativ: </span> @Model.DeliveryPrice
+                                            <span>Cost livrare estimativ: </span> @Model.DeliveryPrice RON
                                         </li>
                                     }
                                 }
@@ -182,7 +182,7 @@
                                 @if (ViewBag.currentUser != null)
                                 {
                                     <ul class="list-border">
-                                        <li><a href='@Url.Action("Index", "Product", new { id = Model.UserId})'> <i class=" fa fa-user"></i> Vezi anunturile vanzatorului </a></li>
+                                        <li><a href='@Url.Action("UserProfile", "Account", new { id = Model.UserId})'> <i class=" fa fa-user"></i> Vezi profilul vanzatorului </a></li>
                                         <li>
                                             @if (ViewBag.interest != null)
                                             {
@@ -308,7 +308,7 @@
                                     <span>Pe site din</span>
                                 </div>
                                 <div class="col to">
-                                    <span>12.06.2019</span>
+                                    <span>@Model.User.Date.ToString("dd.MM.yyyy")</span>
                                 </div>
                             </div>
 
@@ -329,7 +329,7 @@
                         </div>
 
                         <div class="ev-action">
-                            <a class="btn btn-success btn-block" href='@Url.Action("Index", "Rating", new { id = Model.UserId})'>
+                            <a class="btn btn-success btn-block" href='@Url.Action("UserProfile", "Account", new { id = Model.UserId})'>
                                 <i class=" icon-star"></i> Calificative utilizator
                             </a>
                             <a class="btn  btn-info btn-block">
