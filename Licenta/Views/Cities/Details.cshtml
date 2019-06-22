@@ -1,0 +1,49 @@
+﻿@model Licenta.Common.Entities.City
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 page-content">
+            <div class="inner-box category-content">
+                <h2 class="title-2 uppercase">
+                    <strong>
+                        <i class="icon-location"></i> Detalii Oras
+                    </strong>
+
+                </h2>
+
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form class="dl-horizontal">
+                            <div class="form-group row">
+                                @Html.Label("CityName", "Nume Oras", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.DisplayFor(model => model.CityName, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                        </form>
+
+
+
+                        @Html.ActionLink("Editeaza", "Edit", new { id = Model.CityId }) |
+                        @Html.ActionLink("Vezi lista oraselor", "Index")
+                        
+                        <div class="clearfix"></div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 reg-sidebar">
+
+        </div>
+        <!--/.reg-sidebar-->
+    </div>
+</div>

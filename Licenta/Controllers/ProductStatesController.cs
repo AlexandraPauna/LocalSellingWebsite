@@ -11,114 +11,118 @@ using Licenta.DataAccess;
 
 namespace Licenta.Controllers
 {
-    public class DeliveryCompaniesController : Controller
+    public class ProductStatesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
-        // GET: DeliveryCompanies
-        [Authorize(Roles = "Administrator, Editor")]
+        // GET: ProductStates
+        [Authorize(Roles = "Administrator")]
         public ActionResult Index()
         {
-            return View(db.DeliveryCompanies.ToList());
+            return View(db.ProductState.ToList());
         }
 
-        // GET: DeliveryCompanies/Details/5
-        [Authorize(Roles = "Administrator, Editor")]
-        public ActionResult Show(int? id)
+        // GET: ProductStates/Details/5
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DeliveryCompany deliveryCompany = db.DeliveryCompanies.Find(id);
-            if (deliveryCompany == null)
+            ProductState productState = db.ProductState.Find(id);
+            if (productState == null)
             {
                 return HttpNotFound();
             }
-            return View(deliveryCompany);
+            return View(productState);
         }
 
-        // GET: DeliveryCompanies/Create
-        [Authorize(Roles = "Administrator, Editor")]
+        // GET: ProductStates/Create
+        [Authorize(Roles = "Administrator")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: DeliveryCompanies/Create
+        // POST: ProductStates/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Editor")]
-        public ActionResult Create([Bind(Include = "DeliveryCompanyId,DeliveryCompanyName")] DeliveryCompany deliveryCompany)
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Create([Bind(Include = "ProductStateId,ProductStateName")] ProductState productState)
         {
             if (ModelState.IsValid)
             {
-                db.DeliveryCompanies.Add(deliveryCompany);
+                db.ProductState.Add(productState);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(deliveryCompany);
+            return View(productState);
         }
 
-        // GET: DeliveryCompanies/Edit/5
-        [Authorize(Roles = "Administrator, Editor")]
+        // GET: ProductStates/Edit/5
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DeliveryCompany deliveryCompany = db.DeliveryCompanies.Find(id);
-            if (deliveryCompany == null)
+            ProductState productState = db.ProductState.Find(id);
+            if (productState == null)
             {
                 return HttpNotFound();
             }
-            return View(deliveryCompany);
+            return View(productState);
         }
 
-        // POST: DeliveryCompanies/Edit/5
-        [Authorize(Roles = "Administrator, Editor")]
+        // POST: ProductStates/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "DeliveryCompanyId,DeliveryCompanyName")] DeliveryCompany deliveryCompany)
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Edit([Bind(Include = "ProductStateId,ProductStateName")] ProductState productState)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(deliveryCompany).State = EntityState.Modified;
+                db.Entry(productState).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(deliveryCompany);
+            return View(productState);
         }
 
-        // GET: DeliveryCompanies/Delete/5
-        [Authorize(Roles = "Administrator, Editor")]
+        // GET: ProductStates/Delete/5
+        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DeliveryCompany deliveryCompany = db.DeliveryCompanies.Find(id);
-            if (deliveryCompany == null)
+            ProductState productState = db.ProductState.Find(id);
+            if (productState == null)
             {
                 return HttpNotFound();
             }
-            return View(deliveryCompany);
+            return View(productState);
         }
 
-        // POST: DeliveryCompanies/Delete/5
+        // POST: ProductStates/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Editor")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult DeleteConfirmed(int id)
         {
-            DeliveryCompany deliveryCompany = db.DeliveryCompanies.Find(id);
+            ProductState productState = _db.ProductState.Find(id);
 
             var products = from prd in _db.Products
-                           where prd.DeliveryCompanyId == id
+                           where prd.ProductStateId == id
                            select prd;
             foreach (var product in products)
             {
@@ -138,7 +142,7 @@ namespace Licenta.Controllers
 
             }
 
-            _db.DeliveryCompanies.Remove(deliveryCompany);
+            _db.ProductState.Remove(productState);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }

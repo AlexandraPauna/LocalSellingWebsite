@@ -1,0 +1,78 @@
+﻿@model Licenta.Common.Entities.City
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+@*<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>City</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CityName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CityName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>*@
+
+<div class="container">
+    <div class="row">
+
+
+        <div class="col-md-12 page-content">
+            <div class="inner-box category-content">
+                <h2 class="title-2 uppercase">
+                    <strong>
+                        <i class="icon-trash"></i> Esti sigur ca doresti sa stergi asta?
+                    </strong>
+
+                </h2>
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <dl class="dl-horizontal">
+                            <dt class="col-sm-3">
+                                @Html.DisplayNameFor(model => model.CityName)
+                            </dt>
+
+                            <dd class="col-sm-9">
+                                @Html.DisplayFor(model => model.CityName)
+                            </dd>
+
+                        </dl>
+
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-actions no-color pull-right">
+                                <input class="btn btn-danger" type="submit" value="Sterge" /> |
+                                @Html.ActionLink("Vezi Orasele", "Index")
+                            </div>
+                        }
+
+                        <div class="clearfix"></div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

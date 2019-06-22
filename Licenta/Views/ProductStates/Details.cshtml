@@ -1,0 +1,26 @@
+﻿@model Licenta.Common.Entities.ProductState
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ProductState</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductStateName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductStateName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ProductStateId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -63,26 +63,11 @@
 
                                 var role = userManager.GetRoles(User.Identity.GetUserId()).FirstOrDefault();
 
-                                @*if (role == "Editor")
-                                    {
-                                        <li class="dropdown no-arrow nav-item">
-                                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
-                                                <span>Adauga</span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li class="dropdown-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
-                                                <li class="dropdown-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>
-                                            </ul>
-                                        </li>
-                                    }*@
-
-                                if (role == "Administrator")
+                                @*if (role == "Administrator")
                                 {
-                                    @*<li class="nav-item">@Html.ActionLink("Adauga Categorie", "New", "Categories")</li>
-                                        <li class="nav-item">@Html.ActionLink("Adauga Subcategorie", "New", "SubCategories")</li>*@
                                     <li class="nav-item">@Html.ActionLink("Utilizatori", "Index", "Users")</li>
-                                }
+                                }*@
                             }
                         </ul>
 

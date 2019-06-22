@@ -206,6 +206,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\CitiesController.cs" />
     <Compile Include="Controllers\ConversationController.cs" />
     <Compile Include="Controllers\DeliveryCompaniesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductStatesController.cs" />
     <Compile Include="Controllers\RatingController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SubCategoriesController.cs" />
@@ -1039,6 +1041,16 @@
     <Content Include="Views\Manage\Delete.cshtml" />
     <Content Include="Views\Product\Personal.cshtml" />
     <Content Include="Views\Product\Show.cshtml" />
+    <Content Include="Views\Cities\Create.cshtml" />
+    <Content Include="Views\Cities\Delete.cshtml" />
+    <Content Include="Views\Cities\Details.cshtml" />
+    <Content Include="Views\Cities\Edit.cshtml" />
+    <Content Include="Views\Cities\Index.cshtml" />
+    <Content Include="Views\ProductStates\Create.cshtml" />
+    <Content Include="Views\ProductStates\Delete.cshtml" />
+    <Content Include="Views\ProductStates\Details.cshtml" />
+    <Content Include="Views\ProductStates\Edit.cshtml" />
+    <Content Include="Views\ProductStates\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,114 +11,121 @@ using Licenta.DataAccess;
 
 namespace Licenta.Controllers
 {
-    public class DeliveryCompaniesController : Controller
+    public class CitiesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
-        // GET: DeliveryCompanies
-        [Authorize(Roles = "Administrator, Editor")]
+        // GET: Cities
+        [Authorize(Roles = "Administrator")]
         public ActionResult Index()
         {
-            return View(db.DeliveryCompanies.ToList());
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+            return View(db.Cities.ToList());
         }
 
-        // GET: DeliveryCompanies/Details/5
-        [Authorize(Roles = "Administrator, Editor")]
-        public ActionResult Show(int? id)
+        // GET: Cities/Details/5
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DeliveryCompany deliveryCompany = db.DeliveryCompanies.Find(id);
-            if (deliveryCompany == null)
+            City city = db.Cities.Find(id);
+            if (city == null)
             {
                 return HttpNotFound();
             }
-            return View(deliveryCompany);
+            return View(city);
         }
 
-        // GET: DeliveryCompanies/Create
-        [Authorize(Roles = "Administrator, Editor")]
+        // GET: Cities/Create
+        [Authorize(Roles = "Administrator")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: DeliveryCompanies/Create
+        // POST: Cities/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Editor")]
-        public ActionResult Create([Bind(Include = "DeliveryCompanyId,DeliveryCompanyName")] DeliveryCompany deliveryCompany)
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Create([Bind(Include = "CityId,CityName")] City city)
         {
             if (ModelState.IsValid)
             {
-                db.DeliveryCompanies.Add(deliveryCompany);
+                db.Cities.Add(city);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(deliveryCompany);
+            return View(city);
         }
 
-        // GET: DeliveryCompanies/Edit/5
-        [Authorize(Roles = "Administrator, Editor")]
+        // GET: Cities/Edit/5
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DeliveryCompany deliveryCompany = db.DeliveryCompanies.Find(id);
-            if (deliveryCompany == null)
+            City city = db.Cities.Find(id);
+            if (city == null)
             {
                 return HttpNotFound();
             }
-            return View(deliveryCompany);
+            return View(city);
         }
 
-        // POST: DeliveryCompanies/Edit/5
-        [Authorize(Roles = "Administrator, Editor")]
+        // POST: Cities/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "DeliveryCompanyId,DeliveryCompanyName")] DeliveryCompany deliveryCompany)
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Edit([Bind(Include = "CityId,CityName")] City city)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(deliveryCompany).State = EntityState.Modified;
+                db.Entry(city).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(deliveryCompany);
+            return View(city);
         }
 
-        // GET: DeliveryCompanies/Delete/5
-        [Authorize(Roles = "Administrator, Editor")]
+        // GET: Cities/Delete/5
+        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DeliveryCompany deliveryCompany = db.DeliveryCompanies.Find(id);
-            if (deliveryCompany == null)
+            City city = db.Cities.Find(id);
+            if (city == null)
             {
                 return HttpNotFound();
             }
-            return View(deliveryCompany);
+            return View(city);
         }
 
-        // POST: DeliveryCompanies/Delete/5
+        // POST: Cities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Editor")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult DeleteConfirmed(int id)
         {
-            DeliveryCompany deliveryCompany = db.DeliveryCompanies.Find(id);
-
+            City city = _db.Cities.Find(id);
             var products = from prd in _db.Products
-                           where prd.DeliveryCompanyId == id
+                           where prd.CityId == id
                            select prd;
             foreach (var product in products)
             {
@@ -135,11 +142,12 @@ namespace Licenta.Controllers
                 _db.Interests.RemoveRange(interests);
 
                 _db.Products.Remove(product);
-
+                
             }
 
-            _db.DeliveryCompanies.Remove(deliveryCompany);
+            _db.Cities.Remove(city);
             _db.SaveChanges();
+            TempData["message"] = "Orasul a fost sters!";
             return RedirectToAction("Index");
         }
 

@@ -152,12 +152,45 @@
     @if (role == "Administrator" || role == "Editor")
     {
         @*<li class="postadd nav-item">
-            <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "Categories")'>Categorie Noua</a>
-        </li>
+                <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "Categories")'>Categorie Noua</a>
+            </li>
 
-        <li class="postadd nav-item">
-            <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "SubCategories")'>Subcategorie Noua</a>
-        </li>*@
+            <li class="postadd nav-item">
+                <a class="btn btn-block   btn-border btn-post btn-success nav-link" href='@Url.Action("New", "SubCategories")'>Subcategorie Noua</a>
+            </li>*@
+        <li class="dropdown no-arrow nav-item">
+            <a class="dropdown-toggle nav-link" data-toggle="dropdown">
+                <span>Vizualizare</span> <i class="icon-eye"></i> <i class=" icon-down-open-big fa"></i>
+            </a>
+
+            <ul class="dropdown-menu user-menu dropdown-menu-right">
+                <li class="dropdown-item">
+                    <a href='@Url.Action("Index", "Users")'>
+                        <i class="icon-user"></i> Utilizatori
+                    </a>
+                </li>
+
+                <li class="dropdown-item">
+                    <a href='@Url.Action("Index", "Cities")'>
+                        <i class="icon-location"></i> Orase
+                    </a>
+                </li>
+
+                <li class="dropdown-item">
+                    <a href='@Url.Action("Index", "DeliveryCompanies")'>
+                        <i class="icon-truck"></i> Companii livrare
+                    </a>
+                </li>
+
+                <li class="dropdown-item">
+                    <a href='@Url.Action("Index", "ProductStates")'>
+                        <i class="icon-cricket"></i> Stari produs
+                    </a>
+                </li>
+
+            </ul>
+
+        </li>
 
         <li class="dropdown no-arrow nav-item">
             <a class="dropdown-toggle nav-link" data-toggle="dropdown">
@@ -184,8 +217,14 @@
                 </li>
 
                 <li class="dropdown-item">
-                    <a href='@Url.Action("New", "Cities")'>
+                    <a href='@Url.Action("Create", "Cities")'>
                         <i class="icon-location"></i> Oras
+                    </a>
+                </li>
+
+                <li class="dropdown-item">
+                    <a href='@Url.Action("Create", "ProductStates")'>
+                        <i class="icon-cricket"></i> Stari produs
                     </a>
                 </li>
 

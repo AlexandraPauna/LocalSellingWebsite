@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Licenta.Common.Entities.City>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    }
+    <div class="row">
+
+
+        <div class="col-md-12 page-content">
+            <div class="inner-box">
+                <h2 class="title-2"><i class="icon-location"></i> Afisare Orase </h2>
+                <p>
+                    @Html.ActionLink("Adauga Oras", "Create")
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered add-manage-table table demo">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CityName)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CityName)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Editeaza", "Edit", new { id = item.CityId }) |
+                                    @Html.ActionLink("Detalii", "Details", new { id = item.CityId }) |
+                                    @Html.ActionLink("Sterge", "Delete", new { id = item.CityId })
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
