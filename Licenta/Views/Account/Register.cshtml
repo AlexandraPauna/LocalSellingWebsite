@@ -115,7 +115,7 @@
                                                 @Html.CheckBox("Condition", false, new { @id = "chkcondition" })
                                                 <label class="control-label" for="chkcondition">
                                                     <span class="custom-control-description">
-                                                        Sunt de acord cu <a href="#">Termenii si Conditiile</a>
+                                                        Sunt de acord cu @Html.ActionLink("Termenii si Conditiile", "Download", "Account") @*<a href="#">Termenii si Conditiile</a>*@
                                                     </span>
                                                 </label>
 

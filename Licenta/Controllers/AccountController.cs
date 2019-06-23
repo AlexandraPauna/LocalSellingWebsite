@@ -23,6 +23,14 @@ namespace Licenta.Controllers
         private ApplicationUserManager _userManager;
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
+        [AllowAnonymous]
+        public ActionResult Download()
+        {
+            string file = @"C:\Users\HP\Desktop\Licenta\Licenta\Files\TermeniConditii.pdf";
+            string contentType = "application/pdf";
+            return File(file, contentType, Path.GetFileName(file));
+        }
+
         public AccountController()
         {
         }

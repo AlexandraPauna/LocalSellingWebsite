@@ -14,7 +14,7 @@
                             <h5 class="collapse-title no-border">
                                 Contul Meu <a href="#MyClassified" aria-expanded="true" data-toggle="collapse"
                                                  class="pull-right">
-                                    <i class="fa fa-angle-down"></i>
+                                    @*<i class="fa fa-angle-down"></i>*@
                                 </a>
                             </h5>
 
@@ -47,7 +47,7 @@
                             <h5 class="collapse-title">
                                 Anunturi <a href="#MyAds" aria-expanded="true" data-toggle="collapse"
                                           class="pull-right">
-                                    <i class="fa fa-angle-down"></i>
+                                    @*<i class="fa fa-angle-down"></i>*@
                                 </a>
                             </h5>
 
@@ -85,7 +85,7 @@
                                 Inchidere Cont <a href="#TerminateAccount"
                                                      aria-expanded="true" data-toggle="collapse"
                                                      class="pull-right">
-                                    <i class="fa fa-angle-down"></i>
+                                    @*<i class="fa fa-angle-down"></i>*@
                                 </a>
                             </h5>
 
@@ -129,7 +129,7 @@
                                 </div>
                                 <div class="mcol-right">
                                     <!-- Number of visitors -->
-                                    <p><a href="account-message-inbox.html">@ViewBag.UnreadMessages</a> <em>Mesaje noi</em></p>
+                                    <p><a href="@Url.Action("Index","Conversation")">@ViewBag.UnreadMessages</a> <em>Mesaje noi</em></p>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -142,7 +142,7 @@
                                 </div>
                                 <div class="mcol-right">
                                     <!-- Number of visitors -->
-                                    <p><a href="#">@ViewBag.AdViews</a> <em>Vizite anunturi</em></p>
+                                    <p><a href="@Url.Action("Personal","Product")">@(ViewBag.AdViews/2)</a> <em>Vizite anunturi</em></p>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -155,7 +155,7 @@
                                 </div>
                                 <div class="mcol-right">
                                     <!-- Number of visitors -->
-                                    <p><a href="#">@ViewBag.NrAds</a><em>Anunturi postate</em></p>
+                                    <p><a href="@Url.Action("Personal","Product")">@ViewBag.NrAds</a><em>Anunturi postate</em></p>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -168,7 +168,7 @@
                                 </div>
                                 <div class="mcol-right">
                                     <!-- Number of visitors -->
-                                    <p><a href="#">@ViewBag.NrRatings</a> <em>Calificative primite</em></p>
+                                    <p><a href="@Url.Action("Index","Rating")">@ViewBag.NrRatings</a> <em>Calificative primite</em></p>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -180,7 +180,7 @@
             <div class="inner-box">
                 <div class="welcome-msg">
                     <h3 class="page-sub-header2 clearfix no-padding">Bine ai venit, @Model.UserName</h3>
-                    <span class="page-sub-header-sub small">Cont creat la: 01-06-2019</span>
+                    <span class="page-sub-header-sub small">Cont creat la: @Model.Date.ToString("dd.MM.yyyy")</span>
                 </div>
                 <div id="accordion" class="panel-group">
                     <div class="card card-default">
@@ -277,77 +277,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card card-default">
-                        <div class="card-header">
-                            <h4 class="card-title">
-                                <a href="#collapseB2" aria-expanded="true" data-toggle="collapse"> Setari </a>
-                            </h4>
-                        </div>
-                        <div class="panel-collapse collapse" id="collapseB2">
-                            <div class="card-body">
-                                <form class="form-horizontal" role="form">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox">
-                                                    Comments are enabled on my ads
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">New Password</label>
-
-                                        <div class="col-sm-9">
-                                            <input type="password" class="form-control" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Confirm Password</label>
-
-                                        <div class="col-sm-9">
-                                            <input type="password" class="form-control" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-offset-3 col-sm-9">
-                                            <button type="submit" class="btn btn-default">Update</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card card-default">
-                        <div class="card-header">
-                            <h4 class="card-title">
-                                <a href="#collapseB3" aria-expanded="true" data-toggle="collapse">
-                                    Preferences
-                                </a>
-                            </h4>
-                        </div>
-                        <div class="panel-collapse collapse" id="collapseB3">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <div class="col-sm-12">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox">
-                                                I want to receive newsletter.
-                                            </label>
-                                        </div>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox">
-                                                I want to receive advice on buying and selling.
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
+                    
                 </div>
                 <!--/.row-box End-->
 
