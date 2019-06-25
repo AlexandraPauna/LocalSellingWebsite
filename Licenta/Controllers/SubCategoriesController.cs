@@ -219,7 +219,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var cities = from cit in _db.Cities select cit;
+            var cities = (from cit in _db.Cities select cit).OrderBy(x => x.CityName);
             foreach (var city in cities)
             {
                 selectList.Add(new SelectListItem
@@ -239,7 +239,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var states = from st in _db.ProductState select st;
+            var states = (from st in _db.ProductState select st).OrderBy(x => x.ProductStateName);
             foreach (var state in states)
             {
                 selectList.Add(new SelectListItem
