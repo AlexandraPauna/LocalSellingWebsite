@@ -277,7 +277,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var cities = from cit in _db.Cities select cit;
+            var cities = (from cit in _db.Cities select cit).OrderBy(x => x.CityName);
             foreach (var city in cities)
             {
                 selectList.Add(new SelectListItem
@@ -297,7 +297,7 @@ namespace Licenta.Controllers
             var selectList = new List<SelectListItem>();
 
             //get all categories from Data Base
-            var categories = from cat in _db.Categories select cat;
+            var categories = (from cat in _db.Categories select cat).OrderBy(x => x.CategoryName);
             foreach (var category in categories)
             {
                 //add elements in dropdown
@@ -317,7 +317,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var stateTypes = from st in _db.ProductState select st;
+            var stateTypes = (from st in _db.ProductState select st).OrderBy(x => x.ProductStateName);
             foreach (var stateType in stateTypes)
             {
                 //add elements in dropdown
@@ -337,7 +337,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var delivTypes = from dlv in _db.DeliveryCompanies select dlv;
+            var delivTypes = (from dlv in _db.DeliveryCompanies select dlv).OrderBy(x => x.DeliveryCompanyName);
             foreach (var delivType in delivTypes)
             {
                 //add elements in dropdown
@@ -418,9 +418,9 @@ namespace Licenta.Controllers
 
             //get all categories from Data Base
 
-            var subcategories = from sbcat in _db.SubCategories
+            var subcategories = (from sbcat in _db.SubCategories
                                 where sbcat.CategoryId == selectedCatId
-                                select sbcat;
+                                select sbcat).OrderBy(x => x.SubCategoryName);
             foreach (var subcategory in subcategories)
             {
                 //add elements in dropdown

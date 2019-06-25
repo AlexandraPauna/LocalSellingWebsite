@@ -133,7 +133,7 @@ namespace Licenta.Controllers
                             string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + product.Title + ". De la " + message.Sender.UserName;
                             await _emailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
 
-                            return RedirectToAction("Index", "Conversation");
+                            return RedirectToAction("Show", "Conversation", new { id = message.ConversationId.ToString() });
                         }
                         else
                         {
@@ -147,7 +147,7 @@ namespace Licenta.Controllers
                             string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + product.Title + ". De la " + message.Sender.UserName;
                             await _emailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
 
-                            return RedirectToAction("Index", "Conversation");
+                            return RedirectToAction("Show", "Conversation", new { id = message.ConversationId.ToString() });
                         }
                     }
                 }

@@ -197,7 +197,7 @@ namespace Licenta.Controllers
             // generam o lista goala
             var selectList = new List<SelectListItem>();
             // Extragem toate categoriile din baza de date
-            var categories = from cat in _db.Categories select cat;
+            var categories = (from cat in _db.Categories select cat).OrderBy(x => x.CategoryName);
             // iteram prin categorii
             foreach (var category in categories)
             {

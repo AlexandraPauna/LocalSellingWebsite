@@ -160,7 +160,7 @@ namespace Licenta.Controllers
                             string content = "Buna " + rating.RatedUser.UserName + ", \n" + "Ai primit un calificativ nou de la " + rating.User.UserName + ".";
                             await _emailService.SendEmailAsync(rating.RatedUser.Email, "site_anunturi@yahoo.com", "Site anunturi", "Calificativ nou", content);
 
-                            return RedirectToAction("Index", "Rating", new { id = rating.RatedUserId});
+                            return RedirectToAction("UserProfile", "Account", new { id = rating.RatedUserId});
                             //return Redirect(Request.UrlReferrer.ToString());
 
                         }

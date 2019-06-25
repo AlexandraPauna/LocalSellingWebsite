@@ -186,8 +186,13 @@ namespace Licenta.Controllers
                     auxList.Add(p);
                 }
 
+                // adaugam elem la recomandari cat timp exista elem neadaugate
                 while (auxList.Count() != 0)
                 {
+                    //elem vor fi adaugate in lista de recomandari in seturi
+                    //fiecare iteratie a acestui for va reprezenta un set adaugat
+                    //calculam nr de anunturi ce trb adaugate
+                    //mereu verificam sa mai existe elem care trb adaugate altfel break
                     foreach (Tuple<string, int, int> t in subcategoriesRm)
                     {
                         int nrOfPrd = t.Item3 / 10;
@@ -202,7 +207,7 @@ namespace Licenta.Controllers
                                 if (auxList.ElementAt(j).SubCategoryId.ToString().Equals(t.Item1))
                                 {
                                     productsArray.Add(auxList.ElementAt(j));
-                                    auxList.RemoveAt(j);
+                                    auxList.RemoveAt(j); // elem a fost adaugat, deci il scoatem din lista
                                     break;
                                 }
                             }
@@ -218,7 +223,7 @@ namespace Licenta.Controllers
                     }
                 }
 
-                ViewBag.RecommendedProducts = productsArray;
+                ViewBag.RecommendedProducts = productsArray.Take(40);
             }
                 //utilizand nr de vizualizari
                 /*bool statisticPresent = false;
@@ -326,7 +331,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var cities = from cit in _db.Cities select cit;
+            var cities = (from cit in _db.Cities select cit).OrderBy(x => x.CityName);
             foreach (var city in cities)
             {
                 selectList.Add(new SelectListItem

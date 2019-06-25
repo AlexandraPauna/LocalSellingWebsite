@@ -9,12 +9,14 @@ using Licenta.DataAccess;
 using System.Data.SqlClient;
 using Licenta.Common.Models;
 using PagedList;
+using System.Threading.Tasks;
 
 namespace Licenta.Controllers
 {
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _db = ApplicationDbContext.Create();
+        private readonly EmailService _emailService = new EmailService();
         // GET: Users
         [Authorize(Roles = "Administrator")]
         public ActionResult Index(int? page)
@@ -24,6 +26,10 @@ namespace Licenta.Controllers
                         select user;
             ViewBag.UsersList = users;
             return View();*/
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
 
             var users = from user in _db.Users
                         orderby user.UserName
@@ -89,7 +95,7 @@ namespace Licenta.Controllers
 
         [HttpDelete]
         [Authorize(Roles = "Administrator")]
-        public ActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
             ApplicationUser user = _db.Users.Find(id);
 
@@ -179,6 +185,11 @@ namespace Licenta.Controllers
             _db.Users.Remove(user);
             _db.SaveChanges();
             TempData["message"] = "Userul a fost sters!";
+
+            //trimitere email
+            string content = "Buna " + user.UserName + ", \r\n" + "Contul tau a fost sters de un administrator! Din pacate toate datele personale din cadrul site-ului au fost sterse si nu mai pot fi recuperate."
+                            + " Acest lucru s-a intamplat deoarece nu ai respectat normele comunitatii!";
+            await _emailService.SendEmailAsync(user.Email, "site_anunturi@yahoo.com", "Site anunturi", "Cont sters", content);
 
             return RedirectToAction("Index");
         }

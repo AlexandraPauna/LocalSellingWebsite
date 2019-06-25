@@ -20,6 +20,7 @@ namespace Licenta.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly EmailService _emailService = new EmailService();
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         public ManageController()
@@ -100,7 +101,7 @@ namespace Licenta.Controllers
        
 
         [HttpDelete]
-        public ActionResult DeleteAccount()
+        public async Task<ActionResult> DeleteAccount()
         {
             var id = User.Identity.GetUserId();
 
@@ -194,6 +195,12 @@ namespace Licenta.Controllers
             _db.Users.Remove(user);
             _db.SaveChanges();
             TempData["message"] = "Cont sters!";
+
+            //trimitere email
+            string content = "Buna " + user.UserName + ", \r\n" + "Contul tau a fost sters cu succes! Din pacate toate datele personale din cadrul site-ului au fost sterse si nu mai pot fi recuperate."
+                            + " Cu toate acestea iti poti crea un cont nou, oricand.";
+            await _emailService.SendEmailAsync(user.Email, "site_anunturi@yahoo.com", "Site anunturi", "Cont sters", content);
+
 
             return RedirectToAction("Index", "Home");
         }

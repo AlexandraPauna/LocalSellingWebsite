@@ -22,6 +22,7 @@ namespace Licenta.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly EmailService _emailService = new EmailService();
 
         [AllowAnonymous]
         public ActionResult Download()
@@ -229,6 +230,11 @@ namespace Licenta.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                     UserManager.AddToRole(user.Id, "User");
+
+                    //trimitere email
+                    string content = "Buna " + user.UserName + ", \r\n" + "Contul tau a fost creat cu succes!";
+                    await _emailService.SendEmailAsync(user.Email, "site_anunturi@yahoo.com", "Site anunturi", "Cont creat", content);
+
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);

@@ -62,8 +62,10 @@ namespace Licenta.Controllers
                                       where subcategs.CategoryId == categoryId
                                       select subcategs.SubCategoryId).ToList();
 
-                var products = _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
-                                          .Where(s => s.Title.Contains(search) ||
+                var products = _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User").Where(p => p.Active == true);
+                if(search != null)
+                {
+                    products = products.Where(s => s.Title.Contains(search) ||
                                                       s.Description.Contains(search) ||
                                                       s.SubCategoryId == subCatId ||
                                                       s.CityId == cityId ||
@@ -72,8 +74,8 @@ namespace Licenta.Controllers
                                                       s.ProductStateId == stateId ||
                                                       s.DeliveryCompanyId == deliveryCompId ||
                                                       subCatsIdOfCat.Any(x => x == s.SubCategoryId));
+                }
 
-                products = products.Where(p => p.Active == true);
                 //Filtrarea
                 if (priceMin != null)
                     products = products.Where(s => s.Price >= priceMin);
@@ -135,7 +137,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var cities = from cit in _db.Cities select cit;
+            var cities = (from cit in _db.Cities select cit).OrderBy(x => x.CityName);
             foreach (var city in cities)
             {
                 selectList.Add(new SelectListItem
@@ -155,7 +157,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var states = from st in _db.ProductState select st;
+            var states = (from st in _db.ProductState select st).OrderBy(x => x.ProductStateName);
             foreach (var state in states)
             {
                 selectList.Add(new SelectListItem
@@ -173,7 +175,7 @@ namespace Licenta.Controllers
             // generam o lista goala
             var selectList = new List<SelectListItem>();
             // Extragem toate categoriile din baza de date
-            var categories = from cat in _db.Categories select cat;
+            var categories = (from cat in _db.Categories select cat).OrderBy(x => x.CategoryName);
             // iteram prin categorii
             foreach (var category in categories)
             {
