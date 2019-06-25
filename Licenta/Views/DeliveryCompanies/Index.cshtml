@@ -4,7 +4,51 @@
     ViewBag.Title = "Companii curierat";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="container">
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    }
+    <div class="row">
+
+
+        <div class="col-md-12 page-content">
+            <div class="inner-box">
+                <h2 class="title-2"><i class="icon-location"></i> Afisare Companii livrare </h2>
+                <p>
+                    @Html.ActionLink("Adauga Companie", "Create")
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered add-manage-table table demo">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DeliveryCompanyName)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeliveryCompanyName)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Editeaza", "Edit", new { id = item.DeliveryCompanyId }) |
+                                    @Html.ActionLink("Detalii", "Details", new { id = item.DeliveryCompanyId }) |
+                                    @Html.ActionLink("Sterge", "Delete", new { id = item.DeliveryCompanyId })
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<h2>@ViewBag.Title</h2>
 
 <p>
     @Html.ActionLink("Adauga", "Create")
@@ -30,4 +74,4 @@
     </tr>
 }
 
-</table>
+</table>*@

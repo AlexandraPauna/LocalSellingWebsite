@@ -25,7 +25,7 @@ namespace Licenta.Controllers
 
         // GET: DeliveryCompanies/Details/5
         [Authorize(Roles = "Administrator, Editor")]
-        public ActionResult Show(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {

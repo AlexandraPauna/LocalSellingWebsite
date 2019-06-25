@@ -4,30 +4,75 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductStateName)
-        </th>
-        <th></th>
-    </tr>
+<div class="container">
+    @if (TempData.ContainsKey("message"))
+    {
+        <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+    }
+    <div class="row">
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductStateName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ProductStateId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ProductStateId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ProductStateId })
-        </td>
-    </tr>
-}
 
-</table>
+        <div class="col-md-12 page-content">
+            <div class="inner-box">
+                <h2 class="title-2"><i class="icon-location"></i> Afisare Stari </h2>
+                <p>
+                    @Html.ActionLink("Adauga Stare", "Create")
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered add-manage-table table demo">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ProductStateName)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProductStateName)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Editeaza", "Edit", new { id = item.ProductStateId }) |
+                                    @Html.ActionLink("Detalii", "Details", new { id = item.ProductStateId }) |
+                                    @Html.ActionLink("Sterge", "Delete", new { id = item.ProductStateId })
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<h2>Index</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductStateName)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductStateName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.ProductStateId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.ProductStateId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.ProductStateId })
+            </td>
+        </tr>
+    }
+
+    </table>*@
