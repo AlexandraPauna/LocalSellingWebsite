@@ -174,13 +174,34 @@
 
                                 <h3 class="no-margin no-padding link-color uppercase "> @Model.User.UserName</h3>
 
-                                <div class="text-muted">
-                                    Rating: @Model.User.RatingScore
-                                </div>
+                                @if (Model.User.FirstName != null && Model.User.LastName != null)
+                                {
+                                    <div class="text-muted">
+                                        @Model.User.FirstName @Model.User.LastName
+                                    </div>
+                                }
 
-                                <div class="text-muted">
-                                    @Model.User.FirstName @Model.User.LastName
-                                </div>
+
+                                @if (@Model.User.RatingScore != null)
+                                {
+                                    <div class="text-muted">
+                                        Calificativ general: @Model.User.RatingScore
+                                    </div>
+
+                                    <div class="text-muted">
+                                        Comunicare: @Model.User.CommunicationScore
+                                    </div>
+
+                                    <div class="text-muted">
+                                        Acuratetea anunturilor: @Model.User.AccuracyScore
+                                    </div>
+
+                                    <div class="text-muted">
+                                        Timp onorare comenzi: @Model.User.TimeScore
+                                    </div>
+                                }
+
+
 
                             </div>
                         </div>

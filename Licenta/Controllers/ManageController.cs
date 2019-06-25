@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -141,6 +142,18 @@ namespace Licenta.Controllers
                           select rtn;
             foreach (var rating in ratings)
             {
+                //modificare rating-uri ale utilizatorilor ce au primit calificativ de la utilizatorul ce va fi sters
+                var ratedUser = (from usr in _db.Users
+                                 where usr.Id == rating.RatedUserId
+                                 select usr).Single();
+                var numberOfRatings = (from rtng in _db.Ratings
+                                       where rtng.RatedUserId == rating.RatedUserId
+                                       select rtng).Count();
+                ratedUser.CommunicationScore = Math.Round( ((double)ratedUser.CommunicationScore * numberOfRatings - rating.Communication) / (numberOfRatings - 1));
+                ratedUser.AccuracyScore = Math.Round( ((double)ratedUser.AccuracyScore * numberOfRatings - rating.Accuracy) / (numberOfRatings - 1));
+                ratedUser.TimeScore = Math.Round( ((double)ratedUser.TimeScore * numberOfRatings - rating.Time) / (numberOfRatings - 1));
+                ratedUser.RatingScore = Math.Round( ((double)ratedUser.RatingScore * numberOfRatings - rating.Average) / (numberOfRatings - 1));
+
                 _db.Ratings.Remove(rating);
             }
             var ratingsReceived = from rtn in _db.Ratings

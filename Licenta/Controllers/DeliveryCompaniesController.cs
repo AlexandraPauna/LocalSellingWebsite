@@ -115,7 +115,7 @@ namespace Licenta.Controllers
         [Authorize(Roles = "Administrator, Editor")]
         public ActionResult DeleteConfirmed(int id)
         {
-            DeliveryCompany deliveryCompany = db.DeliveryCompanies.Find(id);
+            DeliveryCompany deliveryCompany = _db.DeliveryCompanies.Find(id);
 
             var products = from prd in _db.Products
                            where prd.DeliveryCompanyId == id

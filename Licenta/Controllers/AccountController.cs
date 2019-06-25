@@ -167,7 +167,7 @@ namespace Licenta.Controllers
             //generate empty list
             var selectList = new List<SelectListItem>();
 
-            var cities = from cit in _db.Cities select cit;
+            var cities = (from cit in _db.Cities select cit).OrderBy(x => x.CityName);
             foreach (var city in cities)
             {
                 selectList.Add(new SelectListItem
