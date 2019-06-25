@@ -4,23 +4,68 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>COmpanie curierat</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.DeliveryCompanyName)
-        </dt>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 page-content">
+            <div class="inner-box category-content">
+                <h2 class="title-2 uppercase">
+                    <strong>
+                        <i class="icon-location"></i> Detalii Companie livrare
+                    </strong>
 
-        <dd>
-            @Html.DisplayFor(model => model.DeliveryCompanyName)
-        </dd>
+                </h2>
 
-    </dl>
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form class="dl-horizontal">
+                            <div class="form-group row">
+                                @Html.Label("DeliveryCompanyName", "Nume Companie", new { @class = "col-sm-3 col-form-label" })
+                                <div class="col-sm-8">
+                                    @Html.DisplayFor(model => model.DeliveryCompanyName, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                        </form>
+
+
+
+                        @Html.ActionLink("Editeaza", "Edit", new { id = Model.DeliveryCompanyId }) |
+                        @Html.ActionLink("Vezi lista companiilor", "Index")
+
+                        <div class="clearfix"></div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 reg-sidebar">
+
+        </div>
+        <!--/.reg-sidebar-->
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.DeliveryCompanyId }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+@*<h2>Details</h2>
+
+    <div>
+        <h4>COmpanie curierat</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.DeliveryCompanyName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DeliveryCompanyName)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.DeliveryCompanyId }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>*@
