@@ -24,7 +24,7 @@ namespace Licenta.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            return View(db.Cities.ToList());
+            return View(db.Cities.ToList().OrderBy(x => x.CityName));
         }
 
         // GET: Cities/Details/5

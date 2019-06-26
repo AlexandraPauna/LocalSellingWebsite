@@ -168,6 +168,7 @@ namespace Licenta.Controllers
 
             ViewBag.NoStatistic = false;
             var allproducts = from prd in _db.Products
+                              where prd.Active == true
                               select prd;
             List<Product> productsArray = new List<Product>();
             if (!interestsPresent)

@@ -20,7 +20,7 @@ namespace Licenta.Controllers
         [Authorize(Roles = "Administrator, Editor")]
         public ActionResult Index()
         {
-            return View(db.DeliveryCompanies.ToList());
+            return View(db.DeliveryCompanies.ToList().OrderBy(x => x.DeliveryCompanyName));
         }
 
         // GET: DeliveryCompanies/Details/5

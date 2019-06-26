@@ -90,20 +90,32 @@ namespace Licenta.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var user = UserManager.FindByEmail(model.Email);
-            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            bool userExists = true;
+            if (user == null) { userExists = false; }
+
+            if ( userExists == true)
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Conectare esuata!");
-                    return View(model);
+                var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        return RedirectToLocal(returnUrl);
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
+                    case SignInStatus.RequiresVerification:
+                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Conectare esuata!");
+                        return View(model);
+                }
             }
+            else
+            {
+                ModelState.AddModelError("Email", "Conectare esuata!");
+                return View(model);
+            }
+            
         }
 
         //
@@ -621,13 +633,13 @@ namespace Licenta.Controllers
 
             var recentProducts = from prod in _db.Products.Include("City").Include("SubCategory").Include("ProductState").Include("DeliveryCompany").Include("ProductImages").Include("User")
                                  where prod.UserId == id
-                                 orderby prod.Date
+                                 orderby prod.Date descending
                                  select prod;
             //ViewBag.RecentProducts = recentProducts.Take(3);
 
             var ratings = from rat in _db.Ratings.Include("User")
                           where rat.RatedUserId == id
-                          orderby rat.Date
+                          orderby rat.Date descending
                           select rat;
 
             /*if(display == null || display == "Ratings")

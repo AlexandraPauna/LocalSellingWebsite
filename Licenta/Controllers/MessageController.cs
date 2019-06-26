@@ -86,70 +86,80 @@ namespace Licenta.Controllers
                     }
                     else
                     {
-                        message.Date = DateTime.Now;
-                        message.Read = false;
-                        message.SenderId = currentUser;
-                        message.Content = Encrypt(message.Content);
-                        var sender = (from usr in _db.Users
-                                      where usr.Id == currentUser
-                                      select usr).Single();
-                        message.Sender = sender;
                         var product = (from prod in _db.Products
                                        where prod.ProductId == id
                                        select prod).Single();
-                        message.ReceiverId = product.UserId;
-                        message.Receiver = product.User;
-
-                        //check if conversation already exists
-                        var conversationId = from conv in _db.Conversations
-                                             where (conv.SenderId ==currentUser && conv.ProductId == id)
-                                             select conv.ConversationId;
-
-
-                        if (conversationId.Count() == 0)
+                        if (currentUser != product.UserId)
                         {
-                            //add Conversation
-                            Conversation conversation = new Conversation();
-                            conversation.ProductId = Convert.ToInt32(id);
-                            conversation.Product = product;
-                            conversation.SenderId = currentUser;
+                            message.Date = DateTime.Now;
+                            message.Read = false;
+                            message.SenderId = currentUser;
+                            message.Content = Encrypt(message.Content);
+                            var sender = (from usr in _db.Users
+                                          where usr.Id == currentUser
+                                          select usr).Single();
+                            message.Sender = sender;
 
-                            conversation.Sender = sender;
-                            _db.Conversations.Add(conversation);
-                            _db.SaveChanges();
+                            message.ReceiverId = product.UserId;
+                            message.Receiver = product.User;
 
-                            var newConversationId = (from conv in _db.Conversations
-                                                     where ((conv.SenderId == currentUser) && (conv.ProductId == id))
-                                                     select conv.ConversationId).First();
+                            //check if conversation already exists
+                            var conversationId = from conv in _db.Conversations
+                                                 where (conv.SenderId == currentUser && conv.ProductId == id)
+                                                 select conv.ConversationId;
 
 
-                            message.ConversationId = Convert.ToInt32(newConversationId);
+                            if (conversationId.Count() == 0)
+                            {
+                                //add Conversation
+                                Conversation conversation = new Conversation();
+                                conversation.ProductId = Convert.ToInt32(id);
+                                conversation.Product = product;
+                                conversation.SenderId = currentUser;
 
-                            _db.Messages.Add(message);
-                            _db.SaveChanges();
-                            TempData["message"] = "Mesaj trimis!";
+                                conversation.Sender = sender;
+                                _db.Conversations.Add(conversation);
+                                _db.SaveChanges();
 
-                            //send email
-                            string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + product.Title + ". De la " + message.Sender.UserName;
-                            await _emailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
+                                var newConversationId = (from conv in _db.Conversations
+                                                         where ((conv.SenderId == currentUser) && (conv.ProductId == id))
+                                                         select conv.ConversationId).First();
 
-                            return RedirectToAction("Show", "Conversation", new { id = message.ConversationId.ToString() });
+
+                                message.ConversationId = Convert.ToInt32(newConversationId);
+
+                                _db.Messages.Add(message);
+                                _db.SaveChanges();
+                                TempData["message"] = "Mesaj trimis!";
+
+                                //send email
+                                string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + product.Title + ". De la " + message.Sender.UserName;
+                                await _emailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
+
+                                return RedirectToAction("Show", "Conversation", new { id = message.ConversationId.ToString() });
+                            }
+                            else
+                            {
+                                message.ConversationId = Convert.ToInt32(conversationId.Single());
+
+                                _db.Messages.Add(message);
+                                _db.SaveChanges();
+                                TempData["message"] = "Mesaj trimis!";
+
+                                //send email
+                                string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + product.Title + ". De la " + message.Sender.UserName;
+                                await _emailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
+
+                                return RedirectToAction("Show", "Conversation", new { id = message.ConversationId.ToString() });
+                            }
                         }
                         else
                         {
-                            message.ConversationId = Convert.ToInt32(conversationId.Single());
-
-                            _db.Messages.Add(message);
-                            _db.SaveChanges();
-                            TempData["message"] = "Mesaj trimis!";
-
-                            //send email
-                            string content = "Buna " + message.Receiver.UserName + ", \n" + "Ai primit un mesaj nou pentru anuntul: " + product.Title + ". De la " + message.Sender.UserName;
-                            await _emailService.SendEmailAsync(message.Receiver.Email, "site_anunturi@yahoo.com", "Site anunturi", "Mesaj nou", content);
-
-                            return RedirectToAction("Show", "Conversation", new { id = message.ConversationId.ToString() });
+                            TempData["message"] = "Nu iti poti trimite mesaj pt un anunt propriu!";
+                            return RedirectToAction("Show", "Product", new { id });
                         }
                     }
+                      
                 }
             }
             else

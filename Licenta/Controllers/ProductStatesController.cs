@@ -20,7 +20,7 @@ namespace Licenta.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Index()
         {
-            return View(db.ProductState.ToList());
+            return View(db.ProductState.ToList().OrderBy(x => x.ProductStateName));
         }
 
         // GET: ProductStates/Details/5

@@ -186,7 +186,7 @@ namespace Licenta.Controllers
             else
             {
                 TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui calificativ care nu va apartine!";
-                return Redirect(Request.UrlReferrer.ToString());
+                return RedirectToAction("UserProfile", "Rating", new { id = rating.RatedUserId});
             }
         }
 
@@ -229,8 +229,10 @@ namespace Licenta.Controllers
 
                 //send email
                 string content = "Buna " + rating.RatedUser.UserName + ", \n" + "Calificativul primit de la  " + rating.User.UserName + " a fost modificat!";
-                await _emailService.SendEmailAsync(rating.RatedUser.Email, "site_anunturi@yahoo.com", "Site anunturi", "Calificativ modificat", content);
+                await _emailService.SendEmailAsync(rating.RatedUser.Email, "site_anunturi@yahoo.com", "Site anunturi", "Calificativ primit modificat", content);
 
+                string content2 = "Buna " + rating.User.UserName + ", \n" + "Calificativul acordat lui  " + rating.RatedUser.UserName + " a fost modificat cu succes!";
+                await _emailService.SendEmailAsync(rating.User.Email, "site_anunturi@yahoo.com", "Site anunturi", "Calificativ modificat", content2);
 
                 //return RedirectToAction("Index", new { id = rating.RatedUserId});
                 return RedirectToAction("UserProfile", "Account", new { id = rating.RatedUserId });

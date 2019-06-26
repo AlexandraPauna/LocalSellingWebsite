@@ -482,7 +482,7 @@ namespace Licenta.Controllers
             else
             {
                 TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui anunt care nu va apartine!";
-                return Redirect(Request.UrlReferrer.ToString());
+                return RedirectToAction("Show", "SubCategories", new { id = product.SubCategoryId});
             }
         }
 
@@ -659,6 +659,16 @@ namespace Licenta.Controllers
                 //trimitere email
                 string content = "Buna " + user.UserName + ", \r\n" + "Anuntul tau a fost sters cu succes! Anunt:" + product.Title + ".";
                 await _emailService.SendEmailAsync(user.Email, "site_anunturi@yahoo.com", "Site anunturi", "Anunt sters", content);
+
+                var usersInterested = from intr in _db.Interests
+                                      where intr.ProductId == id
+                                      select intr.User;
+                foreach (var userInterested in usersInterested)
+                {
+                    string content2 = "Buna " + userInterested.UserName + ", \n" + "Un anunt de care esti interesat a fost sters. Anunt: " + product.Title + ".";
+                    await _emailService.SendEmailAsync(userInterested.Email, "site_anunturi@yahoo.com", "Site anunturi", "Anuntul de care esti interesat a fost sters", content2);
+
+                }
 
             }
 
